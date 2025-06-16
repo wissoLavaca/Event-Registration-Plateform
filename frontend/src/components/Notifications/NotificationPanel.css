@@ -1,0 +1,301 @@
+.notification-panel {
+    position: absolute;
+    top: 100%; /* Position below the icon */
+    right: 0;
+    width: 350px; /* Adjust as needed */
+    max-height: 400px; /* Limit height and make scrollable */
+    overflow-y: auto;
+    background-color: white;
+    border: 1px solid #dcedc8; /* Light green border */
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    z-index: 1000;
+    border-radius: 4px;
+}
+
+.panel-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 15px;
+    border-bottom: 1px solid #e0e0e0; /* Lighter gray border */
+    background-color: #f9f9f9;
+}
+
+.panel-header h3 {
+    margin: 0;
+    font-size: 1rem;
+    color: #333; /* Darker text for header */
+}
+
+.close-btn, .refresh-btn {
+    background: none;
+    border: none;
+    font-size: 1.2rem;
+    cursor: pointer;
+    padding: 5px;
+    color: #555; /* Slightly darker icon color */
+}
+.refresh-btn {
+    font-size: 1rem;
+    color: #4CAF50; /* Green for refresh icon */
+}
+.refresh-btn:hover {
+    color: #388E3C; /* Darker green on hover */
+}
+.close-btn:hover {
+    color: #000;
+}
+
+
+.loading-text, .error-text, .empty-text {
+    padding: 20px;
+    text-align: center;
+    color: #666;
+}
+.error-text {
+    color: red;
+}
+
+.notification-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.notification-item {
+    display: flex;
+    align-items: center;
+    padding: 10px 15px;
+    border-bottom: 1px solid #e8f5e9; /* Very light green border */
+    cursor: pointer;
+}
+
+.notification-item:last-child {
+    border-bottom: none;
+}
+
+.notification-item.unread {
+    background-color: #e8f5e9; /* Light green for unread */
+    /* font-weight: bold; // Keep if desired, or remove for cleaner look */
+}
+.notification-item.unread .item-message {
+     color: #388E3C; /* Darker green for unread message text */
+     font-weight: 600;
+}
+
+
+.notification-item:hover {
+    background-color: #f0f0f0; /* Light gray hover */
+}
+
+.item-icon {
+    margin-right: 10px;
+    font-size: 1.2rem;
+    color: #4CAF50; /* Primary green for icons */
+}
+
+.item-content {
+    flex-grow: 1;
+}
+
+.item-message {
+    margin: 0 0 5px 0;
+    font-size: 0.9rem;
+    color: #333;
+}
+
+
+.item-date {
+    font-size: 0.75rem;
+    color: #66bb6a; /* Lighter green for date */
+}
+
+.mark-all-read-btn {
+    display: block;
+    width: calc(100% - 30px);
+    margin: 10px 15px;
+    padding: 8px;
+    background-color: #4CAF50; /* Primary green */
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    text-align: center;
+}
+
+.mark-all-read-btn:hover {
+    background-color: #388E3C; /* Darker green */
+}
+
+/* Dark mode styles - Green Theme */
+.notification-panel-dark {
+    position: absolute;
+    top: calc(100% + 10px);
+    right: 0;
+    width: 360px;
+    max-height: 500px;
+    background-color: #1A202C; /* Very dark background */
+    border: 1px solid #2D3748; /* Dark surface color for border */
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+    z-index: 1000;
+    border-radius: 8px;
+    color: #A0AEC0; /* Secondary text color (light gray) */
+    display: flex;
+    flex-direction: column;
+}
+
+.panel-header-dark {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 16px;
+    border-bottom: 1px solid #2D3748; /* Dark surface color */
+}
+
+.panel-header-dark h3 {
+    margin: 0;
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: #E2E8F0; /* Primary text color (off-white) */
+}
+
+.close-btn-dark {
+    background: none;
+    border: none;
+    color: #A0AEC0; /* Muted icon color (secondary text) */
+    font-size: 1.1rem;
+    cursor: pointer;
+    padding: 5px;
+}
+.close-btn-dark:hover {
+    color: #E2E8F0; /* Brighter on hover */
+}
+
+.loading-text-dark, .error-text-dark, .empty-text-dark {
+    padding: 20px 16px;
+    text-align: center;
+    color: #A0AEC0; /* Secondary text */
+    flex-grow: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.error-text-dark {
+    color: #F56565; /* Red for errors */
+}
+
+.notification-list-dark {
+    list-style: none;
+    padding: 8px 0;
+    margin: 0;
+    overflow-y: auto;
+    flex-grow: 1;
+}
+
+.notification-item-dark {
+    display: flex;
+    padding: 12px 16px;
+    margin: 0 8px 8px 8px;
+    cursor: pointer;
+    border-radius: 6px;
+    background-color: #2D3748; /* Dark surface color for cards */
+    transition: background-color 0.2s ease;
+}
+
+.notification-item-dark.unread {
+    border-left: 3px solid #4CAF50; /* Primary green for unread indicator */
+    background-color: #252f3e; /* Slightly different shade for unread background */
+}
+.notification-item-dark.unread .item-message-main-dark {
+    font-weight: 600;
+    color: #E2E8F0; /* Brighter text for unread main message */
+}
+
+
+.notification-item-dark:hover {
+    background-color: #4A5568; /* Lighter dark surface on hover */
+}
+
+.item-icon-dark {
+    margin-right: 12px;
+    font-size: 1.1rem;
+    color: #4CAF50; /* Primary green for icons */
+    width: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: rgba(76, 175, 80, 0.1); /* Very faint green background for icon */
+    border-radius: 50%;
+    height: 30px;
+}
+
+.item-content-dark {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.item-message-main-dark {
+    margin: 0 0 4px 0;
+    font-size: 0.9rem;
+    color: #CBD5E1; /* Lighter gray for main message */
+    line-height: 1.4;
+}
+.item-message-sub-dark {
+    margin: 0 0 6px 0;
+    font-size: 0.8rem;
+    color: #A0AEC0; /* Secondary text for sub message */
+    line-height: 1.3;
+}
+
+
+.item-date-dark {
+    font-size: 0.75rem;
+    color: #81C784; /* Lighter green for date */
+}
+
+.panel-footer-dark {
+    display: flex;
+    justify-content: space-between;
+    padding: 12px 16px;
+    border-top: 1px solid #2D3748; /* Dark surface color */
+    background-color: #1A202C; /* Match panel background */
+}
+
+.footer-btn-dark {
+    background: none;
+    color: #81C784; /* Lighter green for footer buttons */
+    border: none;
+    padding: 8px 0;
+    cursor: pointer;
+    font-size: 0.85rem;
+    font-weight: 500;
+    flex-grow: 1;
+    text-align: center;
+}
+.footer-btn-dark:hover {
+    color: #A5D6A7; /* Even lighter green on hover */
+}
+.footer-btn-dark:disabled {
+    color: #4A5568; /* Muted color for disabled */
+    cursor: not-allowed;
+}
+
+.footer-btn-dark:first-child {
+    margin-right: 8px;
+}
+
+/* Optional: Scrollbar styling for webkit browsers - Dark Green Theme */
+.notification-list-dark::-webkit-scrollbar {
+    width: 6px;
+}
+.notification-list-dark::-webkit-scrollbar-track {
+    background: #1A202C; /* Dark background */
+}
+.notification-list-dark::-webkit-scrollbar-thumb {
+    background: #2D3748; /* Dark surface */
+    border-radius: 3px;
+}
+.notification-list-dark::-webkit-scrollbar-thumb:hover {
+    background: #4A5568; /* Lighter dark surface */
+}

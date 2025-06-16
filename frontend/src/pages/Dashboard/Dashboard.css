@@ -1,0 +1,1038 @@
+.dashboard {
+    padding: 20px;
+    background-color: var(--background-content);
+    /* display: flex; // Removed as .dashboard-columns-wrapper will handle specific flex layouts
+    flex-wrap: wrap;
+    gap: 20px; */
+}
+
+.dashboard-title {
+  margin-bottom: 24px;
+  color: var(--text-primary);
+  font-size: 28px;
+  font-weight: 600;
+}
+
+/* Generic stat card, if used elsewhere */
+.dashboard-stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 24px;
+  margin-top: 20px;
+}
+
+.stat-card {
+  background-color: var(--card-bg);
+  border-radius: 8px;
+  padding: 24px;
+  box-shadow: 0 2px 10px rgba(var(--shadow-color-rgb), 0.05);
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.stat-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 5px 15px rgba(var(--shadow-color-rgb), 0.1);
+}
+
+.stat-card h3 {
+  color: var(--text-secondary);
+  font-size: 16px;
+  margin-bottom: 12px;
+  font-weight: 500;
+}
+
+/* .stat-value is defined more specifically later, this is a general one if needed */
+/* .stat-value {
+  color: var(--primary-color);
+  font-size: 36px;
+  font-weight: 700;
+} */
+
+/* Welcome Banner Styles */
+.welcome-banner-dashboard {
+  margin-bottom: 32px;
+  background: linear-gradient(to right, rgba(var(--primary-color-rgb), 0.03), rgba(var(--accent-color-rgb), 0.03));
+  border-radius: 16px;
+  padding: 24px;
+  box-shadow: 0 4px 10px rgba(var(--shadow-color-rgb), 0.03);
+  border: 1px solid var(--border-color);
+  position: relative;
+  overflow: hidden;
+}
+
+.welcome-banner-dashboard .decorative-blur-circle {
+  position: absolute;
+  top: 0; right: 0;
+  width: 256px; height: 256px;
+  background: rgba(var(--primary-color-rgb), 0.1);
+  border-radius: 50%;
+  filter: blur(50px);
+  margin-right: -128px; margin-top: -128px;
+}
+
+.welcome-banner-dashboard .content-relative {
+  position: relative;
+}
+
+.welcome-title {
+  font-size: 1.875rem;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+  color: var(--text-darker);
+}
+
+.user-name-highlight {
+  color: var(--primary-color);
+}
+
+.welcome-subtitle {
+  color: var(--text-muted);
+}
+
+/* Stats Overview Grid Styles (Top Admin Stats) */
+.stats-overview-grid {
+  display: grid; /* Changed from flex to grid */
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); /* Responsive columns with reduced min-width */
+  /* overflow-x: auto; Removed to allow wrapping and fill width */
+  /* flex-direction: row; Removed as it's not for grid */
+  padding-bottom: 15px;
+  gap: 24px;
+  margin-bottom: 32px;
+}
+
+/* Stat Card Item Styles (for .stats-overview-grid and .event-categories-grid) */
+.stat-card-item {
+  background: var(--card-bg);
+  backdrop-filter: blur(2px);
+  border-radius: 16px;
+  padding: 24px; /* This padding will be within the new height */
+  border: 1px solid var(--border-color);
+  box-shadow: 0 3px 10px rgba(var(--shadow-color-rgb), 0.05);
+  display: flex;
+  align-items: center;
+  transition: all 0.4s ease;
+  position: relative;
+  overflow: hidden;
+  /* flex: 0 0 260px; Removed fixed width, grid will handle width */
+  height: 150px; /* Increased height */
+}
+
+.stat-card-item::after {
+  content: '';
+  position: absolute;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  background: linear-gradient(115deg, transparent, rgba(0, 0, 0, 0.02), transparent);
+  transition: transform 0.6s;
+  transform: translateX(-100%);
+}
+
+.stat-card-item:hover::after {
+  transform: translateX(100%);
+}
+
+.stat-card-item:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.07);
+  border-color: rgba(var(--primary-color-rgb), 0.4);
+}
+
+.stat-icon-container {
+  width: 48px;
+  height: 48px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 16px;
+  font-size: 1.25rem;
+  transition: all 0.3s ease;
+}
+
+.stat-card-item.green .stat-icon-container { background-color: rgba(var(--primary-color-rgb), 0.15); color: var(--primary-color); }
+.stat-card-item.purple .stat-icon-container { background-color: rgba(var(--secondary-color-rgb), 0.15); color: var(--secondary-color); }
+.stat-card-item.blue .stat-icon-container { background-color: rgba(54, 162, 235, 0.2); color: rgb(54, 162, 235); }
+
+
+.stat-card-item:hover .stat-icon-container {
+  transform: scale(1.05);
+  box-shadow: 0 0 10px rgba(var(--primary-color-rgb), 0.2);
+}
+
+.stat-text-content h3 {
+  font-size: 0.875rem;
+  color: var(--text-muted);
+  margin-bottom: 0.25rem;
+  font-weight: 500;
+}
+
+.stat-card-item .stat-text-content .stat-value { /* More specific for these cards */
+  font-size: 1.75rem;
+  font-weight: 600;
+  margin-bottom: 0.25rem;
+  color: var(--text-darker);
+}
+
+.stat-change {
+  font-size: 0.75rem;
+  display: flex;
+  align-items: center;
+}
+.stat-change.positive { color: var(--success-color); }
+.stat-change.negative { color: var(--danger-color); }
+.stat-change i { margin-right: 0.25rem; }
+
+
+/* Admin Charts Section */
+.charts-section {
+  margin-top: 30px;
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+}
+
+.chart-row {
+  display: flex;
+  flex-direction: row;
+  gap: 30px;
+  width: 100%;
+}
+
+.chart-container {
+  padding: 20px;
+  background-color: var(--card-bg, #ffffff);
+  border-radius: var(--border-radius-md, 8px);
+  box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+  display: flex;
+  flex-direction: column;
+  border: 1px solid transparent;
+  transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+}
+
+.chart-container:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 16px rgba(0,0,0,0.1);
+  /* border-color: rgba(var(--primary-color-rgb), 0.4); // Keep or remove based on preference */
+}
+
+.chart-container h3 { /* Applies to "Évolution des Inscriptions" as well */
+  margin-top: 0;
+  margin-bottom: 10px; /* Reduced margin to make space */
+  text-align: center;
+  font-size: 1.1rem;
+  color: var(--text-primary, #333);
+  font-weight: 600; /* Ensure title is bold */
+}
+
+/* Remove general padding from .chart-header-controls if it exists, or ensure it's specific */
+.chart-header-controls { /* This was for the old layout, review if still needed elsewhere */
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  /* margin-bottom: 15px; */ /* Handled by chart-sub-header-controls now for this chart */
+  /* padding: 0 10px; */
+}
+/* .chart-header-controls h3 { ... } */ /* Review if this specific h3 styling is needed */
+
+
+/* New styles for the sub-header controls (buttons and custom legend) */
+.chart-sub-header-controls {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px; /* Space between controls and chart canvas */
+  padding: 0 5px; /* Minimal padding for this control row */
+}
+
+.time-range-buttons { /* Ensure it's flex for gap to work */
+  display: flex;
+  gap: 4px; /* Slightly reduced gap to match screenshot */
+}
+
+.time-range-button {
+  padding: 3px 7px; /* Adjusted padding to be more compact */
+  font-size: 0.7rem; 
+  font-weight: 500; /* Standard weight for inactive */
+  border: 1px solid #adb5bd; /* Darker grey border for inactive - closer to screenshot */
+  background-color: #e9ecef; /* Light grey background for inactive - closer to screenshot */
+  color: #495057; /* Dark grey text for inactive - closer to screenshot */
+  border-radius: 3px; /* Slightly less rounded corners */
+  cursor: pointer;
+  transition: background-color 0.2s, color 0.2s, border-color 0.2s;
+  line-height: 1.2; /* Ensure text is vertically centered well */
+}
+
+.time-range-button:hover {
+  background-color: #dee2e6; /* Slightly darker on hover */
+  border-color: #6c757d;
+}
+
+.time-range-button.active {
+  background-color: #495057; /* Dark grey background for active - closer to screenshot */
+  color: #ffffff; /* White text for active */
+  border-color: #495057; /* Border same as background for a solid look */
+  font-weight: 600; /* Bolder text for active */
+}
+
+.custom-chart-legend {
+  display: flex;
+  align-items: center;
+  gap: 6px; /* Gap between color box and text */
+  font-size: 0.75rem; /* Match button text size */
+  color: var(--text-secondary, #555);
+}
+
+.legend-color-box {
+  display: inline-block;
+  width: 10px; /* Smaller color box */
+  height: 10px; /* Smaller color box */
+  border-radius: 50%; /* Circle */
+  /* background-color is set inline via style prop in JSX */
+}
+
+.chart-container-half {
+  flex: 1;
+  min-width: 0;
+  height: 380px; /* Keep overall container height */
+  display: flex; /* Allow flex direction column */
+  flex-direction: column; /* Stack title, controls, chart */
+  padding: 15px; /* Adjust overall padding for the container */
+}
+
+.chart-canvas-wrapper {
+  flex-grow: 1; /* Allow canvas wrapper to take remaining space */
+  position: relative; /* For chart.js to correctly size canvas */
+  min-height: 0; /* Important for flex children to shrink properly */
+}
+
+
+.chart-container-pie {
+  max-width: 480px;
+  height: 380px;
+  margin: 0 auto;
+}
+
+.chart-container p { /* Loading/no-data messages */
+  text-align: center;
+  margin-top: 20px;
+  color: var(--text-secondary, #666);
+}
+
+.chart-container-full {
+  width: 100%;
+  height: 380px; /* Matched height */
+  overflow-x: auto;
+  overflow-y: hidden;
+  padding: 15px; /* Consistent padding */
+}
+
+.chart-container-full canvas,
+.chart-container-half .chart-canvas-wrapper canvas, 
+.chart-container-pie canvas {
+  max-width: 100%;
+  max-height: 100%;
+}
+
+/* Event Category Cards Grid (Récapitulatif des Événements) */
+.event-categories-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); /* Adjusted minmax */
+  gap: 16px;
+  margin-bottom: 32px;
+}
+
+.event-category-card { /* Base styles for these cards if used standalone */
+  background: linear-gradient(to right, rgba(var(--primary-color-rgb), 0.03), rgba(var(--accent-color-rgb), 0.02));
+  border-radius: 16px;
+  padding: 24px;
+  box-shadow: 0 4px 10px rgba(var(--shadow-color-rgb), 0.03);
+  border: 1px solid var(--border-color);
+  transition: transform 0.2s ease-out, box-shadow 0.2s ease-out, border-color 0.2s ease-out;
+  display: flex;
+  flex-direction: column;
+}
+
+.event-category-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 6px 15px rgba(var(--shadow-color-rgb), 0.05);
+  border-color: rgb(9, 218, 9) !important; /* User preferred hardcoded green */
+}
+
+.event-category-card h2 { /* Title inside these cards */
+  margin-top: 0;
+  margin-bottom: 16px;
+  color: var(--text-darker);
+  font-size: 1.25rem;
+  font-weight: 600;
+  border-bottom: 1px solid rgba(var(--primary-color-rgb), 0.1);
+  padding-bottom: 12px;
+}
+
+/* Specific styling for .stat-card-item when used within .event-categories-grid */
+.event-categories-grid > .event-category-card.stat-card-item {
+  background: var(--card-bg); /* Override gradient if needed, or keep if preferred */
+  border-radius: var(--border-radius-lg, 16px);
+  box-shadow: var(--shadow-md, 0 4px 6px -1px rgba(0,0,0,0.1), 0 2px 4px -1px rgba(0,0,0,0.06));
+  border: 1px solid var(--border-color-soft, transparent);
+  display: flex;
+  flex-direction: row; /* Horizontal layout for icon and text */
+  align-items: center;
+  justify-content: flex-start;
+  height: 120px;
+  padding: 16px;
+  flex: 1; /* Allow these cards to grow in the grid */
+  min-width: 200px; /* Ensure they don't get too small */
+}
+.event-categories-grid > .event-category-card.stat-card-item:hover { /* Override general .event-category-card hover if needed */
+  border-color: rgb(9, 218, 9) !important; /* Keep consistent green border */
+}
+
+
+.event-categories-grid > .event-category-card.stat-card-item .stat-icon-container {
+  /* Uses .stat-icon-container styles from above */
+  /* Specific icon colors for these cards: */
+  font-size: 1.8rem; /* Icon size inside container */
+  /* background-color is transparent by default, color is set by specific classes below */
+}
+
+.event-card-upcoming .stat-icon-container i { color: #3b82f6; }
+.event-card-ongoing .stat-icon-container i { color: #f59e0b; }
+.event-card-finished .stat-icon-container i { color: #10b981; }
+.event-card-cancelled .stat-icon-container i { color: #ef4444; }
+.event-card-default .stat-icon-container i { color: #6b7280; }
+
+
+.event-categories-grid > .event-category-card.stat-card-item .stat-text-content {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  flex-grow: 1;
+  margin-left: 12px;
+}
+
+.event-categories-grid > .event-category-card.stat-card-item .stat-text-content h3 {
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+  margin-bottom: 2px;
+  font-weight: 500;
+  line-height: 1.2;
+}
+
+.event-categories-grid > .event-category-card.stat-card-item .stat-text-content .stat-value {
+  font-size: 1.75rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  line-height: 1.1;
+  margin-bottom: 2px;
+}
+
+.event-categories-grid > .event-category-card.stat-card-item .stat-text-content .stat-change {
+  font-size: 0.7rem;
+  display: flex;
+  align-items: center;
+}
+
+
+/* Two-Column Layout Wrapper */
+.dashboard-columns-wrapper {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  width: 100%;
+  align-items: flex-start;
+  margin-top: 30px; /* Space above this section */
+  margin-bottom: 30px; /* Space below this section */
+}
+
+/* Shared styles for section headers in columns */
+/* This is now handled by .section-header-with-pagination .section-header */
+/* .my-registered-events-table-section .section-header,
+.recent-activity-section .section-header { ... } */
+
+
+/* Header with Pagination Controls */
+.section-header-with-pagination {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px; /* Space below header/pagination */
+  border-bottom: 1px solid var(--border-color);
+  padding-bottom: 10px;
+}
+
+.section-header-with-pagination .section-header {
+  margin-bottom: 0; /* Remove default margin as parent handles spacing */
+  border-bottom: none; /* Remove default border as parent has it */
+  padding-bottom: 0;
+  font-size: 1.25rem; /* Consistent with other section headers */
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.pagination-controls {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.pagination-button {
+  background-color: var(--button-secondary-bg, #e2e8f0);
+  color: var(--button-secondary-text, #4a5568);
+  border: 1px solid var(--button-secondary-border, #cbd5e0);
+  border-radius: var(--border-radius-sm, 6px);
+  padding: 6px 10px;
+  cursor: pointer;
+  transition: background-color 0.2s, color 0.2s;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.9rem;
+}
+
+.pagination-button:hover:not(:disabled) {
+  background-color: var(--button-secondary-hover-bg, #cbd5e0);
+  color: var(--button-secondary-hover-text, #2d3748);
+}
+
+.pagination-button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.page-info {
+  font-size: 0.875rem;
+  color: var(--text-muted);
+  white-space: nowrap;
+}
+
+
+/* Column 1: "Mes Inscriptions aux Événements" Section */
+.my-registered-events-table-section {
+  background-color: var(--card-bg, #fff);
+  border-radius: var(--border-radius-md, 8px);
+  padding: 24px;
+  box-shadow: 0 2px 10px rgba(var(--shadow-color-rgb), 0.05);
+  border: 1px solid var(--border-color);
+  width: calc(50% - 10px); /* Half width minus half gap */
+  box-sizing: border-box;
+  display: flex; /* Added to manage inner content flow */
+  flex-direction: column; /* Stack header, quick-stats, list */
+  transition: border-color 0.3s ease, box-shadow 0.3s ease; /* Added transition */
+}
+
+.my-registered-events-table-section:hover {
+  border-color: var(--success-color, green); /* Green border on hover */
+  box-shadow: 0 5px 15px rgba(var(--shadow-color-rgb), 0.08); /* Optional: slightly enhance shadow on hover */
+}
+
+/* "Mes Inscriptions Personnelles" Quick Stat Card - This was removed from JSX, but styles can remain for now or be cleaned up */
+.my-registered-events-table-section .dashboard-quick-stats .stat-card {
+  background-color: var(--card-bg);
+  border-radius: var(--border-radius-md, 8px);
+  padding: 20px;
+  box-shadow: var(--shadow-sm, 0 2px 4px rgba(0,0,0,0.07));
+  text-align: center;
+  border: 1px solid var(--border-color-soft, #eeeeee);
+  margin-bottom: 20px; /* Adjusted space */
+}
+
+.my-registered-events-table-section .dashboard-quick-stats .stat-card h3 {
+  margin-top: 0;
+  margin-bottom: 8px;
+  font-size: 1.0em;
+  font-weight: 600;
+  color: var(--text-secondary);
+}
+
+.my-registered-events-table-section .dashboard-quick-stats .stat-card .stat-value {
+  font-size: 3em;
+  font-weight: 700;
+  color: var(--primary-color);
+  margin-bottom: 8px;
+  line-height: 1;
+}
+
+.my-registered-events-table-section .dashboard-quick-stats .stat-card p:not(.stat-value) {
+  font-size: 0.9em;
+  color: var(--text-muted, #6c757d);
+  margin-bottom: 0;
+}
+
+/* Styles for the new "Mes Inscriptions" list */
+.inscription-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  flex-grow: 1; /* Allows list to take available space */
+}
+
+.inscription-list-item {
+  display: flex;
+  align-items: flex-start;
+  padding: 16px 0;
+  border-bottom: 1px solid var(--border-color);
+  min-height: 90px;
+  box-sizing: border-box;
+}
+
+.inscription-list-item:last-child {
+  border-bottom: none;
+}
+
+.inscription-icon-container {
+  width: 38px;
+  height: 38px;
+  border-radius: var(--border-radius-sm, 6px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 12px;
+  flex-shrink: 0;
+  color: var(--text-on-primary, #ffffff);
+  font-size: 1rem;
+  background-color: var(--primary-color-light, #79bbff); /* Default icon bg */
+}
+/* Example: .inscription-icon-container.icon-bg-green { background-color: #10b981; } */
+
+
+.inscription-text-content {
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.inscription-text-content h3 {
+  font-size: 0.95rem;
+  font-weight: 500;
+  color: var(--text-primary);
+  margin: 0 0 6px 0;
+  line-height: 1.3;
+}
+
+.inscription-details {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+}
+
+.inscription-details .status-badge {
+  align-self: flex-start;
+}
+
+.inscription-date {
+  display: flex;
+  align-items: center;
+  color: var(--text-muted);
+}
+
+
+/* Status Badge Styles (shared for inscriptions and potentially other tables) */
+.status-badge {
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 1;
+  text-align: center;
+  white-space: nowrap;
+  vertical-align: baseline;
+  text-transform: capitalize;
+}
+.status-badge.status-termine { background-color: rgba(var(--success-color-rgb), 0.15); color: var(--success-color); }
+.status-badge.status-en-cours { background-color: rgba(var(--primary-color-rgb), 0.15); color: var(--primary-color); }
+.status-badge.status-a-venir { background-color: rgba(var(--warning-color-rgb), 0.15); color: var(--warning-color); }
+.status-badge.status-annule { background-color: rgba(var(--danger-color-rgb), 0.15); color: var(--danger-color); }
+.status-badge.status-default { background-color: rgba(var(--text-muted-rgb), 0.15); color: var(--text-muted); }
+
+
+/* Column 2: "Activités récentes" Section */
+.recent-activity-section {
+  background-color: var(--background-elevated);
+  padding: 24px;
+  border-radius: var(--border-radius-md, 8px);
+  box-shadow: var(--shadow-md);
+  width: calc(50% - 10px); /* Half width minus half gap */
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  min-height: 300px; /* Optional base height, adjust to match inscriptions section if needed */
+  border: 1px solid transparent; /* Start with a transparent border or match existing border */
+  transition: border-color 0.3s ease, box-shadow 0.3s ease; /* Added transition */
+}
+
+.recent-activity-section:hover {
+  border-color: var(--success-color, green); /* Green border on hover */
+  box-shadow: 0 5px 15px rgba(var(--shadow-color-rgb), 0.08); /* Optional: slightly enhance shadow on hover */
+}
+
+/* Ensure "Activités récentes" also uses section-header-with-pagination for consistent header styling */
+.recent-activity-section .section-header-with-pagination .section-header {
+  margin-bottom: 0;
+  border-bottom: none;
+  padding-bottom: 0;
+}
+
+.activity-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  flex-grow: 1;
+}
+
+.activity-list-item {
+  display: flex;
+  align-items: flex-start;
+  padding: 12px 0;
+  border-bottom: 1px solid var(--border-color);
+  min-height: 90px; /* Match inscription item height */
+  box-sizing: border-box;
+  box-shadow: var(--card-shadow-dark-mode);
+
+}
+
+.activity-list-item:last-child {
+  border-bottom: none;
+}
+
+.activity-icon-container { /* Specific for recent activities */
+  width: 38px;
+  height: 38px;
+  border-radius: var(--border-radius-sm, 6px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 12px;
+  flex-shrink: 0;
+  color: var(--text-on-primary, #ffffff);
+  font-size: 1rem;
+}
+
+/* Icon background colors for "Activités récentes" */
+.icon-bg-blue { background-color: #3b82f6; }
+.icon-bg-green { background-color: #10b981; }
+.icon-bg-purple { background-color: #8b5cf6; }
+.icon-bg-yellow { background-color: #f59e0b; }
+.icon-bg-gray { background-color: #690ad4; }
+.icon-bg-orange { background-color: #f97316; }
+.icon-bg-red { background-color: #ef4444; }
+
+
+.activity-text-content {
+  flex-grow: 1;
+  display: flex; /* Added for better vertical alignment if needed */
+  flex-direction: column; /* Stack title, subtitle, timestamp */
+  justify-content: center; /* Vertically center content */
+}
+
+.activity-text-content h3 { /* Overrides general .stat-text-content h3 for this section */
+  font-size: 0.95rem;
+  font-weight: 500;
+  color: var(--text-primary);
+  margin: 0 0 3px 0;
+  line-height: 1.3;
+}
+
+.activity-subtitle {
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+  margin: 0 0 6px 0;
+  line-height: 1.4;
+}
+
+.activity-timestamp {
+  font-size: 0.75rem;
+  color: var(--text-secondary); /* CHANGED: Use a theme variable for better contrast */
+  line-height: 1.5; /* Adjusted line-height slightly if needed */
+}
+
+.recent-activity-section > div[style*="text-align: right"] { /* Targets the "Voir tout" link container */
+  margin-top: auto; /* Pushes it to the bottom */
+  padding-top: 16px; /* Add some space above it */
+}
+
+.recent-activity-section .text-link {
+  color: var(--text-link);
+  text-decoration: none;
+  font-weight: 500;
+  font-size: 0.85rem;
+  /* display: inline-block; // Not needed if parent div handles positioning */
+}
+
+.recent-activity-section .text-link:hover {
+  text-decoration: underline;
+}
+
+/* Loading and No Data Messages (shared for columns) */
+.my-registered-events-table-section .loading-message,
+.my-registered-events-table-section .no-events-message,
+.my-registered-events-table-section .error-message,
+.recent-activity-section .loading-message,
+.recent-activity-section .no-activity-message,
+.recent-activity-section .error-message {
+  color: var(--text-muted);
+  padding: 20px 0;
+  text-align: center;
+  font-style: italic;
+  flex-grow: 1; /* Helps center if section is flex column */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100px; /* Ensure some space for these messages */
+}
+
+.my-registered-events-table-section .error-message,
+.recent-activity-section .error-message {
+  color: var(--danger-color, #ef4444);
+  font-style: normal;
+  border: 1px solid var(--danger-color-lighter, #fecaca); /* Define --danger-color-lighter or use rgba */
+  background-color: rgba(var(--danger-color-rgb), 0.1); /* Define --danger-color-rgb */
+  border-radius: var(--border-radius-sm);
+  padding: 10px;
+}
+
+/* General dashboard divider */
+.dashboard-divider {
+    border: none;
+    border-top: 1px solid var(--border-color);
+    margin: 30px 0;
+}
+
+/* General section title if used outside columns */
+.section-title {
+  margin-top: 40px;
+  margin-bottom: 20px;
+  font-size: 1.8em;
+  color: var(--text-primary);
+  padding-bottom: 10px;
+  border-bottom: 2px solid var(--primary-color-light); /* Define --primary-color-light */
+}
+
+/* Table responsive wrapper (if you still use tables elsewhere) */
+.table-responsive {
+  overflow-x: auto;
+}
+
+/* Generic dashboard table styles (if used outside specific sections) */
+.dashboard-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 15px;
+  font-size: 0.9rem;
+}
+
+.dashboard-table th,
+.dashboard-table td {
+  border: 1px solid var(--border-color, #ddd);
+  padding: 10px 12px;
+  text-align: left;
+  vertical-align: middle;
+}
+
+.dashboard-table th {
+  background-color: var(--table-header-bg, #f7f7f7);
+  color: var(--text-secondary, #555);
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.dashboard-table tbody tr:nth-child(even) {
+  background-color: var(--table-row-even-bg, #fdfdfd);
+}
+
+.dashboard-table tbody tr:hover {
+  background-color: var(--table-row-hover-bg, #f0f5ff);
+}
+
+/* Styles for the old "Mes Inscriptions" table if it's still used or needs to be phased out */
+/* These are the styles that were previously used for the table-as-cards look */
+/* You might want to remove or comment these out if .inscription-list is the final approach */
+/*
+.my-registered-events-table-section .dashboard-table {
+  border-collapse: separate;
+  margin-top: 20px;
+  width: 100%;
+  background-color: transparent;
+}
+
+.my-registered-events-table-section .dashboard-table thead {
+  display: none;
+}
+
+.my-registered-events-table-section .dashboard-table tr {
+  display: block;
+  background-color: var(--card-background-inscription, #ffffff);
+  border: 1px solid var(--card-border-inscription, #e2e8f0);
+  border-radius: var(--border-radius-lg, 12px);
+  padding: 20px 24px;
+  box-shadow: var(--shadow-md, 0 4px 6px -1px rgba(0,0,0,0.1), 0 2px 4px -1px rgba(0,0,0,0.06));
+  transition: background-color 0.2s ease-in-out, border-color 0.2s ease-in-out;
+}
+
+.my-registered-events-table-section .dashboard-table tbody tr:not(:last-child) {
+  margin-bottom: 24px;
+}
+
+.my-registered-events-table-section .dashboard-table tbody tr:nth-child(even) {
+  background-color: var(--card-background-inscription);
+}
+
+.my-registered-events-table-section .dashboard-table tr:hover {
+  background-color: var(--card-background-inscription-hover, #f7fafc);
+  border-color: var(--primary-color);
+}
+
+.my-registered-events-table-section .dashboard-table td {
+  display: block;
+  padding: 0;
+  border: none;
+  text-align: left;
+  vertical-align: top;
+}
+
+.my-registered-events-table-section .dashboard-table tr td:nth-child(1) {
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: var(--text-title-inscription, #1a202c);
+  margin-bottom: 10px;
+}
+
+.my-registered-events-table-section .dashboard-table tr td:nth-child(2) {
+  margin-bottom: 8px;
+}
+
+.my-registered-events-table-section .dashboard-table tr td:nth-child(3) {
+  font-size: 0.875rem;
+  color: var(--text-secondary-inscription, #718096);
+}
+*/
+
+/* Dark Mode White Shadows for Containers */
+@media (prefers-color-scheme: dark) {
+  /* Define global dark mode variables and shadows */
+  :root {
+    /* Card Shadows for Dark Mode */
+    --card-shadow-dark-mode: 0 1px 3px 0 rgba(255, 255, 255, 0.07), 0 1px 2px -1px rgba(255, 255, 255, 0.07); /* Slightly more subtle shadow */
+    --card-shadow-hover-dark-mode: 0 4px 6px -1px rgba(255, 255, 255, 0.1), 0 2px 4px -1px rgba(255, 255, 255, 0.1); /* Slightly more subtle hover shadow */
+
+    /* Core Dark Mode Theme Variables (adjust these to your exact theme) */
+    --card-bg: #1f2937; /* Example: Dark blue/slate background for cards (like Tailwind slate-800) */
+    --background-content: #111827; /* Example: Even darker page background (like Tailwind gray-900) */
+    --text-primary: #f3f4f6; /* Example: Light gray for primary text (like Tailwind gray-100) */
+    --text-secondary: #9ca3af; /* Example: Medium gray for secondary text (like Tailwind gray-400) */
+    --text-muted: #6b7280; /* Example: Darker gray for muted text (like Tailwind gray-500) */
+    --text-darker: #e5e7eb; /* Example: For titles that were darker in light mode, make them light gray */
+    --border-color: #374151; /* Example: Dark gray for borders (like Tailwind gray-700) */
+    --border-color-soft: #4b5563; /* Example: Softer border (like Tailwind gray-600) */
+    
+    /* Specific component variables if needed */
+    --table-header-bg: #374151;
+    --table-row-even-bg: #27303f; /* Slightly lighter than card-bg for table rows */
+    --table-row-hover-bg: #303a4b;
+    --button-secondary-bg: #374151;
+    --button-secondary-text: #e5e7eb;
+    --button-secondary-border: #4b5563;
+    --button-secondary-hover-bg: #4b5563;
+    --button-secondary-hover-text: #f3f4f6;
+    --primary-color-light: rgba(var(--primary-color-rgb), 0.3); /* Adjust for dark mode if needed */
+     /* Ensure --shadow-color-rgb is defined for dark mode if used by other shadows, or switch to white shadows */
+    --shadow-color-rgb: 255, 255, 255; /* For white shadows if this variable is used */
+  }
+
+  /* Apply white shadow and ensure dark background for main containers */
+  .stat-card-item,
+  .event-category-card,
+  .chart-container,
+  .inscription-list-item,
+  .activity-list-item,
+  .my-registered-events-table-section, /* Added section container */
+  .recent-activity-section { /* Added section container */
+    box-shadow: var(--card-shadow-dark-mode);
+    background-color: var(--card-bg); /* Ensure all these use the dark card background */
+    border-color: var(--border-color-soft); /* Use a slightly softer border for cards */
+  }
+  
+  /* Override specific background if .event-category_card had a gradient */
+  .event-category-card {
+    background: var(--card-bg); /* Explicitly set to solid dark background */
+  }
+
+  /* Text colors for event stat cards to match screenshot */
+  .event-categories-grid > .event-category-card.stat-card-item .stat-text-content h3 { /* Title like "Événements à Venir" */
+    color: var(--text-secondary); /* Should be a light gray in dark mode */
+  }
+  .event-categories-grid > .event-category-card.stat-card-item .stat-text-content .stat-value { /* The number */
+    color: var(--text-primary); /* Should be a very light gray/white in dark mode */
+  }
+  /* Icon colors in event stat cards are set via specific classes like .event-card-upcoming, they should remain as is */
+
+  /* Hover states for shadowed items */
+  .stat-card-item:hover,
+  .event-category-card:hover,
+  .chart-container:hover,
+  .inscription-list-item:hover,
+  .activity-list-item:hover,
+  .my-registered-events-table-section:hover,
+  .recent-activity-section:hover {
+    box-shadow: var(--card-shadow-hover-dark-mode);
+  }
+
+  /* Maintain specific hover effects if needed */
+  .chart-container:hover {
+    transform: translateY(-5px); /* Keep existing transform */
+  }
+  
+  .event-category-card:hover {
+    /* The green border from light mode might be too bright. Consider a dark-mode appropriate success color or remove/adjust. */
+    /* border-color: var(--success-color) !important; */ /* Example: if --success-color is also themed for dark */
+    border-color: rgba(var(--success-color-rgb), 0.7) !important; /* Or a less intense version */
+  }
+
+  .my-registered-events-table-section:hover,
+  .recent-activity-section:hover {
+     border-color: rgba(var(--success-color-rgb), 0.7) !important; /* Consistent hover border */
+  }
+
+  /* Adjust time range button colors for dark mode if they look off */
+  .time-range-button {
+    border: 1px solid var(--border-color); 
+    background-color: var(--button-secondary-bg); 
+    color: var(--button-secondary-text); 
+  }
+  .time-range-button:hover {
+    background-color: var(--button-secondary-hover-bg);
+    border-color: var(--text-muted);
+  }
+  .time-range-button.active {
+    background-color: var(--text-primary); 
+    color: var(--background-content); 
+    border-color: var(--text-primary); 
+  }
+  .custom-chart-legend {
+     color: var(--text-secondary);
+  }
+
+  /* Other general dark mode text color adjustments */
+  .dashboard-title,
+  .section-title,
+  .section-header-with-pagination .section-header,
+  .stat-card-item .stat-text-content .stat-value, /* Already covered by .event-categories-grid for specific cards */
+  .inscription-text-content h3,
+  .activity-text-content h3 {
+    color: var(--text-primary);
+  }
+
+  .stat-text-content h3, /* General stat card titles */
+  .welcome-subtitle,
+  .page-info,
+  .inscription-details,
+  .activity-subtitle,
+  .chart-container p { /* Loading/no-data messages */
+    color: var(--text-secondary);
+  }
+  .activity-timestamp {
+    color: var(--primary-color-light); /* Or a specific info color for dark mode */
+  }
+}

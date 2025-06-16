@@ -1,0 +1,187 @@
+:root {
+    --primary-color: #1DB954; /* Main Green */
+    --primary-color-rgb: 29, 185, 84;
+    
+    /* Adjust secondary and accent if they clash, or make them shades of green/neutral */
+    --secondary-color: #128A4A; /* Darker Green */
+    --secondary-color-rgb: 18, 138, 74;
+    --accent-color: #2DC26B; /* Lighter Green */
+    --accent-color-rgb: 45, 194, 107;
+
+    --success-color: #10b981; /* Keep or adjust */
+    --success-color-rgb: 16, 185, 129;
+    --warning-color: #f59e0b;
+    --warning-color-rgb: 245, 158, 11;
+    --danger-color: #ef4444;
+    --danger-color-rgb: 239, 68, 68;
+
+    /* Light Theme Backgrounds */
+    --background-light: #ffffff; /* Main background */
+    --background-lighter: #f7f9fc; /* Slightly off-white for cards, sidebar */
+    --sidebar-bg: #f0f4f8; /* Light grey for sidebar */
+    --sidebar-hover: #e6eaf0; /* Slightly darker hover for sidebar */
+    --card-bg: rgba(255, 255, 255, 0.8); /* Card background, can have slight transparency */
+    
+    /* Light Theme Text */
+    --text-dark: #0f172a; /* Main text color (dark slate) */
+    --text-darker: #020617; /* For headings or stronger text */
+    --text-muted: #64748b; /* Muted text (grey slate) */
+    
+    --border-color: rgba(148, 163, 184, 0.3); /* Light border color */
+}
+
+/* Define variables for light theme (applied by default or via body.light-theme) */
+body, body.light-theme {
+    --primary-color: #1DB954; /* Main Green */
+    --primary-color-rgb: 29, 185, 84;
+    --secondary-color: #128A4A; /* Darker Green */
+    --secondary-color-rgb: 18, 138, 74;
+    --accent-color: #2DC26B; /* Lighter Green */
+    --accent-color-rgb: 45, 194, 107;
+
+    --success-color: #10b981;
+    --success-color-rgb: 16, 185, 129;
+    --warning-color: #f59e0b;
+    --warning-color-rgb: 245, 158, 11;
+    --danger-color: #ef4444;
+    --danger-color-rgb: 239, 68, 68;
+
+    /* Generic Semantic Names */
+    --background-body: #ffffff;         /* Overall page background */
+    --background-content: #f7f9fc;    /* Background for content areas, cards */
+    --background-elevated: #ffffff;   /* Background for elements like modals, dropdowns */
+    --sidebar-bg: #f0f4f8;
+    --sidebar-hover: #e6eaf0;
+    --card-bg: rgba(255, 255, 255, 0.9);
+    
+    --text-primary: #0f172a;          /* Main text color */
+    --text-secondary: #334155;        /* Secondary text (slightly lighter) */
+    --text-muted: #64748b;            /* Muted text */
+    --text-on-primary: #ffffff;       /* Text on primary-color backgrounds */
+    --text-link: var(--primary-color);
+    
+    --border-color: rgba(148, 163, 184, 0.3);
+    --border-color-strong: rgba(148, 163, 184, 0.5);
+    --shadow-color-rgb: 0, 0, 0; /* For box shadows, e.g., rgba(var(--shadow-color-rgb), 0.1) */
+    --input-bg: #ffffff;
+    --input-border: var(--border-color);
+    --input-focus-border: var(--primary-color);
+
+    /* NEW: Spotlight color for light theme */
+    --spotlight-color: #e2e8f0; /* A slightly off-white or very light grey for the spotlight */
+                                /* Or var(--background-content) if you want it to match content areas */
+
+    /* Light Mode Defaults for inscription cards (ensure these are also here or in :root) */
+    --card-background-inscription: #ffffff;
+    --card-border-inscription: #e2e8f0; 
+    --card-background-inscription-hover: #f7fafc; 
+    --text-title-inscription: #0f172a; /* Using --text-primary from light theme */
+    --text-secondary-inscription: #64748b; /* Using --text-muted from light theme */
+}
+
+/* Define variables for dark theme (applied via body.dark-theme) */
+body.dark-theme {
+    --primary-color: #1DB954; /* Keep green, or adjust for dark mode contrast */
+    --primary-color-rgb: 29, 185, 84;
+    --secondary-color: #2DC26B; /* Lighter green for dark mode */
+    --secondary-color-rgb: 45, 194, 107;
+    --accent-color: #128A4A;
+    --accent-color-rgb: 18, 138, 74;
+
+    /* Dark Theme Semantic Names */
+    --background-body: #0f172a;
+    --background-content: #1e293b;
+    --background-elevated: #273344;
+    --sidebar-bg: #0b101f;
+    --sidebar-hover: #161e2e;
+    --card-bg: rgba(30, 41, 59, 0.85);
+    
+    --text-primary: #f3f4f6;
+    --text-secondary: #cbd5e1;
+    --text-muted: #9ca3af;
+    --text-on-primary: #ffffff; /* Or #000000 if primary is very light in dark mode */
+    --text-link: var(--secondary-color); /* Lighter green for links in dark mode */
+    
+    --border-color: rgba(71, 85, 105, 0.5);
+    --border-color-strong: rgba(71, 85, 105, 0.8);
+    --shadow-color-rgb: 200, 200, 200; /* Lighter shadows for dark mode, or use overlay */
+    --input-bg: #1e293b;
+    --input-border: var(--border-color);
+    --input-focus-border: var(--primary-color);
+
+    /* NEW: Spotlight color for dark theme */
+    --spotlight-color: var(--background-elevated); /* Lighter slate/blue for the spotlight */
+                                                /* Or #161e2e (a bit darker than content) */
+
+    /* ADD THESE FOR "Mes Inscriptions" CARDS DARK MODE */
+    --card-background-inscription: var(--background-content); /* Use existing dark card background */
+    --card-border-inscription: var(--border-color);          /* Use existing dark border color */
+    --card-background-inscription-hover: var(--background-elevated); /* Slightly lighter dark for hover */
+    --text-title-inscription: var(--text-primary);           /* Use existing dark theme primary text */
+    --text-secondary-inscription: var(--text-muted);         /* Use existing dark theme muted text */
+}
+
+/* Base body styles using the variables */
+body {
+  margin: 0;
+  min-height: 100vh;
+  color: var(--text-primary);
+  transition: background-color 0.3s ease, color 0.3s ease; /* Smooth theme transitions */
+  overflow-x: hidden; /* Prevents horizontal scrollbars on the body */
+
+  /* --- GLOBAL RADIAL GRADIENT BACKGROUND --- */
+  background-color: var(--background-body); /* Fallback color - use the darkest/lightest body color */
+  background-image: radial-gradient(
+    ellipse at center 10%, /* Shape: ellipse, Position: centered horizontally, 10% from the top */
+    var(--spotlight-color) 0%,
+    var(--background-body) 75% /* Use --background-body as the outer part of the gradient */
+  );
+  background-repeat: no-repeat;
+  background-attachment: fixed; /* Keeps the gradient fixed during scroll */
+}
+
+/* Scrollbar styles - adapt for theming */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: rgba(var(--shadow-color-rgb), 0.05); /* Use shadow color for track */
+  border-radius: 10px;
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(var(--primary-color-rgb), 0.5);
+  border-radius: 10px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(var(--primary-color-rgb), 0.7);
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+@keyframes pulse {
+  0% { transform: scale(1); opacity: 1; }
+  50% { transform: scale(1.15); opacity: 0.8; }
+  100% { transform: scale(1); opacity: 1; }
+}
+.pulse-animation { /* Utility class from target */
+    animation: pulse 2s infinite;
+}
+
+html {
+  box-sizing: border-box;
+  font-family: 'Montserrat', sans-serif;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: inherit;
+}
+

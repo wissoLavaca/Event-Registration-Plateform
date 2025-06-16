@@ -1,0 +1,174 @@
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(var(--shadow-color-rgb), 0.6); /* Slightly darker overlay */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  padding: 20px; /* Add padding for smaller screens */
+}
+
+.modal-content {
+  background: var(--background-elevated);
+  color: var(--text-primary);
+  border-radius: 12px; /* Slightly larger border-radius */
+  padding: 28px 32px; /* Increased padding */
+  width: 100%; /* Allow it to be responsive within overlay padding */
+  max-width: 650px; /* Increased max-width slightly */
+  max-height: 85vh;
+  overflow-y: auto;
+  position: relative;
+  box-shadow: 0 8px 25px rgba(var(--shadow-color-rgb), 0.15); /* Softer, larger shadow */
+  border: 1px solid var(--border-color);
+  animation: modalScaleIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); /* New animation */
+}
+
+@keyframes modalScaleIn {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  /* border-bottom: 1px solid var(--border-color); REMOVED - title will have its own underline */
+  padding-bottom: 10px; /* Adjusted padding */
+  margin-bottom: 24px; 
+}
+
+.modal-header h2 { /* Main modal title "Détails de l'inscription #X" */
+  color: var(--primary-color); /* Colorful title */
+  font-size: 1.5rem; /* Slightly larger */
+  font-weight: 600;
+  margin: 0;
+  padding-bottom: 8px; /* Space for the underline */
+  border-bottom: 2px solid var(--primary-color-light, var(--primary-color)); /* Colorful underline */
+  width: fit-content; /* Underline only under text */
+}
+
+/* Updated close button style */
+.modal-close-btn { /* This is the 'x' button */
+  position: absolute; /* Keep it absolute to the modal-content */
+  top: 18px; /* Adjust positioning relative to new padding */
+  right: 20px;
+  background: transparent;
+  border: none;
+  color: var(--text-muted); /* Themed color */
+  font-size: 1.8rem; /* Slightly larger for easier clicking */
+  line-height: 1;
+  padding: 5px; /* Add some padding for easier interaction */
+  cursor: pointer;
+  transition: color 0.2s ease;
+}
+
+.modal-close-btn:hover {
+  color: var(--text-primary); /* Darken on hover */
+}
+
+/* NEW: Section container styling */
+.modal-section {
+  margin-bottom: 28px; /* Space between sections */
+  padding: 18px; /* Padding within each section */
+  background-color: var(--background-content); /* Subtle background for sections */
+  border-radius: 8px; /* Rounded corners for sections */
+  border: 1px solid var(--border-color-subtle, var(--border-color)); /* Subtle border */
+}
+
+.modal-section:last-of-type {
+  margin-bottom: 0; /* No bottom margin for the last section */
+}
+
+.modal-section-title { /* For titles within sections like "Réponses au formulaire:" */
+  font-size: 1.2rem; 
+  color: var(--accent-color, var(--secondary-color)); /* THIS SETS THE COLOR */
+  font-weight: 600;
+  margin-top: 0; 
+  margin-bottom: 18px; 
+  padding-bottom: 6px; /* Space for the underline */
+  border-bottom: 2px solid var(--accent-color-light, var(--secondary-color)); /* THIS CREATES THE UNDERLINE */
+  width: fit-content; /* Underline only under text */
+}
+
+
+/* General styling for detail items (label + value pairs) */
+.detail-item {
+  display: flex;
+  flex-wrap: wrap; /* Allow wrapping if content is too long */
+  margin-bottom: 12px; /* Space between detail items */
+  font-size: 0.95rem; /* Base font size for details */
+}
+
+.detail-item strong { /* For labels like "Utilisateur:", "Département:" */
+  color: var(--text-secondary);
+  font-weight: 500; /* Medium weight for labels */
+  margin-right: 8px; /* Space after the label */
+  flex-shrink: 0; /* Prevent label from shrinking */
+}
+
+.detail-item span, 
+.detail-item p,
+.detail-item a { /* For values */
+  color: var(--text-primary);
+  word-break: break-word; /* Prevent long words from overflowing */
+}
+
+.detail-item a { /* Specific for file links */
+  color: var(--text-link);
+  text-decoration: underline;
+  text-decoration-color: rgba(var(--primary-color-rgb), 0.5); /* Subtle underline */
+  transition: color 0.2s ease, text-decoration-color 0.2s ease;
+}
+
+.detail-item a:hover {
+  color: var(--primary-color);
+  text-decoration-color: var(--primary-color);
+}
+
+/* Section for "Réponses au formulaire" - will now use .modal-section and .modal-section-title */
+/* .form-responses-section {
+  margin-top: 28px; 
+}
+
+.form-responses-section h3 { 
+  font-size: 1.15rem; 
+  color: var(--text-primary);
+  font-weight: 600;
+  margin-bottom: 16px; 
+  padding-bottom: 8px;
+  border-bottom: 1px solid var(--border-color-subtle, var(--border-color)); 
+} */
+
+/* List for individual form field responses */
+.field-responses-list {
+  list-style-type: none;
+  padding-left: 0;
+}
+
+.field-responses-list li { /* Each form response item */
+  padding: 10px 0; /* Increased padding */
+  border-bottom: 1px solid var(--border-color-subtle, var(--border-color)); /* Use themed and subtle border */
+  /* .detail-item styles will apply here if the structure is <label><span> */
+}
+
+.field-responses-list li:last-child {
+  border-bottom: none;
+}
+
+/* Fallback for old .close-button if it's still used somewhere, though .modal-close-btn is primary */
+.close-button {
+  color: var(--text-muted);
+}
+.close-button:hover {
+  color: var(--text-primary);
+}

@@ -1,0 +1,101 @@
+.confirmation-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.6); /* Darker overlay */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000; /* Ensure it's on top */
+  padding: 15px;
+}
+
+.confirmation-modal-content {
+  background-color: #ffffff;
+  padding: 25px;
+  border-radius: 8px;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+  width: 100%;
+  max-width: 450px; /* Adjust as needed */
+  display: flex;
+  flex-direction: column;
+  gap: 20px; /* Space between sections */
+}
+
+.confirmation-modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid #eee;
+  padding-bottom: 15px;
+}
+
+.confirmation-modal-header h3 {
+  margin: 0;
+  font-size: 1.25rem;
+  color: #333;
+}
+
+.confirmation-modal-close-btn {
+  background: none;
+  border: none;
+  font-size: 1.8rem;
+  cursor: pointer;
+  color: #888;
+  padding: 0;
+  line-height: 1;
+}
+.confirmation-modal-close-btn:hover {
+  color: #333;
+}
+
+.confirmation-modal-body p {
+  margin: 0;
+  font-size: 1rem;
+  color: #555;
+  line-height: 1.6;
+}
+
+.confirmation-modal-footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  padding-top: 15px;
+  border-top: 1px solid #eee;
+}
+
+.confirmation-modal-btn {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-weight: 500;
+  transition: background-color 0.2s ease;
+}
+
+.confirmation-modal-btn.confirm {
+  background-color: #28a745; /* Green for confirm */
+  color: white;
+}
+.confirmation-modal-btn.confirm:hover {
+  background-color: #218838;
+}
+
+.confirmation-modal-btn.cancel {
+  background-color: #6c757d; /* Grey for cancel */
+  color: white;
+}
+.confirmation-modal-btn.cancel:hover {
+  background-color: #5a6268;
+}
+
+/* Example for a delete/danger confirmation */
+.confirmation-modal-btn.danger {
+  background-color: #dc3545; /* Red for danger/delete */
+  color: white;
+}
+.confirmation-modal-btn.danger:hover {
+  background-color: #c82333;
+}

@@ -1,0 +1,430 @@
+.events-container {
+  padding: 24px;
+  /* background-color: #f5f6fa; */ /* Old */
+  background-color: var(--background-body); /* New */
+  min-height: 100vh;
+}
+
+.events-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+}
+
+.events-header h1 {
+  font-size: 28px;
+  font-weight: 600;
+
+  color: var(--text-primary); /* New */
+  margin: 0;
+}
+
+.add-event-button {
+  /* background-color: #149b3c; */ /* Old */
+  background-color: var(--primary-color); /* New */
+  /* color: white; */ /* Old */
+  color: var(--text-on-primary); /* New */
+  border: none;
+  border-radius: 6px;
+  padding: 10px 16px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.2s;
+  display: flex;
+  align-items: center;
+}
+
+.add-event-button:hover {
+  /* background-color: #0e7b2e; */ /* Old */
+  opacity: 0.9; /* New */
+}
+
+.add-event-button:disabled {
+  /* background-color: #cccccc; */ /* Old */
+  background-color: var(--text-muted); /* New */
+  color: var(--background-content); /* New */
+  cursor: not-allowed;
+}
+
+/* Filters Bar Styling */
+.events-filters {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px 20px;
+  margin-bottom: 20px;
+  /* background-color: #ffffff; */ /* Old */
+  background-color: var(--background-content); /* New */
+  border-radius: 8px;
+  /* box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05); */ /* Old */
+  box-shadow: 0 2px 4px rgba(var(--shadow-color-rgb), 0.05); /* New */
+  border: 1px solid var(--border-color); /* New */
+}
+
+.filter-group,
+.search-group {
+  display: flex;
+  align-items: center;
+}
+
+.search-group {
+  flex: 1;
+  margin-left: 20px;
+  min-width: 200px;
+}
+
+.filter-label {
+  margin-right: 10px;
+  font-weight: 500;
+  /* color: #333; */ /* Old */
+  color: var(--text-secondary); /* New */
+  font-size: 14px;
+}
+
+.status-filter-select,
+.search-input {
+  padding: 10px 12px;
+  border-radius: 6px;
+  /* border: 1px solid #ccc; */ /* Old */
+  border: 1px solid var(--input-border); /* New */
+  font-size: 14px;
+  /* background-color: #fff; */ /* Old */
+  background-color: var(--input-bg); /* New */
+  color: var(--text-primary); /* New */
+  box-sizing: border-box;
+  transition: border-color 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+}
+
+.status-filter-select {
+  min-width: 170px;
+}
+
+.search-input {
+  width: 100%;
+}
+
+.status-filter-select:focus,
+.search-input:focus {
+  /* border-color: #149b3c; */ /* Old */
+  border-color: var(--input-focus-border); /* New */
+  /* box-shadow: 0 0 0 2px rgba(20, 155, 60, 0.15); */ /* Old */
+  box-shadow: 0 0 0 2px rgba(var(--primary-color-rgb), 0.15); /* New */
+  outline: none;
+}
+
+.search-input::placeholder {
+  /* color: #999; */ /* Old */
+  color: var(--text-muted); /* New */
+}
+
+/* Messages for loading, error, no events */
+.loading-message,
+.no-events-message { /* Combined non-error messages */
+  text-align: center;
+  padding: 40px 20px;
+  font-size: 16px;
+  /* color: #555; */ /* Old */
+  color: var(--text-muted); /* New */
+}
+
+.error-message { /* Specific error message styling */
+  text-align: center;
+  padding: 10px; /* Adjusted padding */
+  font-size: 16px;
+  /* color: #d9534f; */ /* Old */
+  color: var(--danger-color); /* New */
+  /* background-color: #f2dede; */ /* Old */
+  background-color: rgba(var(--danger-color-rgb), 0.1); /* New */
+  /* border: 1px solid #ebccd1; */ /* Old */
+  border: 1px solid rgba(var(--danger-color-rgb), 0.3); /* New */
+  border-radius: 4px;
+  margin: 15px 0; /* Added margin for standalone display */
+}
+
+
+/* Events Grid Styling */
+.events-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 24px;
+}
+
+.event-card {
+  /* background-color: white; */ /* Old */
+  background-color: var(--card-bg); /* New */
+  border-radius: 8px; /* Consistent border-radius */
+  overflow: hidden;
+  padding: 1.5rem; /* Overall padding for the card */
+  /* border-radius: 10px; */ /* Removed duplicate, stick to one value */
+  box-shadow: 0 4px 12px rgba(var(--shadow-color-rgb), 0.08); /* New */
+  transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out, border-color 0.2s ease-in-out; /* ADDED border-color to transition */
+  display: flex;
+  flex-direction: column;
+  border: 1px solid var(--border-color); /* New */
+  font-family: 'Inter', sans-serif; /* or 'Roboto', 'Open Sans' */
+  font-size: 1rem; /* around 16px */
+  line-height: 1.6;
+  /* Ensure the card can grow if content is short, but buttons stay at bottom */
+  /* min-height can be set if you want all cards to have a minimum height,
+     otherwise, height will be determined by content + flex behavior. */
+}
+
+.event-card:hover {
+  transform: translateY(-5px);
+  /* box-shadow: 0 8px 16px rgba(0, 0, 0, 0.12); */ /* Old */
+  box-shadow: 0 8px 16px rgba(var(--shadow-color-rgb), 0.12); /* New */
+  border-color: var(--primary-color); /* ADDED green border on hover */
+}
+
+.event-image {
+  position: relative;
+  height: 180px;
+  overflow: hidden;
+  /* background-color: #eee; */ /* Old */
+  background-color: var(--background-elevated); /* New */
+}
+
+.event-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* NEW STYLES for the header containing title and badge */
+.event-card-header {
+  display: flex;
+  align-items: center; /* Vertically aligns title and badge */
+  justify-content: flex-start; /* Aligns items to the start (left) */
+  margin-bottom: 0.75rem; /* Space below the header section */
+  flex-wrap: nowrap; /* Prevent wrapping of title and badge to new lines */
+  flex-shrink: 0; /* Header should not shrink */
+}
+
+/* Styles for the event title within the header */
+.event-card-header h3 {
+  margin: 0;
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  line-height: 1.3;
+  flex-grow: 1;
+  flex-shrink: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  /* white-space: nowrap; */ /* Remove or comment out if you want titles to wrap */
+}
+
+/* MODIFIED .event-status-badge styles for a more distinct badge look */
+.event-status-badge {
+  padding: 6px 12px;
+  border-radius: 20px; /* This creates the pill shape */
+  font-size: 12px;
+  font-weight: 500;
+  text-transform: capitalize;
+  /* Added for consistent inline display and vertical alignment if needed */
+  display: inline-block; 
+  line-height: 1; /* Adjust if text isn't vertically centered */
+}
+
+
+/* Specific status badge colors - UPDATED for new style */
+.event-status-badge.status-a-venir {
+  background-color: rgba(76, 175, 80, 0.15); /* Light green background */
+  color: #388E3C; /* Darker green text (adjust from #4CAF50 if needed for contrast) */
+}
+
+.event-status-badge.status-en-cours {
+  background-color: rgba(33, 150, 243, 0.15); /* Light blue background */
+  color: #1976D2; /* Darker blue text (adjust from #2196F3) */
+}
+
+.event-status-badge.status-termine {
+  background-color: rgba(117, 117, 117, 0.15); /* Light grey background */
+  color: #616161; /* Darker grey text (adjust from #757575) */
+}
+
+.event-status-badge.status-annule {
+  background-color: rgba(244, 67, 54, 0.15); /* Light red background */
+  color: #D32F2F; /* Darker red text (adjust from #f44336) */
+}
+
+.event-details {
+  /* padding: 20px; */ /* Padding is now on .event-card */
+  flex-grow: 1; /* This is key: .event-details takes up available space */
+  display: flex;
+  flex-direction: column;
+  /* position: relative; */ 
+  /* align-items: center; */ /* CHANGED: from center to flex-start for left alignment of dates */
+  align-items: flex-start; 
+}
+
+/* Assuming the event description is a <p> tag directly inside .event-details.
+   If you have a specific class for the description, use that instead of 'p'.
+   For example, if your description is <p class="event-description-text">...</p>,
+   use .event-details > .event-description-text */
+.event-details > p { /* Or a more specific selector for the description paragraph */
+  flex-grow: 1; /* Makes the description paragraph take available vertical space */
+  margin-bottom: 1rem; /* Space between description and dates */
+  width: 100%; /* Ensure it uses the available width for text wrapping */
+  overflow-wrap: break-word; /* Allow long words to break and wrap */
+  word-break: break-word; /* For broader compatibility */
+}
+
+
+.event-card-body { /* This class seems to be a general wrapper, ensure its role is clear.
+                      The main flex control for content between header and actions is on .event-details */
+  padding-top: 0; 
+  /* If .event-card-body wraps .event-details, it might not need specific flex properties here,
+     but if it *is* the container for description and dates instead of .event-details,
+     then it would need flex-grow:1 and display:flex; flex-direction:column; */
+}
+
+
+.event-date,
+.event-registration {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--text-secondary);
+  font-size: 14px;
+  margin-bottom: 8px; /* Existing margin for spacing between date lines */
+  width: 100%; /* Ensure date lines take full width for consistent alignment */
+}
+
+.event-date i,
+.event-registration i {
+  color: var(--primary-color);
+  font-size: 16px;
+}
+
+.event-date svg { /* Assuming this is for an SVG icon */
+  /* color: #149b3c; */ /* Old */
+  color: var(--primary-color); /* New */
+  flex-shrink: 0;
+}
+
+.event-actions {
+  display: flex;
+  padding: 12px 20px;
+  /* border-top: 1px solid #f0f0f0; */ /* Old */
+  border-top: 1px solid var(--border-color); /* New */
+  gap: 10px;
+  /* background-color: #f9f9f9; */ /* Old */
+  background-color: var(--background-elevated); /* New */
+  flex-shrink: 0; /* Ensures the actions area does not shrink */
+}
+
+.action-button {
+  flex: 1;
+  padding: 9px 12px;
+  border-radius: 5px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+  border: 1px solid transparent;
+  text-align: center;
+  display: inline-block;
+  text-decoration: none;
+  vertical-align: middle;
+}
+
+.action-button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  /* Ensure disabled state uses theme variables if specific colors were set */
+  background-color: var(--text-muted) !important; /* Example */
+  color: var(--background-content) !important; /* Example */
+  border-color: var(--border-color) !important; /* Example */
+}
+
+.action-button.edit {
+  /* background-color: #e9ecef; */ /* Old */
+  background-color: var(--background-content); /* New - or a specific secondary button bg */
+  /* color: #343a40; */ /* Old */
+  color: var(--text-secondary); /* New */
+  /* border-color: #ced4da; */ /* Old */
+  border-color: var(--border-color-strong); /* New */
+}
+
+.action-button.edit:hover:not(:disabled) {
+  /* background-color: #dee2e6; */ /* Old */
+  background-color: var(--border-color); /* New */
+  /* border-color: #adb5bd; */ /* Old */
+  border-color: var(--border-color-strong); /* New */
+}
+
+.action-button.delete {
+  /* background-color: #dc3545; */ /* Old */
+  background-color: var(--danger-color); /* New */
+  /* color: white; */ /* Old */
+  color: var(--text-on-primary); /* New */
+  border-color: var(--danger-color); /* New */
+}
+
+.action-button.delete:hover:not(:disabled) {
+  /* background-color: #c82333; */ /* Old */
+  opacity: 0.85; /* New */
+  /* border-color: #bd2130; */ /* Old */
+  border-color: var(--danger-color); /* New */
+}
+
+.action-button.register {
+  /* background-color: #28a745; */ /* Old */
+  background-color: var(--success-color); /* New */
+  /* color: white; */ /* Old */
+  color: var(--text-on-primary); /* New */
+  border-color: var(--success-color); /* New */
+}
+
+.action-button.register:hover:not(:disabled) {
+  /* background-color: #218838; */ /* Old */
+  opacity: 0.85; /* New */
+  /* border-color: #1e7e34; */ /* Old */
+  border-color: var(--success-color); /* New */
+}
+
+
+
+@media (max-width: 768px) {
+  .events-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 16px;
+  }
+
+  .events-filters {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 15px;
+  }
+
+  .search-group {
+    margin-left: 0;
+    width: 100%;
+  }
+
+  .status-filter-select {
+    width: 100%;
+  }
+
+  .events-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .event-title {
+    font-size: 18px;
+  }
+}
+
+.date-icon {
+  margin-right: 8px;
+  /* color: #149b3c; */ /* Old */
+  color: var(--primary-color); /* New */
+  font-size: 1.1em;
+  line-height: 1;
+  vertical-align: middle;
+}

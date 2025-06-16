@@ -1,0 +1,225 @@
+.settings-page {
+  padding: 24px;
+  max-width: 900px;
+  margin: 0 auto;
+  background-color: var(--background-body); /* New */
+  color: var(--text-primary); /* New */
+}
+
+.settings-page h1 {
+  text-align: center;
+  margin-bottom: 30px;
+  color: var(--text-primary); /* New */
+}
+
+.settings-section {
+  /* background-color: white; */ /* Old */
+  background-color: var(--background-content); /* New */
+  padding: 25px;
+  border-radius: 8px;
+  /* box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05); */ /* Old */
+  box-shadow: 0 2px 10px rgba(var(--shadow-color-rgb), 0.05); /* New */
+  margin-bottom: 30px;
+  border: 1px solid var(--border-color); /* New */
+}
+
+.settings-section h2 {
+  margin-top: 0;
+  margin-bottom: 20px;
+  /* color: #333; */ /* Old */
+  color: var(--text-primary); /* New */
+  padding-bottom: 10px;
+  border-bottom: 1px solid var(--border-color); /* New */
+}
+
+.profile-picture-form, .password-form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.profile-picture-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 20px; /* Ensure space before messages or save button */
+  position: relative;
+}
+
+.profile-preview {
+  width: 150px;
+  height: 150px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 3px solid var(--primary-color);
+  margin-bottom: 20px; /* Increased space for buttons below */
+  background-color: var(--background-elevated);
+}
+
+.file-input { display: none; }
+
+/* Wrapper for the change and delete buttons */
+.upload-actions-container {
+  display: flex;
+  flex-direction: column; /* Stack buttons vertically */
+  align-items: center;
+  gap: 10px; /* Space between the buttons */
+}
+
+/* Wrapper for the file input and its label to keep them together if needed, though not strictly necessary for this layout */
+.upload-button-wrapper {
+  display: inline-block; /* Or flex if you had an icon next to text */
+}
+
+.upload-button { /* This is the <label> styled as a button AND the base for delete button */
+  display: inline-block;
+  padding: 10px 20px;
+  background-color: var(--primary-color);
+  color: var(--text-on-primary);
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  text-align: center;
+  font-weight: 500;
+  transition: background-color 0.3s ease, opacity 0.3s ease; /* Added opacity to transition */
+  min-width: 180px; /* Ensure buttons have similar width */
+  box-sizing: border-box; /* Include padding and border in the element's total width and height */
+}
+.upload-button:hover {
+  opacity: 0.85; /* Unified hover effect */
+}
+.upload-button:disabled,
+.upload-button[disabled] { /* For actual button disabled state */
+    background-color: var(--text-muted) !important; /* Ensure override */
+    color: var(--background-content) !important;
+    cursor: not-allowed;
+    opacity: 0.7;
+}
+
+/* Specific style for the delete button to make it red */
+.delete-picture-button {
+  background-color: var(--danger-color); /* Red color */
+  /* color: var(--text-on-danger, var(--text-on-primary)); */ /* Ensure text is readable, fallback to text-on-primary */
+}
+
+.delete-picture-button:hover {
+   /* background-color: var(--danger-color-dark); */ /* Optional: darker red on hover */
+   opacity: 0.85; /* Consistent hover with other button */
+}
+
+.delete-picture-button:disabled,
+.delete-picture-button[disabled] {
+    background-color: var(--text-muted) !important; /* Ensure disabled style is consistent */
+    color: var(--background-content) !important;
+    cursor: not-allowed;
+    opacity: 0.7;
+}
+
+
+.message { /* For success/error messages */
+  padding: 10px;
+  margin: 15px 0;
+  border-radius: 4px;
+  text-align: center;
+  width: 100%;
+  max-width: 400px; /* Or adjust */
+}
+.message.success {
+  background-color: rgba(var(--success-color-rgb), 0.1);
+  color: var(--success-color);
+  border: 1px solid rgba(var(--success-color-rgb), 0.3);
+}
+.message.error {
+  background-color: rgba(var(--danger-color-rgb), 0.1);
+  color: var(--danger-color);
+  border: 1px solid rgba(var(--danger-color-rgb), 0.3);
+}
+
+.save-button { /* General save button for sections */
+  padding: 10px 20px;
+  /* background-color: #149b3c; */ /* Old */
+  background-color: var(--primary-color); /* New */
+  color: var(--text-on-primary); /* New */
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 1em;
+  font-weight: 500;
+  transition: background-color 0.3s ease;
+  width: auto;
+  min-width: 180px;
+  margin-top: 10px; /* If there's a message above it */
+}
+.save-button:hover {
+  /* background-color: #0f7a2f; */ /* Old */
+  opacity: 0.9; /* New */
+}
+.save-button:disabled {
+  /* background-color: #cccccc; */ /* Old */
+  background-color: var(--text-muted); /* New */
+  color: var(--background-content); /* New */
+  cursor: not-allowed;
+}
+
+.password-form .form-group {
+  margin-bottom: 15px;
+  width: 100%;
+  max-width: 400px;
+}
+.password-form label {
+  display: block;
+  margin-bottom: 5px;
+  font-weight: 500;
+  /* color: #333; */ /* Old */
+  color: var(--text-secondary); /* New */
+}
+.password-form input[type="password"] {
+  width: 100%;
+  padding: 10px;
+  /* border: 1px solid #ddd; */ /* Old */
+  border: 1px solid var(--input-border); /* New */
+  background-color: var(--input-bg); /* New */
+  color: var(--text-primary); /* New */
+  border-radius: 5px;
+  box-sizing: border-box;
+}
+.password-form input[type="password"]:focus {
+  border-color: var(--input-focus-border); /* New */
+  outline: none;
+}
+
+/* Styles from .profile-upload-container section if still relevant */
+.upload-instructions {
+  /* color: #666; */ /* Old */
+  color: var(--text-muted); /* New */
+  font-size: 16px;
+  margin-top: 5px;
+}
+.file-size-info {
+  /* color: #999; */ /* Old */
+  color: var(--text-muted); /* New */
+  font-size: 14px;
+  margin-top: 5px;
+}
+.profile-input-group label { /* If used */
+  /* color: #333; */ /* Old */
+  color: var(--text-secondary); /* New */
+}
+.file-input-container { /* If used */
+  /* border: 1px solid #ddd; */ /* Old */
+  border: 1px solid var(--input-border); /* New */
+  /* background: #fff; */ /* Old */
+  background: var(--input-bg); /* New */
+}
+.browse-button { /* If used */
+  /* background: #f5f5f5; */ /* Old */
+  background: var(--background-elevated); /* New */
+  /* border: 1px solid #ddd; */ /* Old */
+  border: 1px solid var(--border-color); /* New */
+  /* color: #333; */ /* Old */
+  color: var(--text-secondary); /* New */
+}
+.file-name { /* If used */
+  /* color: #555; */ /* Old */
+  color: var(--text-primary); /* New */
+}

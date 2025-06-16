@@ -1,0 +1,237 @@
+.users-page {
+  padding: 24px;
+  background-color: var(--background-body); /* New */
+  color: var(--text-primary); /* New */
+}
+
+.users-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+  padding-bottom: 15px;
+  border-bottom: 1px solid var(--border-color); /* New */
+}
+
+.title-section h1 {
+  font-size: 24px;
+  margin-bottom: 8px;
+  color: var(--text-primary); /* New */
+}
+.title-section p {
+  /* color: #666; */ /* Old */
+  color: var(--text-muted); /* New */
+}
+
+.add-user-btn {
+  /* background-color: #4ade80; */ /* Old */
+  background-color: var(--primary-color); /* New */
+  color: var(--text-on-primary); /* New */
+  border: none;
+  padding: 12px 24px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 500;
+}
+.add-user-btn:hover {
+  opacity: 0.9;
+}
+.add-user-btn:disabled {
+  background-color: var(--text-muted);
+  color: var(--background-content);
+}
+
+.upload-users-btn {
+   background-color: var(--primary-color); /* New */
+  color: var(--text-on-primary); /* New */
+  border: none;
+  padding: 12px 24px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 500;
+}
+
+.upload-users-btn:hover {
+  opacity: 0.9;
+}
+
+.upload-users-btn:disabled {
+  background: #cbd5e1;
+  color: #64748b;
+  cursor: not-allowed;
+  opacity: 0.7;
+  box-shadow: none;
+}
+
+.filters-section {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+  padding: 15px;
+  background-color: var(--background-content); /* New */
+  border: 1px solid var(--border-color); /* New */
+  border-radius: 8px;
+}
+.filters-section label {
+  color: var(--text-secondary); /* New */
+  margin-right: 8px;
+}
+
+.role-filter select, .search-bar input {
+  padding: 8px 16px;
+  border-radius: 6px;
+  /* border: 1px solid #ddd; */ /* Old */
+  border: 1px solid var(--input-border); /* New */
+  background-color: var(--input-bg); /* New */
+  color: var(--text-primary); /* New */
+}
+.role-filter select {
+  margin-left: 8px;
+}
+.search-bar input {
+  width: 300px;
+}
+.role-filter select:focus, .search-bar input:focus {
+  border-color: var(--input-focus-border); /* New */
+  outline: none;
+}
+
+.users-table-container { /* Added for consistency */
+  /* background: white; */ /* Old */
+  background: var(--background-content); /* New */
+  border-radius: 8px;
+  /* box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1); */ /* Old */
+  box-shadow: 0 1px 3px rgba(var(--shadow-color-rgb), 0.1); /* New */
+  overflow-x: auto;
+  border: 1px solid var(--border-color); /* New */
+}
+
+table { /* Assuming .users-table is inside .users-table-container */
+  width: 100%;
+  border-collapse: collapse;
+}
+
+th {
+  text-align: left;
+  padding: 16px;
+  /* border-bottom: 1px solid #eee; */ /* Old */
+  border-bottom: 1px solid var(--border-color-strong); /* New */
+  /* color: #666; */ /* Old */
+  color: var(--text-secondary); /* New */
+  font-weight: 600; /* Added for header emphasis */
+}
+
+td {
+  padding: 16px;
+  border-bottom: 1px solid var(--border-color); /* New */
+  color: var(--text-primary); /* New */
+}
+tbody tr:hover {
+  background-color: var(--sidebar-hover); /* Or a specific table hover variable */
+}
+tbody tr:last-child td {
+  border-bottom: none; /* Remove border for last row */
+}
+
+
+.user-avatar {
+  width: 40px;
+  height: 40px;
+  /* background-color: #eee; */ /* Old */
+  background-color: var(--background-elevated); /* New */
+  border-radius: 50%;
+  object-fit: cover; /* Ensure image covers */
+  border: 2px solid var(--border-color); /* New */
+}
+/* .avatar-img specific border if different from .user-avatar */
+.avatar-img {
+  /* border: 2px solid #2ecc40; */ /* Old - this was very specific green */
+  /* If you want a theme-specific border for the image itself: */
+  /* border: 2px solid var(--primary-color); */
+  object-fit: cover;
+}
+
+
+.user-name {
+  font-weight: 500;
+  color: var(--text-primary); /* New */
+}
+
+
+
+.role-badge {
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-size: 12px; /* Slightly smaller for badge */
+  font-weight: 500;
+  text-transform: capitalize;
+}
+.role-badge.admin {
+  /* background-color: #ffebee; */ /* Old - redish */
+  background-color: rgba(var(--danger-color-rgb), 0.15); /* New */
+  color: var(--danger-color); /* New */
+}
+.role-badge.employee { /* Assuming 'employee' is another role */
+  /* background-color: #e3f2fd; */ /* Old - bluish */
+  background-color: rgba(var(--secondary-color-rgb), 0.15); /* New */
+  color: var(--secondary-color); /* New */
+}
+/* Add more role badge styles as needed */
+
+.department-name {
+  color: var(--text-secondary); /* New */
+}
+
+.actions button {
+  border: none;
+  padding: 8px 12px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 14px;
+  margin-right: 8px;
+  font-weight: 500;
+}
+.actions button:last-child {
+  margin-right: 0;
+}
+.actions button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.edit-btn {
+  /* background-color: #e3f2fd; */ /* Old */
+  background-color: rgba(var(--secondary-color-rgb), 0.2); /* New */
+  /* color: #1976d2; */ /* Old */
+  color: var(--secondary-color); /* New */
+}
+.edit-btn:hover {
+  background-color: rgba(var(--secondary-color-rgb), 0.3); /* New */
+}
+
+.delete-btn {
+  /* background-color: #ffebee; */ /* Old */
+  background-color: rgba(var(--danger-color-rgb), 0.2); /* New */
+  /* color: #d32f2f; */ /* Old */
+  color: var(--danger-color); /* New */
+}
+.delete-btn:hover {
+  background-color: rgba(var(--danger-color-rgb), 0.3); /* New */
+}
+
+.error-message { /* Global error message style */
+  color: var(--danger-color);
+  background-color: rgba(var(--danger-color-rgb), 0.1);
+  border: 1px solid rgba(var(--danger-color-rgb), 0.3);
+  padding: 10px;
+  border-radius: 4px;
+  text-align: center;
+  margin: 15px 0;
+}
+.loading-message { /* Global loading message style */
+  text-align: center;
+  padding: 20px;
+  color: var(--text-muted);
+  font-size: 1.1em;
+}

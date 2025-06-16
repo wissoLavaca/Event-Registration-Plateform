@@ -1,0 +1,394 @@
+.form-builder-container {
+  display: flex;
+  flex-direction: column;
+  gap: 20px; /* Adds space between header, list, and footer */
+  padding: 24px;
+  max-width: 900px; /* Or your preferred max width */
+  margin: 0 auto; /* Center the container if it has a max-width */
+  border: 1px solid #e0e0e0; /* Optional: to see the container bounds */
+  border-radius: 8px;
+  background-color: var(--background-body); /* New */
+  color: var(--text-primary); /* New */
+}
+
+.form-builder {
+  padding: 24px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.form-builder-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+  padding-bottom: 15px;
+  border-bottom: 1px solid var(--border-color); /* New */
+}
+
+.form-builder-header h1 {
+  color: var(--text-primary); /* New */
+}
+
+.header-actions {
+  display: flex;
+  gap: 10px; /* Space between buttons in the header */
+}
+
+.form-builder-header .back-btn { /* Renamed from .back-button to match common naming */
+  padding: 8px 16px;
+  background-color: #6c757d; /* Bootstrap secondary grey */
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 14px;
+  text-decoration: none;
+  transition: background-color 0.2s ease;
+}
+
+.form-builder-header .back-btn:hover {
+  background-color: #5a6268;
+}
+
+.back-button {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 16px;
+  background: transparent;
+  border: none;
+  color: var(--text-link); /* New */
+  font-size: 15px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  text-decoration: none;
+}
+.back-button:hover {
+  color: var(--primary-color); /* New - or a darker shade of text-link */
+  transform: translateX(-5px);
+}
+
+.back-button i {
+  font-size: 20px;
+}
+
+/* Add this if you're using an arrow icon */
+
+
+.subtitle {
+  color: var(--text-muted); /* New */
+  margin-bottom: 32px;
+}
+
+.form-builder-content {
+  display: grid;
+  grid-template-columns: 1fr 2fr;
+  gap: 32px;
+}
+
+.form-settings, .form-fields {
+  background: var(--background-content); /* New */
+  padding: 24px;
+  border-radius: 8px;
+  box-shadow: 0 1px 3px rgba(var(--shadow-color-rgb), 0.1); /* New */
+  border: 1px solid var(--border-color); /* New */
+}
+
+.form-settings h2, .form-fields h2 {
+  margin-bottom: 24px;
+  color: var(--text-primary); /* New */
+  font-size: 1.2rem;
+}
+
+.form-group {
+  margin-bottom: 20px;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 8px;
+  color: var(--text-secondary); /* New */
+  font-weight: 500;
+}
+
+.form-group input,
+.form-group textarea,
+.form-group select {
+  width: 100%;
+  padding: 8px 12px;
+  border: 1px solid var(--input-border); /* New */
+  background-color: var(--input-bg); /* New */
+  color: var(--text-primary); /* New */
+  border-radius: 6px;
+  font-size: 14px;
+}
+.form-group input:focus,
+.form-group textarea:focus,
+.form-group select:focus {
+  border-color: var(--input-focus-border); /* New */
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(var(--primary-color-rgb), 0.2); /* New */
+}
+
+/* ... .form-group textarea (min-height, resize) ... */
+
+.fields-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+}
+
+.add-field-btn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 16px;
+  background-color: var(--primary-color); /* New */
+  color: var(--text-on-primary); /* New */
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 14px;
+}
+.add-field-btn:hover {
+  opacity: 0.9; /* New */
+}
+
+.empty-fields {
+  text-align: center;
+  padding: 48px;
+  color: var(--text-muted); /* New */
+  background: var(--background-elevated); /* New */
+  border-radius: 6px;
+  border: 1px dashed var(--border-color); /* New */
+}
+
+.fields-list {
+  display: flex;
+  flex-direction: column;
+  gap: 15px; /* Increased space between field items */
+  margin-top: 20px; /* Keep or adjust as needed */
+}
+
+.field-item { /* This is the container for each field */
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px;
+  background-color: var(--background-elevated); /* New */
+  border: 1px solid var(--border-color); /* New */
+  border-radius: 6px;
+  margin-bottom: 10px;
+  box-shadow: 0 1px 2px rgba(var(--shadow-color-rgb),0.05); /* New */
+}
+
+.field-item:hover {
+  box-shadow: 0 4px 8px rgba(0,0,0,0.12);
+}
+
+.field-item .field-info { /* Wrapper for label and badge */
+  display: flex;
+  align-items: center;
+  gap: 10px; /* Space between label and badge */
+}
+
+.field-item .field-label-text { /* Class for just the "Label (type)" text */
+  font-size: 1.05em; /* Slightly larger */
+  color: #333;
+  font-weight: 500; /* Bolder label */
+}
+
+.required-badge {
+  display: inline-block;
+  background-color: #fff0f0; /* Lighter red background */
+  color: #c53030; /* Darker red text */
+  padding: 4px 10px; /* Adjusted padding */
+  border-radius: 16px; /* Pill shape */
+  font-size: 0.75em; /* Smaller font size for badge */
+  font-weight: 600;
+  text-transform: uppercase; /* Optional: makes it look more like a badge */
+  border: 1px solid #fdd8d8; /* Light red border */
+}
+
+.field-item .field-actions {
+  display: flex;
+  gap: 10px; /* Space between edit and delete buttons */
+}
+
+.field-item .edit-btn,
+.field-item .delete-btn {
+  padding: 7px 14px; /* Adjusted padding */
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 0.85em; /* Slightly smaller button text */
+  border: none;
+  transition: background-color 0.2s ease, opacity 0.2s ease; /* Added opacity to transition */
+}
+
+.field-item .edit-btn {
+  background-color: #007bff; /* Consider using var(--info-color) or var(--primary-color) */
+  color: white; /* Consider var(--text-on-primary) */
+}
+.field-item .edit-btn:hover {
+  background-color: #0056b3; /* Consider var(--info-color-dark) */
+}
+
+.field-item .delete-btn {
+  background-color: #dc3545; /* Consider var(--danger-color) */
+  color: white; /* Consider var(--text-on-danger) */
+}
+.field-item .delete-btn:hover {
+  background-color: #c82333; /* Consider var(--danger-color-dark) */
+}
+
+/* Styles for disabled edit and delete buttons within a field item */
+.field-item .edit-btn:disabled,
+.field-item .delete-btn:disabled {
+  background-color: var(--button-disabled-bg, #cccccc); /* A muted grey background */
+  color: var(--button-disabled-text, #666666);    /* Darker grey text for readability */
+  cursor: not-allowed;
+  opacity: 0.6; /* Make them appear faded */
+  /* Remove hover effects when disabled */
+  pointer-events: none; /* Prevents click and hover events */
+}
+
+
+.form-builder-footer {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 30px;
+  padding-top: 20px; /* Increased padding */
+  border-top: 1px solid var(--border-color); /* New */
+  text-align: right;
+}
+
+.form-builder-footer .save-all-btn { /* Assuming this is the class for "Enregistrer tous les champs" */
+  padding: 12px 25px; /* Larger padding */
+  font-size: 1.05em; /* Slightly larger font */
+  background-color: var(--success-color); /* New */
+  color: var(--text-on-primary); /* New */
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 500;
+  transition: background-color 0.2s ease;
+}
+.form-builder-footer .save-all-btn:hover {
+  opacity: 0.9; /* New */
+}
+.form-builder-footer .save-all-btn:disabled {
+  background-color: var(--text-muted); /* New */
+  color: var(--background-content); /* New */
+  cursor: not-allowed;
+}
+
+/* For the "Aucun champ défini..." message */
+.fields-list > p { /* Make sure this targets the p inside fields-list */
+  text-align: center;
+  color: var(--text-muted); /* New */
+  padding: 30px 20px; /* More padding */
+  font-style: italic;
+  background-color: var(--background-elevated); /* New */
+  border: 1px dashed var(--border-color); /* New */
+  border-radius: 8px;
+  margin-top: 10px; /* If it's the only thing in the list */
+}
+
+/* Loading message */
+.form-builder-container > p {
+  text-align: center;
+  font-size: 1.2em;
+  padding: 20px;
+  color: var(--text-secondary); /* New */
+}
+
+.modification-locked-message {
+  background-color: var(--warning-bg-light, #fff3cd); /* Light yellow background */
+  color: var(--warning-text-dark, #856404);      /* Dark yellow/brown text */
+  border: 1px solid var(--warning-border, #ffeeba);   /* Yellow border */
+  padding: 15px;
+  border-radius: var(--border-radius-md, 8px);
+  margin: 15px 0;
+  text-align: center;
+  font-size: 0.95rem;
+}
+
+/* Styles for the top navigation area holding the back button */
+.form-builder-top-nav {
+  display: flex;
+  justify-content: flex-start; /* CHANGED from flex-end to flex-start */
+  margin-bottom: 1rem; /* Space below the back button and above the main header */
+}
+
+/* Styling for the back button */
+.form-builder-container .back-btn { /* Increased specificity to override general button styles if necessary */
+  background-color: transparent;
+  color: var(--text-link, var(--primary-color)); /* Use a link color or your primary theme color */
+  border: none; /* Or a subtle border: 1px solid var(--border-color-subtle); */
+  padding: 8px 12px;
+  font-size: 0.9rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: color 0.2s ease, background-color 0.2s ease;
+}
+
+.form-builder-container .back-btn:hover {
+  color: var(--text-link-hover, var(--primary-color-dark));
+  background-color: var(--surface-hover, rgba(0,0,0,0.05)); /* Optional: subtle background on hover */
+}
+
+/* General styling for buttons with icons */
+.form-builder-container .icon-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px; /* Space between icon and text */
+}
+
+.form-builder-container .icon-btn i {
+  font-size: 1.1em; /* Adjust icon size as needed */
+  line-height: 1; /* Helps with vertical alignment of the icon */
+}
+
+/* Ensure the main header still aligns its items correctly */
+.form-builder-header {
+  display: flex;
+  justify-content: space-between; /* Keeps title left, header-actions right */
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.form-builder-header h2 {
+  margin: 0;
+  color: var(--text-primary);
+  font-size: 1.8rem; /* Adjust as needed */
+}
+
+.header-actions {
+  /* This div now only contains the "Ajouter un champ" button */
+  display: flex; /* If you add more buttons here later */
+  gap: 10px;
+}
+
+/* You might want to ensure your .add-field-btn has distinct styling */
+.add-field-btn {
+  background-color: var(--primary-color);
+  color: var(--text-on-primary, #fff);
+  padding: 10px 15px;
+  border-radius: 6px;
+  border: none;
+  cursor: pointer;
+  font-weight: 500;
+}
+
+.add-field-btn:hover {
+  background-color: var(--primary-color-dark);
+}
+
+.add-field-btn:disabled {
+  background-color: var(--disabled-bg, #ccc);
+  color: var(--disabled-text, #777);
+  cursor: not-allowed;
+}
+

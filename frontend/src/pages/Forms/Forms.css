@@ -1,0 +1,177 @@
+.forms-page {
+  padding: 24px;
+  background-color: var(--background-body); /* New */
+  color: var(--text-primary); /* New */
+}
+
+.forms-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+  padding-bottom: 15px;
+  border-bottom: 1px solid var(--border-color); /* New */
+}
+
+.title-section h1 {
+  margin-bottom: 8px;
+  /* color: #333; */ /* Old */
+  color: var(--text-primary); /* New */
+}
+
+.title-section p {
+  /* color: #666; */ /* Old */
+  color: var(--text-muted); /* New */
+}
+
+.add-form-btn { /* This seems to be for adding a new form/event for forms */
+  /* background-color: #4ade80; */ /* Old */
+  background-color: var(--primary-color); /* New */
+  color: var(--text-on-primary); /* New */
+  border: none;
+  padding: 12px 24px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 500;
+  transition: background-color 0.2s;
+}
+.add-form-btn:hover {
+  /* background-color: #22c55e; */ /* Old */
+  opacity: 0.9; /* New */
+}
+
+.forms-filters {
+  margin-bottom: 24px;
+  padding: 15px;
+  background-color: var(--background-content); /* New */
+  border: 1px solid var(--border-color); /* New */
+  border-radius: 8px;
+}
+
+.search-bar input {
+  width: 300px;
+  padding: 10px 16px;
+  /* border: 1px solid #ddd; */ /* Old */
+  border: 1px solid var(--input-border); /* New */
+  background-color: var(--input-bg); /* New */
+  color: var(--text-primary); /* New */
+  border-radius: 8px;
+  font-size: 14px;
+}
+.search-bar input:focus {
+  border-color: var(--input-focus-border); /* New */
+  outline: none;
+}
+
+.forms-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 24px;
+}
+
+.form-card { /* Represents an event card for which forms are managed */
+  background: var(--card-bg); 
+  border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(var(--shadow-color-rgb),0.05); 
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  border: 1px solid var(--border-color);
+  transition: transform 0.2s ease-out, box-shadow 0.2s ease-out, border-color 0.2s ease-out; /* ADDED transitions */
+}
+
+.form-card:hover {
+  transform: translateY(-5px); /* ADDED lift effect */
+  box-shadow: 0 6px 15px rgba(var(--shadow-color-rgb), 0.07); /* ENHANCED shadow on hover */
+  border-color: var(--primary-color); /* ADDED green border on hover */
+}
+
+.form-card-header { /* ADDED to ensure it doesn't shrink and to add bottom margin */
+  margin-bottom: 12px;
+  flex-shrink: 0;
+}
+
+.form-card-header h3 { /* Changed from h2 to h3 to match JSX */
+  color: var(--text-primary); 
+  margin-top: 0; /* Remove default top margin */
+  margin-bottom: 8px;
+  font-size: 1.15rem; /* Adjusted size */
+}
+
+.form-description { /* Assuming this class is used for the description <p> tag */
+  color: var(--text-secondary);
+  font-size: 0.9em;
+  margin-bottom: 16px;
+  flex-grow: 1; /* ADDED to make description take available space */
+  min-height: 40px; /* Optional: ensure a minimum space for description */
+}
+
+.form-meta { /* Container for start date etc. */
+  margin-bottom: 16px;
+  font-size: 0.85em;
+  color: var(--text-muted);
+  flex-shrink: 0; /* Ensure it doesn't shrink */
+}
+
+.form-actions {
+  margin-top: auto; /* Pushes actions to the bottom */
+  padding-top: 16px;
+  border-top: 1px solid var(--border-color); 
+  display: flex;
+  gap: 10px;
+  justify-content: flex-end; /* Align buttons to the right */
+  flex-shrink: 0; /* Ensure actions bar doesn't shrink */
+}
+
+
+/* General button style to reset defaults and add common properties */
+.form-actions button {
+  border-radius: 6px;
+  padding: 8px 16px;
+  font-size: 0.875rem; /* 14px */
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease, opacity 0.2s ease;
+  border: 1px solid transparent; /* Base for border transition */
+  display: inline-flex; /* For icon alignment */
+  align-items: center; /* For icon alignment */
+  gap: 6px; /* Space between icon and text */
+}
+
+.form-actions button i { /* Style for icons within buttons */
+  font-size: 1.1em; /* Slightly larger icon */
+}
+
+
+/* UPDATED .edit-btn style */
+.edit-btn {
+  background-color: var(--primary-button-bg, var(--primary-color)); /* Use a specific variable or fallback to primary */
+  color: var(--primary-button-text, var(--text-on-primary));
+  border-color: var(--primary-button-bg, var(--primary-color));
+}
+.edit-btn:hover {
+  background-color: var(--primary-button-hover-bg, var(--primary-color-dark)); /* Darker shade for hover */
+  border-color: var(--primary-button-hover-bg, var(--primary-color-dark));
+  opacity: 0.9;
+}
+
+/* UPDATED .view-inscriptions-btn style */
+.view-inscriptions-btn {
+  background-color: var(--secondary-button-bg, var(--surface-button)); /* Use a specific variable or a subtle background */
+  color: var(--secondary-button-text, var(--text-primary));
+  border-color: var(--secondary-button-border, var(--border-color-strong));
+}
+.view-inscriptions-btn:hover {
+  background-color: var(--secondary-button-hover-bg, var(--surface-hover));
+  border-color: var(--secondary-button-hover-border, var(--primary-color));
+  color: var(--secondary-button-hover-text, var(--primary-color));
+}
+
+/* Styles for .delete-btn if they are general utility classes */
+.delete-btn {
+  background-color: rgba(var(--danger-color-rgb), 0.15); 
+  color: var(--danger-color); 
+}
+.delete-btn:hover {
+  background-color: rgba(var(--danger-color-rgb), 0.25); 
+}

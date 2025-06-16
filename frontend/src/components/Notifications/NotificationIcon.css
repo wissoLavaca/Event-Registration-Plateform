@@ -1,0 +1,49 @@
+.notification-icon-container {
+    position: relative;
+    /* Adjust margin if needed to align with other .icon-button elements */
+    /* margin-left: 15px; */ /* This might not be needed if it's part of .action-icons */
+}
+
+.notification-button {
+    background: none;
+    border: none;
+    cursor: pointer;
+    position: relative;
+    padding: 8px; /* Match padding from .icon-button in Navbar.css */
+    color: var(--text-muted); /* Use the CSS variable from Navbar.css */
+    font-size: 1.1rem; /* Match font-size from .icon-button in Navbar.css */
+    /* If you want the bell slightly larger or smaller than other icons, adjust font-size here
+       or on .notification-button .bxs-bell specifically */
+}
+
+.notification-button:hover {
+    color: var(--text-light); /* Use the CSS variable for hover from Navbar.css */
+}
+
+/* Style the Boxicon specifically if needed, or rely on .notification-button color */
+.notification-button .bxs-bell {
+    vertical-align: middle; 
+        font-size: 1.3rem; /* << INCREASED SIZE - Try 1.2rem, 1.3rem, or 1.4rem */
+/* Helps align the icon nicely */
+    /* If you used a different font-size on .notification-button for the bell specifically,
+       ensure it looks good. Otherwise, it will inherit from .notification-button. */
+}
+
+.notification-badge {
+    position: absolute;
+    top: 4px;        /* Match .pulse-dot positioning from Navbar.css if desired */
+    right: 4px;      /* Match .pulse-dot positioning from Navbar.css if desired */
+    background-color: var(--primary-color); /* Using a theme variable for the badge background */
+    /* Or stick to red if you prefer: background-color: red; */
+    color: white; /* Or var(--text-on-primary) if your primary color needs a specific text color */
+    border-radius: 50%;
+    padding: 1px 5px; /* Slightly adjust padding for small text */
+    font-size: 0.65rem; /* Make badge text a bit smaller */
+    font-weight: bold;
+    min-width: 16px; /* Adjust min-width */
+    height: 16px; /* Make it more circular by setting height */
+    line-height: 14px; /* Adjust line-height for vertical centering of text */
+    text-align: center;
+    box-sizing: border-box; /* Include padding and border in the element's total width and height */
+    /* border: 1px solid var(--background-content); /* Optional: border to make it pop from icon */
+}
