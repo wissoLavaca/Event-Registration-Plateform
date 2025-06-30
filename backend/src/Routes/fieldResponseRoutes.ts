@@ -7,7 +7,7 @@ import upload from '../Middleware/multerConfig';
 
 const router = Router();
 
-// Handler functions with proper error handling
+// Handler functions 
 const submitResponsesHandler = async (req: Request, res: Response, next: NextFunction) => {
     try {
         await FieldResponseController.submitResponsesForInscription(req as FieldResponseRequest, res);
@@ -32,10 +32,10 @@ const getAllResponsesHandler = async (req: Request, res: Response, next: NextFun
     }
 };
 
-// Apply authentication middleware
+// authentication middleware
 router.use(authMiddleware);
 
-// Route definitions with wrapped handlers
+// Route 
 router.post(
     '/inscriptions/:inscriptionId/responses',
     upload.single('response_file'),
