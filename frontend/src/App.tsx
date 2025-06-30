@@ -15,7 +15,6 @@ import 'react-toastify/dist/ReactToastify.css';
 
 
 
-// A component to wrap authenticated routes with the Layout
 const ProtectedRoutesLayout = () => {
   const { logout } = useAuth();
   return (
@@ -30,7 +29,6 @@ const AppRoutes = () => {
   
 
   if (isLoading) {
-    // You can show a loading spinner here if you want
     return <div>Loading...</div>;
   }
 
@@ -73,7 +71,7 @@ function App() {
           pauseOnFocusLoss
           draggable
           pauseOnHover
-          
+          theme="light"
         />
       </NotificationProvider>
     </AuthProvider>
