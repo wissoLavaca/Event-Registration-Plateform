@@ -2,8 +2,8 @@ import { Router, Request, Response, NextFunction } from 'express';
 import * as UserController from '../Controllers/UserController';
 import { authMiddleware } from '../Middleware/authMiddleware';
 import { authorizeRole } from '../Middleware/authorizeMiddleware';
-import { UserRequest } from '../types/user.types'; // Assuming this is your custom request type
-import multer from 'multer'; // Corrected import name
+import { UserRequest } from '../types/user.types';
+import multer from 'multer'; 
 import path from 'path';
 import fs from 'fs';
 
@@ -37,7 +37,7 @@ const upload = multer({
     fileFilter: imageFileFilter
 });
 
-// Handler functions with proper error handling (assuming UserRequest is compatible with AuthenticatedRequest)
+// Handler functions 
 const getAllUsersHandler = async (req: Request, res: Response, next: NextFunction) => {
     try {
         await UserController.getAllUsers(req as UserRequest, res, next);
@@ -102,27 +102,23 @@ const deleteProfilePictureHandler = async (req: Request, res: Response, next: Ne
     }
 };
 
-// --- Define all routes first ---
-
-// Public routes (if any) would go here, before router.use(authMiddleware)
-
-// Apply authentication middleware to all subsequent routes in this router
+// Apply authentication middleware to all 
 router.use(authMiddleware);
 
 // Authenticated routes
-router.get('/count', authorizeRole(['Admin']), UserController.getUsersCount); // authMiddleware is already applied
-router.put('/change-password', changeCurrentUserPasswordHandler); // authMiddleware is already applied
-router.post('/profile-picture', upload.single('profilePicture'), uploadProfilePictureHandler); // authMiddleware is already applied
-router.delete('/profile-picture', deleteProfilePictureHandler); // authMiddleware is already applied
+router.get('/count', authorizeRole(['Admin']), UserController.getUsersCount); 
+router.put('/change-password', changeCurrentUserPasswordHandler); 
+router.post('/profile-picture', upload.single('profilePicture'), uploadProfilePictureHandler); 
+router.delete('/profile-picture', deleteProfilePictureHandler); 
 
-router.get('/', authorizeRole(['Admin']), getAllUsersHandler); // authMiddleware is already applied
-router.get('/:id', getUserByIdHandler); // authMiddleware is already applied, consider adding authorizeRole if needed
-router.post('/', authorizeRole(['Admin']), createUserHandler); // authMiddleware is already applied
+router.get('/', authorizeRole(['Admin']), getAllUsersHandler); 
+router.get('/:id', getUserByIdHandler);
+router.post('/', authorizeRole(['Admin']), createUserHandler);
 
-router.post('/bulk', authorizeRole(['Admin']), UserController.createBulkUsers); // authMiddleware is already applied
+router.post('/bulk', authorizeRole(['Admin']), UserController.createBulkUsers);
 
-router.put('/:id', authorizeRole(['Admin']), updateUserHandler); // authMiddleware is already applied (ensure this is the intended behavior for all users or just admin)
-router.delete('/:id', authorizeRole(['Admin']), deleteUserHandler); // authMiddleware is already applied
+router.put('/:id', authorizeRole(['Admin']), updateUserHandler); 
+router.delete('/:id', authorizeRole(['Admin']), deleteUserHandler);
 
 
 export default router;
