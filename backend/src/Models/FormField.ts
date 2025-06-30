@@ -38,6 +38,6 @@ export class FormField {
     @OneToMany(() => FieldResponse, fieldResponse => fieldResponse.formField)
     fieldResponses!: FieldResponse[];
 
-    @Column({ type: 'text', nullable: true, name: 'accepted_file_types' }) // Match DB column name
+    @Column({ type: 'text', nullable: true, name: 'accepted_file_types' })
   acceptedFileTypes: string | null;
 }
