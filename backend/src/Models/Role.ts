@@ -12,8 +12,7 @@ export class Role {
         type: "varchar",
         length: 20,
         unique: true, 
-        // The CHECK constraint is handled by the DB schema.
-        // For application-level validation, you'd use class-validator or similar.
+
     })
     name_role!: RoleName;
 
