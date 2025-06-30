@@ -11,7 +11,7 @@ export class Departement {
     @Column({
         type: "varchar",
         length: 20,
-        unique: true, // Assuming department names are unique
+        unique: true, 
     })
     name_departement!: DepartementName;
 
