@@ -7,20 +7,13 @@ const roleRepository = AppDataSource.getRepository(Role);
 
 export const authorizeRole = (allowedRoleNames: string[]) => {
     return async (req: AuthenticatedRequest, res: Response, next: NextFunction): Promise<void> => {
-        // ---- START DEBUG LOGS ----
-        console.log('--- AUTHORIZE ROLE DEBUG ---');
-        console.log('Timestamp:', new Date().toISOString());
-        console.log('Route Path:', req.path); // req.originalUrl might be more complete
-        console.log('Allowed Roles:', allowedRoleNames);
+     
         if (req.user) {
             console.log('req.user.id_user (from token/authMiddleware):', req.user.id_user);
-            // If AuthenticatedRequest is updated to include username:
-            // console.log('req.user.username (from token/authMiddleware):', req.user.username);
             console.log('req.user.id_role (from token/authMiddleware):', req.user.id_role);
         } else {
             console.log('req.user is undefined');
         }
-        // ---- END DEBUG LOGS ----
 
         if (!req.user || typeof req.user.id_role === 'undefined') {
             console.log('--- AUTHORIZE ROLE DEBUG ---: Failing due to missing req.user or req.user.id_role');
@@ -31,14 +24,13 @@ export const authorizeRole = (allowedRoleNames: string[]) => {
         try {
             const userRole = await roleRepository.findOneBy({ id_role: req.user.id_role });
 
-            // ---- MORE DEBUG LOGS ----
+            // to knwo where is the error 
             if (userRole) {
                 console.log('Fetched userRole from DB:', JSON.stringify(userRole));
                 console.log('Comparing userRole.name_role:', `"${userRole.name_role}"`, 'with allowedRoles:', JSON.stringify(allowedRoleNames));
             } else {
                 console.log('--- AUTHORIZE ROLE DEBUG ---: userRole not found in DB for id_role:', req.user.id_role);
             }
-            // ---- END MORE DEBUG LOGS ----
 
             if (!userRole) {
                 res.status(403).json({ message: 'Forbidden: User role not found' });
