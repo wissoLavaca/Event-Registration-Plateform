@@ -38,6 +38,15 @@ export class Event {
     @OneToMany(() => FormField, formField => formField.event)
     formFields!: FormField[];
 
+    @Column({ type: 'int', nullable: true })
+    created_by_user_id!: number | null;
+
+    @Column({ type: 'timestamp with time zone', nullable: true })
+    updated_at!: Date | null;
+
+    @Column({ type: 'int', nullable: true })
+    updated_by_user_id!: number | null;
+
     @Column({ type: 'boolean', default: false })
     is_deleted!: boolean;
 
@@ -46,6 +55,10 @@ export class Event {
 
     @Column({ type: 'int', nullable: true })
     deleted_by_user_id!: number | null;
+
+    @ManyToOne(() => User, { nullable: true, onDelete: 'SET NULL' })
+    @JoinColumn({ name: 'updated_by_user_id' })
+    updated_by?: User | null;
 
     @ManyToOne(() => User, { nullable: true, onDelete: 'SET NULL' }) 
     @JoinColumn({ name: 'deleted_by_user_id' })
