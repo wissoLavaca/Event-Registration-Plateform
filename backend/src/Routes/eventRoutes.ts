@@ -70,7 +70,6 @@ router.delete('/:id', authMiddleware, authorizeRole(['Admin']), deleteEventHandl
 
 
 
-// Nested routes with error handling
 router.post('/:eventId/inscriptions', 
     authMiddleware, 
     upload.any(),
@@ -96,14 +95,13 @@ router.get('/:eventId/inscriptions',
 );
 
 router.get('/:eventId/inscriptions/me',
-    authMiddleware, // Ensures the user is logged in
+    authMiddleware, 
     async (req: Request, res: Response, next: NextFunction) => {
         try {
-            // The user ID will be extracted from the token by authMiddleware
-            // and available in req.user.id_user within the controller
+
             await InscriptionController.getCurrentUserInscriptionForEvent(req, res, next);
         } catch (error) {
-            next(error); // Pass errors to your centralized error handler
+            next(error);
         }
     }
 );
@@ -131,13 +129,12 @@ router.post('/:eventId/form-fields',
     }
 );
 
-router.put('/:eventId/fields', // This path matches the frontend request
+router.put('/:eventId/fields', 
     authMiddleware,
-    authorizeRole(['Admin']), // Assuming only Admins can set fields for an event
+    authorizeRole(['Admin']), 
     async (req: Request, res: Response, next: NextFunction) => {
         try {
-            // Ensure setFormFieldsForEvent in FormFieldController handles req, res, next
-            await FormFieldController.setFormFieldsForEvent(req, res, next); // Pass next if controller uses it
+            await FormFieldController.setFormFieldsForEvent(req, res, next); 
         } catch (error) {
             next(error);
         }
