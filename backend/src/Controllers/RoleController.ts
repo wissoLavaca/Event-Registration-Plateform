@@ -27,10 +27,8 @@ export const getRoleById = async (req: Request, res: Response) => {
     }
 };
 
-// Create/Update/Delete for roles might not be needed if they are static as per schema
 
 export const createRole = async (req: Request, res: Response) => {
-    // TODO: Add authorization (admin only)
     try {
         const { name_role } = req.body as { name_role: RoleName };
         if (!name_role || !['admin', 'employee'].includes(name_role)) {
@@ -40,7 +38,7 @@ export const createRole = async (req: Request, res: Response) => {
         await roleRepository.save(newRole);
         res.status(201).json(newRole);
     } catch (error: any) {
-        if ((error as any).code === '23505') { // Unique constraint violation
+        if ((error as any).code === '23505') { 
             return res.status(409).json({ message: "Role name already exists." });
         }
         res.status(500).json({ message: "Error creating role", error: error.message });
@@ -83,7 +81,7 @@ export const deleteRole = async (req: Request, res: Response) => {
         // Check if role exists
         const role = await roleRepository.findOne({
             where: { id_role: parseInt(id) },
-            relations: ['users'] // Include users to check dependencies
+            relations: ['users'] 
         });
 
         if (!role) {
@@ -92,7 +90,6 @@ export const deleteRole = async (req: Request, res: Response) => {
             });
         }
 
-        // Check if role has associated users
         if (role.users && role.users.length > 0) {
             return res.status(400).json({
                 message: 'Cannot delete role with associated users'
