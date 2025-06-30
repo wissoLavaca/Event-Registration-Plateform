@@ -4,11 +4,11 @@
   left: 0;
   right: 0;
   bottom: 0;
-  background-color: rgba(0, 0, 0, 0.6); /* Darker overlay */
+  background-color: rgba(0, 0, 0, 0.6);
   display: flex;
   align-items: center;
   justify-content: center;
-  z-index: 1000; /* Ensure it's on top */
+  z-index: 1000;
   padding: 15px;
 }
 
@@ -18,10 +18,10 @@
   border-radius: 8px;
   box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
   width: 100%;
-  max-width: 450px; /* Adjust as needed */
+  max-width: 450px;
   display: flex;
   flex-direction: column;
-  gap: 20px; /* Space between sections */
+  gap: 20px;
 }
 
 .confirmation-modal-header {
@@ -76,7 +76,7 @@
 }
 
 .confirmation-modal-btn.confirm {
-  background-color: #28a745; /* Green for confirm */
+  background-color: #28a745;
   color: white;
 }
 .confirmation-modal-btn.confirm:hover {
@@ -84,16 +84,15 @@
 }
 
 .confirmation-modal-btn.cancel {
-  background-color: #6c757d; /* Grey for cancel */
+  background-color: #6c757d;
   color: white;
 }
 .confirmation-modal-btn.cancel:hover {
   background-color: #5a6268;
 }
 
-/* Example for a delete/danger confirmation */
 .confirmation-modal-btn.danger {
-  background-color: #dc3545; /* Red for danger/delete */
+  background-color: #dc3545;
   color: white;
 }
 .confirmation-modal-btn.danger:hover {
