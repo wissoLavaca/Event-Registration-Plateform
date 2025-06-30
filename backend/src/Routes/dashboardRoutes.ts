@@ -1,29 +1,29 @@
 import express from 'express';
 import { DashboardController } from '../Controllers/DashboardContoller';
-import { authMiddleware } from '../Middleware/authMiddleware'; // Corrected path assuming Middleware folder
-import { authorizeRole } from '../Middleware/authorizeMiddleware'; // Corrected path assuming Middleware folder
+import { authMiddleware } from '../Middleware/authMiddleware'; 
+import { authorizeRole } from '../Middleware/authorizeMiddleware'; 
 
 const router = express.Router();
 
 router.get(
-    '/registrations-per-event', // Path is now relative to /api/admin/dashboard
+    '/registrations-per-event', 
     authMiddleware,
     authorizeRole(['Admin']),
     DashboardController.getRegistrationsPerEvent
 );
 
 router.get(
-    '/registrations-over-time', // Path is now relative
+    '/registrations-over-time', 
     authMiddleware,
     authorizeRole(['Admin']),
-    DashboardController.getRegistrationsOverTime // Ensure this method exists in DashboardController
+    DashboardController.getRegistrationsOverTime 
 );
 
 router.get(
-    '/registrations-by-department', // Path is now relative
+    '/registrations-by-department', 
     authMiddleware,
     authorizeRole(['Admin']),
-    DashboardController.getRegistrationsByDepartment // Ensure this method exists in DashboardController
+    DashboardController.getRegistrationsByDepartment 
 );
 
 export default router;
