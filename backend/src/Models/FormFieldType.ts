@@ -9,7 +9,7 @@ export class FormFieldType {
     id_type!: number;
 
     @Column({ type: "varchar", length: 50, unique: true })
-    field_name!: FieldTypeName; // Your DB uses field_name
+    field_name!: FieldTypeName; 
 
     @OneToMany(() => FormField, formField => formField.type)
     formFields!: FormField[];
