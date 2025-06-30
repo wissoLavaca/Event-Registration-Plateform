@@ -17,7 +17,7 @@ export class FieldResponse {
     @Column()
     id_field!: number;
 
-    @ManyToOne(() => FormField, formField => formField.fieldResponses, { onDelete: 'NO ACTION' }) // Or RESTRICT
+    @ManyToOne(() => FormField, formField => formField.fieldResponses, { onDelete: 'NO ACTION' }) 
     @JoinColumn({ name: "id_field" })
     formField!: FormField;
 
@@ -25,5 +25,5 @@ export class FieldResponse {
     response_text?: string;
 
     @Column({ type: "text", nullable: true })
-    response_file_path?: string; // For file uploads, you'll need handling (e.g., Multer)
+    response_file_path?: string; 
 }
