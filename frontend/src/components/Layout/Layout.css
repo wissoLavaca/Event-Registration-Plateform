@@ -1,69 +1,27 @@
 body { 
-  /* This body rule in Layout.css is redundant if you have it in global.css, remove from here */
-  /* margin: 0; */
-  /* overflow-x: hidden; */
+
 }
 
 .layout {
   display: flex;
   min-height: 100vh;
-  /* REMOVE any background-color from here, let body's background show through */
-  /* background-color: #f5f6fa; */
+
 }
 
-/* .content-wrapper - If this is used as a main container instead of .main-container,
-   ensure it also has no opaque background.
-.content-wrapper {
-  margin-left: 280px;
-  width: calc(100% - 280px);
-  height: 100vh;
-  display: flex;
-  flex-direction: column;
-  position: relative;
-}
-*/
 
-.main-container { /* Parent of Navbar and main-content */
+.main-container { 
   display: flex;
   flex-direction: column;
   flex-grow: 1;
   transition: margin-left 0.3s ease-in-out;
-  /* REMOVE any background-color from here */
-  /* background-color: var(--background-content); */
+
 }
 
-.main-content { /* This is where your page's {children} will go */
+.main-content { 
   flex-grow: 1;
   overflow-y: auto;
   padding: 24px;
   position: relative;
-  /* REMOVE the radial-gradient and background-color from here, let body's background show */
-  /* background-color: var(--background-content); */
-  /* background-image: radial-gradient(...); */
-  /* background-repeat: no-repeat; */
-  /* background-attachment: fixed; */
+ 
 }
 
-/* Ensure your Sidebar and Navbar components also have transparent backgrounds
-   or use semi-transparent var(--sidebar-bg) or var(--navbar-bg) if you want them
-   to have a slight tint but still show the body gradient.
-   Example for Sidebar (in Sidebar.css):
-   .sidebar {
-     background-color: rgba(var(--sidebar-bg-rgb), 0.8); // If --sidebar-bg is a solid color
-     // OR
-     background-color: transparent;
-   }
-   Example for Navbar (in Navbar.css):
-   .navbar { // Or .top-navbar-content
-     background-color: rgba(var(--navbar-bg-rgb), 0.9); // If --navbar-bg is a solid color
-     // OR
-     background-color: transparent;
-   }
-*/
-
-/* REMOVE these other rules if they are not part of your current Layout.tsx structure
-   or ensure they don't have opaque backgrounds.
-.app-container { ... }
-.main-section { ... }
-.page-content-area { ... }
-*/
