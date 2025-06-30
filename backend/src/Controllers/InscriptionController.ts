@@ -16,25 +16,23 @@ const eventRepository = AppDataSource.getRepository(Event);
 const fieldResponseRepository = AppDataSource.getRepository(FieldResponse); 
 
 
-// POST /api/events/:eventId/inscriptions
 export const createInscriptionForEvent = async (req: Request, res: Response, next: NextFunction) => { // Add next to params
     try {
         const eventId = parseInt(req.params.eventId);
         const userId = (req as AuthenticatedRequest).user?.id_user;
 
-        if (isNaN(eventId)) { // Check if eventId is a valid number
+        if (isNaN(eventId)) { 
             return res.status(400).json({ message: "Invalid event ID." });
         }
         if (!userId) {
             return res.status(401).json({ message: "User not authenticated" });
         }
 
-        // Check if event and user exist
         const event = await eventRepository.findOneBy({ id_event: eventId });
         if (!event) return res.status(404).json({ message: "Event not found" });
 
         const user = await userRepository.findOneBy({ id_user: userId });
-        if (!user) return res.status(404).json({ message: "User not found" }); // Should not happen if authenticated
+        if (!user) return res.status(404).json({ message: "User not found" }); 
 
        const existingInscription = await inscriptionRepository.findOne({ where: { id_user: userId, id_event: eventId }});
         if (existingInscription) {
@@ -44,17 +42,13 @@ export const createInscriptionForEvent = async (req: Request, res: Response, nex
         const newInscriptionEntity = inscriptionRepository.create({ 
             id_user: userId, 
             id_event: eventId,
-            // You can also associate the full objects if your relations are set up for it
-            // user: user,
-            // event: event 
+           
         });
         const savedInscription = await inscriptionRepository.save(newInscriptionEntity);
         console.log(`[createInscriptionForEvent] Inscription ${savedInscription.id_inscription} created for event ${eventId} by user ${userId}`);
 
-        // --- START: ADDED LOGIC FOR FIELD RESPONSES ---
         const responsesToSave: FieldResponse[] = [];
 
-        // Process text fields from req.body (populated by multer for non-file FormData parts)
         if (req.body) {
             for (const key in req.body) {
                 if (key.startsWith('field_')) {
@@ -77,15 +71,13 @@ export const createInscriptionForEvent = async (req: Request, res: Response, nex
             }
         }
 
-        // Process uploaded files from req.files (populated by multer's upload.any())
-        // req.files will be an array of Express.Multer.File objects
+
         if (req.files && Array.isArray(req.files)) {
             for (const file of (req.files as Express.Multer.File[])) {
                 if (file.fieldname.startsWith('field_')) {
                     const fieldIdStr = file.fieldname.split('_')[1];
                     const fieldId = parseInt(fieldIdStr);
                     if (!isNaN(fieldId)) {
-                        // If a field could be text OR file, you might want to remove a pre-existing text response for this fieldId
                         const existingTextResponseIndex = responsesToSave.findIndex(r => r.id_field === fieldId && r.response_text !== null && r.response_text !== undefined);
                         if (existingTextResponseIndex !== -1) {
                             console.log(`[createInscriptionForEvent] Field ${fieldId} (inscription ${savedInscription.id_inscription}) also had text data, replacing with file.`);
@@ -95,7 +87,7 @@ export const createInscriptionForEvent = async (req: Request, res: Response, nex
                         const fieldResponse = fieldResponseRepository.create({
                             id_inscription: savedInscription.id_inscription,
                             id_field: fieldId,
-                            response_file_path: file.path, // 'path' is where multer.diskStorage saves the file
+                            response_file_path: file.path, 
                         });
                         responsesToSave.push(fieldResponse);
                         console.log(`[createInscriptionForEvent] Prepared file response for field ${fieldId} (inscription ${savedInscription.id_inscription}): ${file.path}`);
@@ -112,10 +104,8 @@ export const createInscriptionForEvent = async (req: Request, res: Response, nex
         } else {
             console.log(`[createInscriptionForEvent] No field responses to save for inscription ${savedInscription.id_inscription}`);
         }
-        // --- END: ADDED LOGIC FOR FIELD RESPONSES ---
 
-        // --- ADD NOTIFICATION LOGIC HERE ---
-        if (savedInscription && event && user) { // Ensure all necessary data is available
+        if (savedInscription && event && user) { 
             await createNotification(
                 userId,
                 NotificationType.REGISTRATION_CONFIRMATION,
@@ -123,29 +113,20 @@ export const createInscriptionForEvent = async (req: Request, res: Response, nex
                 eventId
             );
         }
-        // --- END NOTIFICATION LOGIC ---
 
         res.status(201).json({ 
-            message: "Successfully inscribed to event and responses saved.", // Updated message
+            message: "Successfully inscribed to event and responses saved.", 
             inscription: savedInscription 
-            // fieldResponses: responsesToSave // Optionally return saved responses
         });
 
     } catch (error: any) {
         console.error("[createInscriptionForEvent] Error:", error);
-        // Basic file cleanup if files were uploaded by multer but DB operations failed
-        // This is a simplified cleanup. For robust transactional behavior, more advanced patterns are needed.
         if (req.files && Array.isArray(req.files)) {
             (req.files as Express.Multer.File[]).forEach(file => {
-                // import fs from 'fs';
-                // fs.unlink(file.path, (unlinkErr) => {
-                //     if (unlinkErr) console.error(`[createInscriptionForEvent] Error deleting orphaned file ${file.path}:`, unlinkErr);
-                //     else console.log(`[createInscriptionForEvent] Deleted orphaned file ${file.path}`);
-                // });
+                
                 console.warn(`[createInscriptionForEvent] Orphaned file might exist due to error: ${file.path}. Manual cleanup might be needed or implement fs.unlink.`);
             });
         }
-        // Pass error to the next error-handling middleware if your route is set up for it
         if (next) {
              next(error);
         } else {
@@ -154,9 +135,7 @@ export const createInscriptionForEvent = async (req: Request, res: Response, nex
     }
 };
 
-// GET /api/events/:eventId/inscriptions
 export const getInscriptionsForEvent = async (req: Request, res: Response) => {
-    // TODO: Authorization: Admin or specific event manager
     try {
         const eventId = parseInt(req.params.eventId);
         const inscriptions = await inscriptionRepository.find({
@@ -164,7 +143,7 @@ export const getInscriptionsForEvent = async (req: Request, res: Response) => {
             relations: ['user', 
                 'user.departement',
                 'fieldResponses', 
-                'fieldResponses.formField'] // Load user details and their responses
+                'fieldResponses.formField'] 
         });
         res.status(200).json(inscriptions);
     } catch (error: any) {
@@ -172,15 +151,10 @@ export const getInscriptionsForEvent = async (req: Request, res: Response) => {
     }
 };
 
-// GET /api/users/:userId/inscriptions
 export const getInscriptionsForUser = async (req: Request, res: Response) => {
-    // TODO: Authorization: Admin or the user themselves
     try {
         const userId = parseInt(req.params.userId);
-        // const requestingUserId = (req as any).user?.userId;
-        // if (requestingUserId !== userId && !(req as any).user?.isAdmin) {
-        //     return res.status(403).json({ message: "Forbidden" });
-        // }
+
         const inscriptions = await inscriptionRepository.find({
             where: { id_user: userId },
             relations: ['event'] // Load event details
@@ -191,9 +165,7 @@ export const getInscriptionsForUser = async (req: Request, res: Response) => {
     }
 };
 
-// GET /api/inscriptions (Admin only)
 export const getAllInscriptions = async (req: Request, res: Response) => {
-    // TODO: Authorization: Admin only
     try {
         const inscriptions = await inscriptionRepository.find({ relations: ['user', 'event'] });
         res.status(200).json(inscriptions);
@@ -204,7 +176,6 @@ export const getAllInscriptions = async (req: Request, res: Response) => {
 
 
 export const getInscriptionById = async (req: Request, res: Response) => {
-    // TODO: Authorization: Admin or relevant user/event manager
     try {
         const id = parseInt(req.params.id);
         const inscription = await inscriptionRepository.findOne({
@@ -221,9 +192,7 @@ export const getInscriptionById = async (req: Request, res: Response) => {
     }
 };
 
-// DELETE /api/inscriptions/:id
 export const deleteInscription = async (req: Request, res: Response) => {
-    // TODO: Authorization: Admin or the user who made the inscription
     try {
         const id = parseInt(req.params.id);
         const result = await inscriptionRepository.delete(id);
@@ -236,7 +205,6 @@ export const deleteInscription = async (req: Request, res: Response) => {
     }
 };
 
-// GET /api/events/:eventId/inscriptions/me
 export const getCurrentUserInscriptionForEvent = async (req: Request, res: Response, next: NextFunction) => {
     try {
         const eventIdString = req.params.eventId;
@@ -251,7 +219,6 @@ export const getCurrentUserInscriptionForEvent = async (req: Request, res: Respo
             return res.status(400).json({ message: "Invalid event ID format." });
         }
         if (!userId) {
-            // This should ideally be caught by authMiddleware if the route is protected
             return res.status(401).json({ message: "User not authenticated." });
         }
 
@@ -265,15 +232,13 @@ export const getCurrentUserInscriptionForEvent = async (req: Request, res: Respo
             relations: [
                 'fieldResponses', 
                 'fieldResponses.formField', 
-                'fieldResponses.formField.type' // Ensure type details are loaded for fieldResponses
+                'fieldResponses.formField.type' 
             ] 
         });
 
         if (inscription) {
             console.log(`[getCurrentUserInscriptionForEvent] Found inscription:`, inscription.id_inscription);
-            // Transform fieldResponses if necessary to match frontend expectations,
-            // e.g., ensuring formField details are present for each response.
-            // The relations above should handle this, but double-check the output.
+
             res.status(200).json(inscription);
         } else {
             console.log(`[getCurrentUserInscriptionForEvent] No inscription found for user ${userId} and event ${eventId}`);
