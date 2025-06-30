@@ -13,9 +13,7 @@ export const getAllFormFieldTypes = async (req: Request, res: Response) => {
     }
 };
 
-// Create/Update/Delete for types might not be needed if they are static
 export const createFormFieldType = async (req: Request, res: Response) => {
-    // TODO: Authorization: Admin only
     try {
         const { field_name } = req.body as { field_name: FieldTypeName };
         if (!field_name || !['text', 'number', 'file', 'date', 'checkbox', 'radio'].includes(field_name)) {
@@ -25,7 +23,7 @@ export const createFormFieldType = async (req: Request, res: Response) => {
         await formFieldTypeRepository.save(newType);
         res.status(201).json(newType);
     } catch (error: any) {
-        if ((error as any).code === '23505') { // Unique constraint violation
+        if ((error as any).code === '23505') { 
             return res.status(409).json({ message: "Field type name already exists." });
         }
         res.status(500).json({ message: "Error creating form field type", error: error.message });
