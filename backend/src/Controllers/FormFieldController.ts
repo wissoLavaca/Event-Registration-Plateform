@@ -9,14 +9,11 @@ import { In } from "typeorm";
 const formFieldRepository = AppDataSource.getRepository(FormField);
 const eventRepository = AppDataSource.getRepository(Event);
 const formFieldTypeRepository = AppDataSource.getRepository(FormFieldType);
-// const dropdownOptionRepository = AppDataSource.getRepository(DropdownOption); // Not directly used here anymore, transaction manager handles it
 
 
-// POST /api/events/:eventId/form-fields
 export const createFormFieldForEvent = async (req: Request, res: Response) => {
     try {
         const eventId = parseInt(req.params.eventId);
-        // Expect 'acceptedFileTypes' from frontend for file types
         const { label, id_type, is_required, order, options, acceptedFileTypes, help_text, min_length, max_length, min_value, max_value } = req.body;
 
         const event = await eventRepository.findOneBy({ id_event: eventId });
@@ -36,7 +33,7 @@ export const createFormFieldForEvent = async (req: Request, res: Response) => {
         if (type.field_name === 'file') {
             newFieldData.acceptedFileTypes = acceptedFileTypes || null;
         } else {
-            newFieldData.acceptedFileTypes = null; // Ensure it's null for non-file types
+            newFieldData.acceptedFileTypes = null;
         }
 
         const newField = formFieldRepository.create(newFieldData);
@@ -65,7 +62,6 @@ export const createFormFieldForEvent = async (req: Request, res: Response) => {
     }
 };
 
-// GET /api/events/:eventId/form-fields
 export const getFormFieldsForEvent = async (req: Request, res: Response): Promise<void> => {
     try {
         const eventIdString = req.params.eventId;
@@ -103,16 +99,14 @@ export const getFormFieldsForEvent = async (req: Request, res: Response): Promis
     }
 };
 
-// GET /api/events/:eventId/form-fields/:fieldId  OR /api/form-fields/:fieldId
 export const getFormFieldById = async (req: Request, res: Response) => {
     try {
         const fieldId = parseInt(req.params.fieldId || req.params.id);
         const field = await formFieldRepository.findOne({
             where: { id_field: fieldId },
-            relations: ['type', 'dropdownOptions', 'event'] // 'event' might be heavy if not needed
+            relations: ['type', 'dropdownOptions', 'event'] 
         });
         if (field) {
-            // The 'field' object from TypeORM will already include 'acceptedFileTypes' if it's in the entity
             res.status(200).json(field);
         } else {
             res.status(404).json({ message: "Form field not found" });
@@ -122,13 +116,12 @@ export const getFormFieldById = async (req: Request, res: Response) => {
     }
 };
 
-// PUT /api/events/:eventId/form-fields/:fieldId OR /api/form-fields/:fieldId
 export const updateFormField = async (req: Request, res: Response) => {
     try {
         const fieldId = parseInt(req.params.fieldId || req.params.id);
         const existingField = await formFieldRepository.findOne({
             where: { id_field: fieldId },
-            relations: ['type'] // Load type to check if it's a file field
+            relations: ['type'] 
         });
 
         if (!existingField) {
@@ -149,25 +142,23 @@ export const updateFormField = async (req: Request, res: Response) => {
         if (id_type !== undefined && id_type !== existingField.id_type) {
             const newType = await formFieldTypeRepository.findOneBy({ id_type });
             if (!newType) return res.status(400).json({ message: "Invalid new form field type ID" });
-            fieldType = newType; // Use the new type for checking 'file'
-            updateData.id_type = id_type; // Update the type ID
+            fieldType = newType; 
+            updateData.id_type = id_type; 
         }
 
 
         if (fieldType.field_name === 'file') {
             updateData.acceptedFileTypes = acceptedFileTypes !== undefined ? acceptedFileTypes : existingField.acceptedFileTypes;
         } else {
-            updateData.acceptedFileTypes = null; // Ensure it's null if not a file type or changed from file type
+            updateData.acceptedFileTypes = null; 
         }
 
         formFieldRepository.merge(existingField, updateData);
         const updatedField = await formFieldRepository.save(existingField);
 
-        // Handle options update (simplified: delete existing and recreate)
-        // For a more robust solution, you'd compare and update/add/delete specific options.
         if ((fieldType.field_name === 'checkbox' || fieldType.field_name === 'radio') && Array.isArray(options)) {
             const dropdownOptionRepo = AppDataSource.getRepository(DropdownOption);
-            await dropdownOptionRepo.delete({ id_field: updatedField.id_field }); // Delete old options
+            await dropdownOptionRepo.delete({ id_field: updatedField.id_field });
 
             for (const optionValue of options) {
                 if (typeof optionValue === 'string' && optionValue.trim() !== '') {
@@ -193,7 +184,6 @@ export const updateFormField = async (req: Request, res: Response) => {
     }
 };
 
-// DELETE /api/events/:eventId/form-fields/:fieldId OR /api/form-fields/:fieldId
 export const deleteFormField = async (req: Request, res: Response) => {
     try {
         const fieldId = parseInt(req.params.fieldId || req.params.id);
@@ -214,7 +204,7 @@ export const deleteFormField = async (req: Request, res: Response) => {
 export const setFormFieldsForEvent = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
         const eventId = parseInt(req.params.eventId);
-        const fieldsData = req.body; // This is payloadFields from FormBuilder.tsx
+        const fieldsData = req.body; 
 
         if (isNaN(eventId)) {
             res.status(400).json({ message: "Invalid event ID." });
@@ -240,7 +230,6 @@ export const setFormFieldsForEvent = async (req: Request, res: Response, next: N
             await transactionalEntityManager.delete(FormField, { id_event: eventId });
 
             for (const fieldDef of fieldsData) {
-                // Destructure all potential fields, including accepted_file_types
                 const { label, id_type, is_required, sequence, help_text, options, accepted_file_types, min_length, max_length, min_value, max_value } = fieldDef;
 
                 const type = await transactionalEntityManager.findOneBy(FormFieldType, { id_type });
@@ -257,9 +246,9 @@ export const setFormFieldsForEvent = async (req: Request, res: Response, next: N
                     };
 
                 if (type.field_name === 'file') {
-                    newFieldData.acceptedFileTypes = accepted_file_types || null; // Use accepted_file_types from payload
+                    newFieldData.acceptedFileTypes = accepted_file_types || null; 
                 } else {
-                    newFieldData.acceptedFileTypes = null; // Ensure it's null for non-file types
+                    newFieldData.acceptedFileTypes = null; 
                 }
 
                 const newFieldEntity = transactionalEntityManager.create(FormField, newFieldData);
@@ -291,7 +280,7 @@ export const setFormFieldsForEvent = async (req: Request, res: Response, next: N
             type: field.type,
             is_required: field.is_required,
             sequence: field.sequence,
-            accepted_file_types: field.acceptedFileTypes, // <<<< ADDED
+            accepted_file_types: field.acceptedFileTypes, 
             options: (field.dropdownOptions && Array.isArray(field.dropdownOptions))
                 ? field.dropdownOptions.map(option => option.value)
                 : []
