@@ -30,11 +30,11 @@ export const authMiddleware = async (req: AuthenticatedRequest, res: Response, n
         req.user = {
            id_user: user.id_user,
             id_role: user.id_role,
-            username: user.username ?? '', // Assuming user.username exists on your User entity
-            profile_picture_url: user.profile_picture_url ?? '', // Or ?? null if your UserType allows string | null
-            first_name: user.first_name ?? '',     // Assuming user.first_name exists
-            last_name: user.last_name ?? '',       // Assuming user.last_name exists
-            id_departement: user.id_departement,   // Assuming user.id_departement exists and is a number
+            username: user.username ?? '', 
+            profile_picture_url: user.profile_picture_url ?? '', 
+            first_name: user.first_name ?? '',     
+            last_name: user.last_name ?? '',       
+            id_departement: user.id_departement,   
         };
         next();
 
