@@ -29,7 +29,6 @@ export const getDepartementById = async (req: Request, res: Response) => {
 
 
 export const createDepartement = async (req: Request, res: Response) => {
-    // TODO: Add authorization (admin only)
     try {
         const { name_departement } = req.body as { name_departement: DepartementName };
          if (!name_departement || !['DDD', 'DSSI', 'DRH', 'DFO'].includes(name_departement)) {
@@ -39,7 +38,7 @@ export const createDepartement = async (req: Request, res: Response) => {
         await departementRepository.save(newDepartement);
         res.status(201).json(newDepartement);
     } catch (error: any) {
-         if ((error as any).code === '23505') { // Unique constraint violation
+         if ((error as any).code === '23505') { 
             return res.status(409).json({ message: "Departement name already exists." });
         }
         res.status(500).json({ message: "Error creating departement", error: error.message });
