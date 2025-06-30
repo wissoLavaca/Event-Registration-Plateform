@@ -6,7 +6,7 @@ import { InscriptionRequest } from '../types/inscription.types';
 
 const router = Router();
 
-// Handler functions with proper error handling
+// Handler functions
 const getAllInscriptionsHandler = async (req: Request, res: Response, next: NextFunction) => {
     try {
         await InscriptionController.getAllInscriptions(req as InscriptionRequest, res);
@@ -31,10 +31,10 @@ const deleteInscriptionHandler = async (req: Request, res: Response, next: NextF
     }
 };
 
-// Apply authentication middleware to all routes
+// authentication middleware to all routes
 router.use(authMiddleware);
 
-// Route definitions with wrapped handlers
+// Route 
 router.get('/', authorizeRole(['Admin']), getAllInscriptionsHandler);
 router.get('/:id', getInscriptionByIdHandler);
 router.delete('/:id', deleteInscriptionHandler);
