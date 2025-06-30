@@ -1,6 +1,5 @@
-// filepath: src/types/jspdf-autotable.d.ts
-import 'jspdf'; // This import is necessary to signal module augmentation
-import { UserOptions } from 'jspdf-autotable'; // Import options type for better type safety
+import 'jspdf'; 
+import { UserOptions } from 'jspdf-autotable'; 
 
 declare module 'jspdf' {
   interface jsPDF {
