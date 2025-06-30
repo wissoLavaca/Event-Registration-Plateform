@@ -6,7 +6,7 @@ import { FormFieldTypeRequest } from '../types/formFieldType.types';
 
 const router = Router();
 
-// Handler functions with proper error handling
+// Handler functions 
 const getAllTypesHandler = async (req: Request, res: Response, next: NextFunction) => {
     try {
         await FormFieldTypeController.getAllFormFieldTypes(req as FormFieldTypeRequest, res);
@@ -23,7 +23,7 @@ const createTypeHandler = async (req: Request, res: Response, next: NextFunction
     }
 };
 
-// Route definitions with wrapped handlers
+// Route 
 router.get('/', getAllTypesHandler);
 router.post('/', authMiddleware, authorizeRole(['Admin']), createTypeHandler);
 
