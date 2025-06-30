@@ -6,7 +6,7 @@ import { RoleRequest } from '../types/role.types';
 
 const router = Router();
 
-// Request handlers with consistent error handling
+// Request handlers 
 const getAllRolesHandler: RequestHandler = async (req, res, next) => {
     try {
         await RoleController.getAllRoles(req as RoleRequest, res);
@@ -47,14 +47,14 @@ const deleteRoleHandler: RequestHandler = async (req, res, next) => {
     }
 };
 
-// Protect all role routes with authentication
+// Protecting all role routes with authentication
 router.use(authMiddleware);
 
-// Public routes (accessible by both admin and employee)
+// Public routes 
 router.get('/', getAllRolesHandler);
 router.get('/:id', getRoleByIdHandler);
 
-// Admin-only routes
+// Admin only routes
 router.use(authorizeRole(['admin']));
 router.post('/', createRoleHandler);
 router.put('/:id', updateRoleHandler);
