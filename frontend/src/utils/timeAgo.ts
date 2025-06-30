@@ -18,6 +18,7 @@ export function timeAgo(isoTimestamp: string): string {
   if (diffInDays < 7) {
     return `Il y a ${diffInDays} jour${diffInDays !== 1 ? 's' : ''}`;
   }
-  // For older dates, you might want to show the actual date
+
+  
   return past.toLocaleDateString('fr-FR', { day: 'numeric', month: 'short' });
 }
