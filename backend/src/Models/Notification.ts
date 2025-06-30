@@ -1,6 +1,6 @@
 import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn, ManyToOne, JoinColumn } from 'typeorm';
 import { User } from './User';
-import { Event } from './Event'; // Make sure Event is imported
+import { Event } from './Event'; 
 
 export enum NotificationType {
     EVENT_CREATED = 'EVENT_CREATED',
@@ -17,10 +17,10 @@ export class Notification {
     id_notification: number;
 
     @ManyToOne(() => User, user => user.notifications, { onDelete: 'CASCADE' })
-    @JoinColumn({ name: 'id_user' }) // Assuming 'id_user' is the FK column name in 'notification' table
+    @JoinColumn({ name: 'id_user' })
     user: User;
 
-    @Column() // This column stores the actual foreign key value
+    @Column() 
     id_user: number;
 
     @Column({
@@ -32,12 +32,12 @@ export class Notification {
     @Column('text')
     message: string;
 
-    @Column({ type: 'int', nullable: true }) // Ensure type is 'int' if id_event is integer
-    related_event_id: number | null; // This is the foreign key column
+    @Column({ type: 'int', nullable: true }) 
+    related_event_id: number | null; 
 
     @ManyToOne(() => Event, { nullable: true, onDelete: 'SET NULL' })
-    @JoinColumn({ name: 'related_event_id' }) // <<< THIS IS IMPORTANT
-    relatedEvent?: Event | null; // The actual related Event object
+    @JoinColumn({ name: 'related_event_id' }) 
+    relatedEvent?: Event | null; 
 
     @Column({ default: false })
     is_read: boolean;
