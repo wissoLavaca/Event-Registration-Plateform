@@ -5,11 +5,10 @@ export enum UINotificationType {
     EVENT_REMINDER = 'EVENT_REMINDER',
     REGISTRATION_DEADLINE_REMINDER = 'REGISTRATION_DEADLINE_REMINDER',
     REGISTRATION_CONFIRMATION = 'REGISTRATION_CONFIRMATION',
-    // Add any other types you might have
 }
 
 export interface UINotification {
-    link: any; // <<<< This is correctly exported
+    link: any; 
     id_notification: number;
     id_user: number;
     type: UINotificationType;
