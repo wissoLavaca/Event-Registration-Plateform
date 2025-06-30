@@ -6,7 +6,6 @@ import { DepartmentRequest } from '../types/department.types';
 
 const router = Router();
 
-// Wrap controller methods to handle promises properly
 const getAllHandler: RequestHandler = async (req, res, next) => {
     try {
         await DepartementController.getAllDepartements(req as DepartmentRequest, res);
@@ -31,7 +30,6 @@ const createHandler: RequestHandler = async (req, res, next) => {
     }
 };
 
-// Apply middleware and routes
 router.use(authMiddleware);
 
 router.get('/', getAllHandler);
