@@ -22,7 +22,6 @@ dotenv.config();
 const app: Application = express();
 const PORT = process.env.PORT || 3001;
 
-// --- Updated CORS Configuration ---
 const allowedOrigins = [
     'http://localhost:3000',
     'http://localhost:5173',
@@ -44,19 +43,16 @@ const corsOptions: cors.CorsOptions = {
 };
 
 app.use(cors(corsOptions));
-// --- End of Updated CORS Configuration ---
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// --- CORRECTED STATIC FILE SERVING ---
-// This assumes your compiled app.js will be in a 'dist' folder,
-// so '../public' goes up from 'dist' to 'backend' and then into 'public'.
+
 const publicDirectoryPath = path.join(__dirname, '../public');
 console.log(`Serving static files from: ${publicDirectoryPath}`);
 app.use(express.static(publicDirectoryPath));
 
-const generalUploadsDirectoryPath = path.join(__dirname, '..', 'uploads'); // Resolves to backend/uploads
+const generalUploadsDirectoryPath = path.join(__dirname, '..', 'uploads'); 
 console.log(`Serving static files from /uploads from: ${generalUploadsDirectoryPath}`);
 app.use('/uploads', express.static(generalUploadsDirectoryPath));
 
@@ -87,7 +83,7 @@ app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
         res.status(500).send({ error: 'Something went wrong!', message: err.message });
     }
 });
-// ... rest of your app.ts
+
 const startServer = async () => {
     await initializeDatabase();
 
