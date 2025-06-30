@@ -7,28 +7,29 @@
   padding: 0 40px;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
   flex-shrink: 0;
-  /* --- Add these properties for a fixed navbar --- */
+
   position: fixed;
   top: 0;
   left: 0;
   width: 100%;
-  z-index: 1000; /* Ensures it stays on top of other content */
-  /* --- End of added properties --- */
-}
+  z-index: 1000; 
 
 
 .main-content {
-  margin-top: 100px; /* This correctly matches navbar height */
-  margin-left: 300px; /* This accounts for your sidebar width */
+  margin-top: 60px; 
+  margin-left: 300px; /
   padding: 20px;
-  /* Add a flex-grow if .main-content is inside a flex container and needs to fill space */
-  /* flex-grow: 1; */
+  transition: margin-left 0.3s ease;
+}
+
+.sidebar-closed .main-content {
+  margin-left: 78px; 
 }
 
 .navbar-left h2 {
   color: #149b3c;
   margin: 0;
-  font-size: 28px;  /* Increased font size */
+  font-size: 28px; 
   font-weight: 600;
 }
 
@@ -40,9 +41,9 @@
 .profile {
   display: flex;
   align-items: center;
-  gap: 15px;  /* Increased gap */
+  gap: 15px;
   cursor: pointer;
-  padding: 10px 20px;  /* Increased padding */
+  padding: 10px 20px;  
   border-radius: 30px;
   transition: all 0.3s ease;
 }
@@ -52,8 +53,8 @@
 }
 
 .profile-image {
-  width: 50px;  /* Increased size */
-  height: 50px;  /* Increased size */
+  width: 50px;  
+  height: 50px; 
   border-radius: 50%;
   object-fit: cover;
   border: 2px solid #149b3c;
@@ -63,22 +64,29 @@
 .profile-name {
   color: #333;
   font-weight: 500;
-  font-size: 17px;  /* Increased font size */
+  font-size: 17px;  
 }
 
-/* Styles for .top-navbar-content, based on .home-content from target */
 .top-navbar-content {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 0 24px; /* p-4 from target */
-  height: 60px; /* Adjust as needed, target doesn't specify fixed height for this bar */
-  /* background: linear-gradient(to right, rgba(var(--secondary-color-rgb), 0.1), var(--background-darker)); */
-  background-color: var(--background-content); /* Using new variable */
-  /* backdrop-filter: blur(5px); */ /* Optional */
+  padding: 0 24px; 
+  height: 60px; 
+  background-color: var(--background-content); 
   border-bottom: 1px solid var(--border-color);
-  color: var(--text-primary); /* Using new variable */
-  flex-shrink: 0; /* Prevent shrinking */
+  color: var(--text-primary);
+  flex-shrink: 0; 
+  position: fixed;
+  top: 0;
+  right: 0;
+  left: 300px; 
+  z-index: 999;
+  transition: left 0.3s ease;
+}
+
+.sidebar-closed .top-navbar-content {
+  left: 78px; 
 }
 
 .left-section {
@@ -86,76 +94,72 @@
   align-items: center;
 }
 
-.navbar-subtitle { /* ADD THESE STYLES */
-  font-size: 0.9em; /* Adjust as needed */
-  color: var(--text-muted); /* Use a muted color */
-  margin-left: 12px; /* Space it from the main title */
-  font-weight: 400; /* Lighter than the main title */
+.navbar-subtitle { 
+  font-size: 0.9em; 
+  color: var(--text-muted); 
+  margin-left: 12px; 
+  font-weight: 400; 
 }
 
 .sidebar-toggle-icon {
-  font-size: 24px; /* text-2xl */
+  font-size: 24px; 
   color: var(--text-muted);
   cursor: pointer;
   transition: color 0.2s ease;
 }
 .sidebar-toggle-icon:hover {
-  color: var(--primary-color); /* hover:text-blue-400 */
+  color: var(--primary-color); 
 }
 
 .page-title {
-  margin-left: 16px; /* ml-4 */
-  font-size: 20px; /* text-xl */
-  font-weight: 500; /* font-medium */
-  /* font-family: 'Montserrat', sans-serif; */ /* Already on body */
+  margin-left: 16px; 
+  font-size: 20px; 
+  font-weight: 500; 
 }
-.page-title span { /* For "Pilotage" part if using target style */
-  color: var(--primary-color); /* text-blue-400 */
+.page-title span { 
+  color: var(--primary-color); 
 }
 .page-title {
-  color: var(--text-secondary); /* Using new variable */
+  color: var(--text-secondary); 
 }
 
 .right-section {
   display: flex;
   align-items: center;
-  gap: 24px; /* space-x-6 */
+  gap: 24px; 
 }
 
-/* Optional Search Bar Styles (from target .home-content) */
 
 
-/* Optional Action Icons (Notifications, Messages) */
 .action-icons {
   display: flex;
-  gap: 16px; /* space-x-4 */
+  gap: 16px; 
 }
 .icon-button {
   position: relative;
-  padding: 8px; /* p-2 */
+  padding: 8px; 
   color: var(--text-muted);
   background: none;
   border: none;
   cursor: pointer;
-  font-size: 1.1rem; /* Ensure icons are visible */
+  font-size: 1.1rem; 
 }
 .icon-button:hover {
   color: var(--text-light);
 }
-.pulse-dot { /* For notification dots */
+.pulse-dot { 
   position: absolute;
-  top: 4px; /* top-1 */
-  right: 4px; /* right-1 */
-  width: 8px; /* w-2 */
-  height: 8px; /* h-2 */
+  top: 4px; 
+  right: 4px; 
+  width: 8px; 
+  height: 8px; 
   border-radius: 50%;
-  animation: pulse 2s infinite; /* Ensure @keyframes pulse is defined */
+  animation: pulse 2s infinite; 
 }
 .pulse-dot.blue { background-color: var(--primary-color); }
 .pulse-dot.green { background-color: var(--success-color); }
 
 
-/* User Profile in Navbar */
 .user-profile-navbar {
   display: flex;
   align-items: center;
@@ -166,8 +170,8 @@
 .user-profile-navbar:hover {
   color: var(--text-light);
 }
-.user-avatar-icon { /* If using an icon instead of image */
-    font-size: 28px; /* bx-sm is ~24px, adjust if needed */
+.user-avatar-icon { 
+    font-size: 28px; 
 }
 .user-name-navbar {
   font-size: 14px;
@@ -175,10 +179,10 @@
 }
 
 .user-avatar-image {
-  width: 32px; /* Or your preferred size */
-  height: 32px; /* Or your preferred size */
+  width: 32px; 
+  height: 32px; 
   border-radius: 50%;
   object-fit: cover;
-  margin-right: 8px; /* Space between image and name */
-  background-color: var(--border-color); /* Placeholder bg while loading or if image fails */
+  margin-right: 8px; 
+  background-color: var(--border-color); 
 }
