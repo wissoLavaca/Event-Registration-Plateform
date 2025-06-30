@@ -10,14 +10,12 @@ const inscriptionRepository = AppDataSource.getRepository(Inscription);
 const formFieldRepository = AppDataSource.getRepository(FormField);
 
 
-// POST /api/inscriptions/:inscriptionId/responses
 export const submitResponsesForInscription = async (req: Request, res: Response) => {
     console.log(`[submitResponsesForInscription] Received request for inscriptionId: ${req.params.inscriptionId}`);
     console.log("[submitResponsesForInscription] Request body:", JSON.stringify(req.body, null, 2));
 
     try {
         const inscriptionId = parseInt(req.params.inscriptionId);
-        // It's safer to access parts of req.body after validation
         const responsesData = req.body.responses as Array<{ id_field: number; response_text?: string; response_file_path?: string }>; 
 
         if (!req.body.responses || !Array.isArray(req.body.responses)) {
@@ -26,14 +24,13 @@ export const submitResponsesForInscription = async (req: Request, res: Response)
         }
         if (responsesData.length === 0) {
             console.log("[submitResponsesForInscription] Received empty 'responses' array for inscriptionId:", inscriptionId);
-            // Decide if this is an error or a valid case (e.g., clearing responses)
-            // For now, let's assume it's valid but log it.
+
         }
 
 
         const inscription = await inscriptionRepository.findOne({
             where: { id_inscription: inscriptionId },
-            relations: ['event', 'event.formFields', 'user'] // Added 'user' to ensure id_user is loaded
+            relations: ['event', 'event.formFields', 'user'] 
         });
 
         if (!inscription) {
@@ -90,7 +87,7 @@ export const submitResponsesForInscription = async (req: Request, res: Response)
                     id_inscription: inscriptionId,
                     id_field: resData.id_field,
                     response_text: resData.response_text,
-                    response_file_path: resData.response_file_path, // TODO: file upload logic
+                    response_file_path: resData.response_file_path, 
                 });
                 try {
                     await fieldResponseRepository.save(newResponse);
@@ -105,8 +102,7 @@ export const submitResponsesForInscription = async (req: Request, res: Response)
 
         if (errorsEncountered.length > 0) {
             console.warn(`[submitResponsesForInscription] Finished processing for inscription ${inscriptionId} with ${errorsEncountered.length} errors/warnings.`);
-             // Decide on response: still 201 if some succeeded, or a different status if critical errors occurred.
-            return res.status(207).json({ // Multi-Status
+            return res.status(207).json({ 
                 message: "Responses processed with some issues.", 
                 successfulResponses: createdOrUpdatedResponses,
                 errors: errorsEncountered 
@@ -122,14 +118,12 @@ export const submitResponsesForInscription = async (req: Request, res: Response)
     }
 };
 
-// GET /api/inscriptions/:inscriptionId/responses
 export const getResponsesForInscription = async (req: Request, res: Response) => {
-    // TODO: Authorization: Admin or user who owns the inscription
     try {
         const inscriptionId = parseInt(req.params.inscriptionId);
         const responses = await fieldResponseRepository.find({
             where: { id_inscription: inscriptionId },
-            relations: ['formField', 'formField.type'] // Load related form field info
+            relations: ['formField', 'formField.type'] 
         });
         res.status(200).json(responses);
     } catch (error: any) {
@@ -137,19 +131,16 @@ export const getResponsesForInscription = async (req: Request, res: Response) =>
     }
 };
 
-// GET /api/events/:eventId/responses (More complex: aggregate responses for an event)
 export const getAllResponsesForEvent = async (req: Request, res: Response) => {
    
     try {
         const eventId = parseInt(req.params.eventId);
-        // Example: Find inscriptions, then loop, or use a more complex TypeORM query with joins
         const inscriptions = await inscriptionRepository.find({
             where: { id_event: eventId },
             relations: ['fieldResponses', 'fieldResponses.formField', 'user']
         });
 
-        // You might want to restructure this data for easier consumption on the frontend
-        res.status(200).json(inscriptions); // This will return inscriptions, each with its user and fieldResponses
+        res.status(200).json(inscriptions); 
     } catch (error: any) {
         res.status(500).json({ message: "Error fetching all responses for event", error: error.message });
     }
