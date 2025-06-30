@@ -38,7 +38,7 @@ const deleteFormFieldHandler = async (req: Request, res: Response, next: NextFun
 // Dropdown option handlers
 const createOptionHandler = async (req: Request, res: Response, next: NextFunction) => {
     try {
-        await DropdownOptionController.createOptionForField(req as AuthenticatedRequest, res);
+        await DropdownOptionController.createOptionForField(req as AuthenticatedRequest, res, next);
     } catch (error) {
         next(error);
     }
@@ -46,7 +46,7 @@ const createOptionHandler = async (req: Request, res: Response, next: NextFuncti
 
 const getOptionsHandler = async (req: Request, res: Response, next: NextFunction) => {
     try {
-        await DropdownOptionController.getOptionsForField(req as AuthenticatedRequest, res);
+        await DropdownOptionController.getOptionsForField(req as AuthenticatedRequest, res, next);
     } catch (error) {
         next(error);
     }
