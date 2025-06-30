@@ -12,8 +12,6 @@ const router = Router();
 router.post('/form-fields/:fieldId/options', createOptionForField);
 router.get('/form-fields/:fieldId/options', getOptionsForField);
 
-// Routes for managing a specific dropdown option by its own ID
-// (Useful if you want to update/delete an option without knowing its parent fieldId directly in the route)
 router.put('/dropdown-options/:optionId', updateDropdownOption);
 router.delete('/dropdown-options/:optionId', deleteDropdownOption);
 
