@@ -51,7 +51,7 @@ const Navbar: React.FC<NavbarProps> = ({ onToggleSidebar }) => {
                   : `${BACKEND_URL}${user.profilePictureUrl}`
               }
               alt={user.username || 'User Avatar'}
-              className="user-avatar-image" // Add a class for styling
+              className="user-avatar-image" 
             />
           ) : (
             <i className='bx bxs-user-circle bx-sm user-avatar-icon'></i>
