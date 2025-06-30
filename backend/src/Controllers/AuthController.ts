@@ -15,7 +15,6 @@ export const registerUser = async (req: RegisterRequest, res: Response) => {
     try {
         const { first_name, last_name, birth_date, username, password, registration_number, id_role, id_departement } = req.body;
 
-        // TODO: Check if username or registration_number already exists
         const existingUser = await userRepository.findOne({
             where: [
                 { username },
@@ -31,7 +30,6 @@ export const registerUser = async (req: RegisterRequest, res: Response) => {
             });
         }
 
-        // TODO: Hash the password using bcryptjs
         const salt = await bcrypt.genSalt(10);
         const hashedPassword = await bcrypt.hash(password, salt);
 
@@ -48,13 +46,11 @@ export const registerUser = async (req: RegisterRequest, res: Response) => {
         });
 
         await userRepository.save(newUser);
-        // TODO: Optionally generate a JWT token upon successful registration
 
         const { password: _, ...userWithoutPassword } = newUser;
         res.status(201).json({ message: "User registered successfully", userId: newUser.id_user });
     } catch (error: any) {
         console.error("Registration error:", error);
-        // TODO: Handle specific errors like unique constraint violations (e.g., username taken)
         res.status(500).json({ message: "Error registering user", error: error.message });
     }
 };
@@ -63,14 +59,12 @@ export const loginUser = async (req: Request, res: Response) => {
     try {
         const { username, password } = req.body;
 
-        // Input validation
         if (!username || !password) {
             return res.status(400).json({ 
                 message: "Username and password are required" 
             });
         }
 
-        // Find user
         const user = await userRepository.findOne({ 
             where: { username }
         });
@@ -81,7 +75,6 @@ export const loginUser = async (req: Request, res: Response) => {
             });
         }
 
-        // Verify password
         const isPasswordValid = await bcrypt.compare(password, user.password);
         
         if (!isPasswordValid) {
@@ -90,7 +83,6 @@ export const loginUser = async (req: Request, res: Response) => {
             });
         }
 
-        // Generate JWT token
         const token = jwt.sign(
             { 
                 userId: user.id_user, 
@@ -129,7 +121,6 @@ export const getMe = async (req: AuthenticatedRequest, res: Response) => {
             });
         }
 
-        // Return user data with correct property names
         res.status(200).json({ 
             id: user.id_user,
             firstName: user.first_name,
