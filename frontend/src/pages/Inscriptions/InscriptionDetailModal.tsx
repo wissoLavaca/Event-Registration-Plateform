@@ -48,20 +48,16 @@ const InscriptionDetailModal: React.FC<InscriptionDetailModalProps> = ({ isOpen,
     return filePath.split(/[\\/]/).pop() || filePath;
   };
 
-  // For Vite projects, environment variables are accessed via import.meta.env
-  // and must be prefixed with VITE_ in your .env file
   const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:3001';
 
   return (
     <div className="modal-overlay" onClick={onClose}>
       <div className="modal-content" onClick={(e) => e.stopPropagation()}>
-        {/* MODAL HEADER: Contains main title and close button */}
         <div className="modal-header">
           <h2>Détails de l'inscription #{inscription.id_inscription}</h2>
           <button className="modal-close-btn" onClick={onClose}>&times;</button>
         </div>
 
-        {/* USER DETAILS SECTION */}
         <div className="modal-section">
           <div className="detail-item">
             <strong>Utilisateur:</strong>
@@ -106,7 +102,6 @@ const InscriptionDetailModal: React.FC<InscriptionDetailModalProps> = ({ isOpen,
           </div>
         )}
         
-        {/* FALLBACK MESSAGE IF NO FIELD RESPONSES */}
         {(!inscription.fieldResponses || inscription.fieldResponses.length === 0) && (
            <div className="modal-section">
              <p>Aucune réponse de champ spécifique pour cette inscription.</p>
