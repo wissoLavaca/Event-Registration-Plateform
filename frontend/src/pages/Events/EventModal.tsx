@@ -4,13 +4,12 @@ import "./EventModal.css"
 interface Event {
   id_event: number;
   title_event: string;
-  description: string | null; // Made optional to handle cases where description might not be set
+  description: string | null;
   start_date: string; 
   end_date: string;  
   registration_start_date: string;
   registration_end_date: string;
   status: string;
-
 }
 
 interface EventFormData {
@@ -21,14 +20,14 @@ interface EventFormData {
   end_date: string; 
   registration_start_date: string;
   registration_end_date: string;  
-  status: string; // We still need this to store the calculated or "Annulé" status
+  status: string;
 }
 
 interface EventModalProps {
   isOpen: boolean;
   onClose: () => void;
   onSave: (eventDataFromModal: EventFormData) => Promise<void> | void; 
-  eventDataToEdit: Event | null; // Changed to Event type for clarity
+  eventDataToEdit: Event | null;
   errorMessage?: string | null;
   isSaving?: boolean;
 }
@@ -53,7 +52,7 @@ const EventModal: React.FC<EventModalProps> = ({
 
   const [eventData, setEventData] = useState<EventFormData>(initialEventData);
   const [modalTitle, setModalTitle] = useState("Créer un événement");
-  const [isCancelled, setIsCancelled] = useState(false); // New state for "Annulé"
+  const [isCancelled, setIsCancelled] = useState(false);
 
   useEffect(() => {
     if (isOpen) {
@@ -86,58 +85,43 @@ const EventModal: React.FC<EventModalProps> = ({
     }
   }, [isOpen, eventDataToEdit]);
 
-  // useEffect to automatically update status based on dates OR if manually cancelled
   useEffect(() => {
-    let newCalculatedStatus: string; // Renamed for clarity
+    let newCalculatedStatus: string;
 
     if (isCancelled) {
       newCalculatedStatus = "Annulé";
     } else {
-      // Date-based calculation if not manually cancelled
       const today = new Date();
       today.setHours(0, 0, 0, 0); 
-
-      // Default status if registration dates are not valid or not set
       newCalculatedStatus = "À venir"; 
-
-      // Use registration_start_date and registration_end_date
       if (eventData.registration_start_date && eventData.registration_end_date) {
         try {
           const regStartDate = new Date(eventData.registration_start_date);
           regStartDate.setHours(0, 0, 0, 0); 
-
           const regEndDate = new Date(eventData.registration_end_date);
           regEndDate.setHours(0, 0, 0, 0); 
-
           if (isNaN(regStartDate.getTime()) || isNaN(regEndDate.getTime())) {
-            // Invalid registration dates, will remain "À venir"
-            console.warn("Invalid registration dates provided for status calculation in modal.");
-            newCalculatedStatus = "À venir"; // Explicitly set
+            newCalculatedStatus = "À venir";
           } else if (regEndDate < today) {
-            newCalculatedStatus = "Terminé"; // Registration period is over
+            newCalculatedStatus = "Terminé";
           } else if (regStartDate <= today && regEndDate >= today) {
-            newCalculatedStatus = "En cours"; // Registration is active/open
+            newCalculatedStatus = "En cours";
           } else if (regStartDate > today) {
-            newCalculatedStatus = "À venir"; // Registration is in the future
+            newCalculatedStatus = "À venir";
           }
         } catch (e) {
-          console.error("Error parsing registration dates for status calculation in modal:", e);
-          newCalculatedStatus = "À venir"; // Fallback in case of parsing error
+          newCalculatedStatus = "À venir";
         }
       } else {
-        // If no registration dates are set, it defaults to "À venir".
-        // Consider if this is the desired behavior or if a different status/validation is needed.
         newCalculatedStatus = "À venir";
       }
     }
-    
     if (newCalculatedStatus !== eventData.status) {
       setEventData((prev) => ({
         ...prev,
         status: newCalculatedStatus,
       }));
     }
-    // Update dependencies to reflect the use of registration dates
   }, [eventData.registration_start_date, eventData.registration_end_date, isCancelled, eventData.status]); 
 
   const handleChange = (
@@ -161,7 +145,6 @@ const EventModal: React.FC<EventModalProps> = ({
 
   if (!isOpen) return null;
 
-  // Determine displayed status (could be different from what's sent if "Annulé" is a separate flag)
   const displayStatus = isCancelled ? "Annulé" : eventData.status;
 
   return (
@@ -237,7 +220,7 @@ const EventModal: React.FC<EventModalProps> = ({
                 type="date"
                 id="registration_start_date"
                 name="registration_start_date" 
-                value={eventData.registration_start_date || ''} // Added || '' for controlled input
+                value={eventData.registration_start_date || ''}
                 onChange={handleChange}
               />
             </div>
@@ -248,21 +231,19 @@ const EventModal: React.FC<EventModalProps> = ({
                 type="date"
                 id="registration_end_date"
                 name="registration_end_date" 
-                value={eventData.registration_end_date || ''} // Added || '' for controlled input
+                value={eventData.registration_end_date || ''}
                 onChange={handleChange}
-                min={eventData.registration_start_date || ''} // Added || '' for controlled input
+                min={eventData.registration_start_date || ''}
               />
             </div>
-          </div> {/* <-- This was the missing closing div */}
+          </div>
           
-          {/* Display Status (Read-Only) */}
           <div className="form-group">
             <label>Statut:</label>
             <p className="status-display">{displayStatus}</p> 
           </div>
 
-          {/* Option to Cancel Event */}
-          {eventDataToEdit && ( // Only show cancel for existing events, or always if new can be cancelled
+          {eventDataToEdit && (
             <div className="form-group">
               <button 
                 type="button" 
