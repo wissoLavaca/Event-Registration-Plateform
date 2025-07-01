@@ -10,7 +10,6 @@ const Dashboard = () => {
     return <p>Veuillez vous connecter pour voir le tableau de bord.</p>;
   }
 
-  // Personalized welcome message
   const welcomeName = user?.username || user?.username ;
 
   return (
