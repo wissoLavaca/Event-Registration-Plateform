@@ -1,13 +1,12 @@
 import { useEffect, useState } from 'react';
 import { useAuth } from '../../context/authContext';
 import './Dashboard.css';
-import { useNotifications } from '../../context/notificationContext'; // Import useNotifications
-import { UINotificationType } from '../../types/notification.types'; // Import notification types
-import { formatDistanceToNow, parseISO } from 'date-fns'; // For relative time
-import { fr } from 'date-fns/locale'; // For French locale
-import { FaChevronLeft, FaChevronRight } from 'react-icons/fa'; // For pagination icons
+import { useNotifications } from '../../context/notificationContext';
+import { UINotificationType } from '../../types/notification.types';
+import { formatDistanceToNow, parseISO } from 'date-fns';
+import { fr } from 'date-fns/locale';
+import { FaChevronLeft, FaChevronRight } from 'react-icons/fa';
 
-// Define types for employee-specific data
 interface MyEvent {
   id_event: string | number;
   title_event: string;
@@ -16,31 +15,23 @@ interface MyEvent {
   description?: string;
   status?: string;
 }
-
-// Define a new interface for Registered Events, including registrationDate
 interface RegisteredEvent extends MyEvent {
   registrationDate: string;
 }
-
-// Helper functions (copied from AdminDashboardView or similar)
 const getNotificationIconClass = (type: UINotificationType): string => {
   switch (type) {
-    case UINotificationType.EVENT_CREATED: return "fas fa-briefcase"; // Example, adjust if needed
-    case UINotificationType.REGISTRATION_CONFIRMATION: return "fas fa-building"; // Example, adjust if needed
-    // Add other cases from your AdminDashboardView if they are relevant for employee notifications
+    case UINotificationType.EVENT_CREATED: return "fas fa-briefcase";
+    case UINotificationType.REGISTRATION_CONFIRMATION: return "fas fa-building";
     default: return "fas fa-info-circle";
   }
 };
-
 const getIconBgClass = (type: UINotificationType): string => {
   switch (type) {
-    case UINotificationType.EVENT_CREATED: return 'icon-bg-blue'; // Example
-    case UINotificationType.REGISTRATION_CONFIRMATION: return 'icon-bg-green'; // Example
-    // Add other cases
+    case UINotificationType.EVENT_CREATED: return 'icon-bg-blue';
+    case UINotificationType.REGISTRATION_CONFIRMATION: return 'icon-bg-green';
     default: return 'icon-bg-gray';
   }
 };
-
 const formatRelativeTime = (dateString?: string): string => {
   if (!dateString) return "Date inconnue";
   try {
@@ -48,15 +39,14 @@ const formatRelativeTime = (dateString?: string): string => {
     return formatDistanceToNow(date, { addSuffix: true, locale: fr });
   } catch (e) {
     console.error("Error formatting relative time:", e);
-    return dateString; // Fallback to original string on error
+    return dateString;
   }
 };
-
-const ITEMS_PER_INSCRIPTIONS_PAGE = 4; // Same as AdminDashboardView
+const ITEMS_PER_INSCRIPTIONS_PAGE = 4;
 
 const EmployeeDashboardView = () => {
   const { user, token } = useAuth();
-  const { notifications, isLoading: isLoadingNotifications, error: notificationsError } = useNotifications(); // Use notifications hook
+  const { notifications, isLoading: isLoadingNotifications, error: notificationsError } = useNotifications();
 
   const [myUpcomingEvents, setMyUpcomingEvents] = useState<MyEvent[]>([]);
   const [ongoingEvents, setOngoingEvents] = useState<MyEvent[]>([]);
@@ -66,7 +56,7 @@ const EmployeeDashboardView = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  const [currentInscriptionsPage, setCurrentInscriptionsPage] = useState(1); // Pagination state
+  const [currentInscriptionsPage, setCurrentInscriptionsPage] = useState(1);
 
   useEffect(() => {
     if (user?.userId && token) {
@@ -117,12 +107,11 @@ const EmployeeDashboardView = () => {
         });
 
     } else {
-      setIsLoading(false); // No user or token, stop loading
+      setIsLoading(false);
       if (!user?.userId) {
         setError("Informations utilisateur non disponibles. Veuillez vous reconnecter.");
       }
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user, token]);
 
   const formatDate = (dateString: string | null | undefined) => {
@@ -134,7 +123,7 @@ const EmployeeDashboardView = () => {
             day: 'numeric',
         });
     } catch (e) {
-        return dateString; // Fallback
+        return dateString;
     }
   };
 
@@ -144,7 +133,7 @@ const EmployeeDashboardView = () => {
     statusKey: 'upcoming' | 'ongoing' | 'finished' | 'cancelled'
   ) => {
     const iconClass = 'fas fa-calendar-check';
-    let styleClass = ''; 
+    let styleClass = '';
 
     switch (statusKey) {
       case 'upcoming':
@@ -176,7 +165,6 @@ const EmployeeDashboardView = () => {
     );
   };
 
-  // Pagination logic for "Mes Inscriptions"
   const indexOfLastInscription = currentInscriptionsPage * ITEMS_PER_INSCRIPTIONS_PAGE;
   const indexOfFirstInscription = indexOfLastInscription - ITEMS_PER_INSCRIPTIONS_PAGE;
   const currentMyInscriptions = myRegisteredEvents.slice(indexOfFirstInscription, indexOfLastInscription);
@@ -190,23 +178,22 @@ const EmployeeDashboardView = () => {
     setCurrentInscriptionsPage((prev) => Math.max(prev - 1, 1));
   };
 
-  const latestNotifications = notifications.slice(0, 4); // Get the latest 4 notifications
+  const latestNotifications = notifications.slice(0, 4);
 
   if (isLoading) {
     return <p className="loading-message" style={{ textAlign: 'center', margin: '20px 0' }}>Chargement de vos informations...</p>;
   }
 
-  if (error && !isLoading) { // Show general error if not loading and error exists
+  if (error && !isLoading) {
     return <p className="error-message" style={{ color: 'red', textAlign: 'center', margin: '20px 0' }}>Erreur: {error}</p>;
   }
   
-  if (!user && !isLoading) { // If no user and not loading
+  if (!user && !isLoading) {
     return <p style={{ textAlign: 'center', margin: '20px 0', fontStyle: 'italic' }}>Veuillez vous connecter pour voir votre tableau de bord.</p>;
   }
 
   return (
-    <div className="employee-dashboard-view dashboard"> {/* Added 'dashboard' class for shared styles */}
-      
+    <div className="employee-dashboard-view dashboard">
       <h2 className="section-title">Récapitulatif des Événements</h2>
       <div className="event-categories-grid">
         {renderEventCard(myUpcomingEvents, "Événements à Venir", "upcoming")}
@@ -214,12 +201,9 @@ const EmployeeDashboardView = () => {
         {renderEventCard(finishedEvents, "Événements Terminés", "finished")}
         {renderEventCard(cancelledEvents, "Événements Annulés", "cancelled")}
       </div>
-
       <hr className="dashboard-divider" />
-
-      <div className="dashboard-columns-wrapper"> {/* Wrapper for two columns */}
-        {/* Column 1: Mes Inscriptions */}
-        <section className="my-registered-events-table-section"> {/* Use same class as Admin */}
+      <div className="dashboard-columns-wrapper">
+        <section className="my-registered-events-table-section">
           <div className="section-header-with-pagination">
             <h2 className="section-header">Mes Inscriptions aux Événements</h2>
             {myRegisteredEvents.length > ITEMS_PER_INSCRIPTIONS_PAGE && (
@@ -230,11 +214,10 @@ const EmployeeDashboardView = () => {
               </div>
             )}
           </div>
-          {/* Removed the extra "Mes Inscriptions Personnelles" stat card from here as it's redundant with the list title */}
           {myRegisteredEvents.length > 0 ? (
-            <ul className="inscription-list"> {/* Use <ul> for semantic list */}
+            <ul className="inscription-list">
               {currentMyInscriptions.map((event) => {
-                let statusClass = ''; 
+                let statusClass = '';
                 const statusText = event.status || 'N/A';
                 switch (statusText.toLowerCase()) {
                   case 'terminé': statusClass = 'status-termine'; break;
@@ -245,8 +228,8 @@ const EmployeeDashboardView = () => {
                 }
                 return (
                   <li key={event.id_event} className="inscription-list-item">
-                    <div className="inscription-icon-container icon-bg-blue"> {/* Example icon bg */}
-                      <i className="fas fa-calendar-check"></i> {/* Example icon */}
+                    <div className="inscription-icon-container icon-bg-blue">
+                      <i className="fas fa-calendar-check"></i>
                     </div>
                     <div className="inscription-text-content">
                       <h3>{event.title_event}</h3>
@@ -266,10 +249,8 @@ const EmployeeDashboardView = () => {
             <p className="no-events-message">Vous n'êtes inscrit à aucun événement pour le moment.</p>
           )}
         </section>
-
-        {/* Column 2: Activités Récentes */}
-        <section className="recent-activity-section"> {/* Use same class as Admin */}
-          <div className="section-header-with-pagination"> {/* Keep consistent structure even if no pagination for now */}
+        <section className="recent-activity-section">
+          <div className="section-header-with-pagination">
             <h2 className="section-header">Activités récentes</h2>
           </div>
           {isLoadingNotifications && <p className="loading-message">Chargement des activités...</p>}
