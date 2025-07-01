@@ -145,7 +145,6 @@ const EventFieldManager = () => {
           <h1>Gestion des Champs par Événement</h1>
           <p>Configurez les champs de formulaire pour chaque événement.</p>
         </div>
-        {/* The "Add" button is removed from here; field management is per-event */}
       </div>
 
       <div className="forms-filters">
@@ -158,10 +157,8 @@ const EventFieldManager = () => {
             onChange={(e) => setSearchTerm(e.target.value)}
           />
         </div>
-        {/* Add event status filter if needed */}
       </div>
 
-      {/* Render the Confirmation Modal */}
       <ConfirmationModal
         isOpen={isConfirmModalOpen}
         title={confirmModalProps.title}
@@ -184,13 +181,17 @@ const EventFieldManager = () => {
                 <h3>{event.title_event}</h3>
                 {/* Display event status if available */}
                 {/* <span className={`status-badge status-${event.status_event}`}>
-                  {event.status_event}
+                  
                 </span> */}
               </div>
               <p className="form-description">{event.description || 'Pas de description.'}</p>
               <div className="form-meta">
-                {/* Add other event details like dates */}
-                {event.start_date && <span>Début: {new Date(event.start_date).toLocaleDateString()}</span>}
+                {event.start_date && (
+                  <div className="meta-item">
+                    <i className="fi fi-rr-calendar"></i>
+                    <span>Début: {new Date(event.start_date).toLocaleDateString('fr-FR', { day: 'numeric', month: 'long', year: 'numeric' })}</span>
+                  </div>
+                )}
               </div>
               <div className="form-actions">
                 <button className="edit-btn" onClick={() => handleManageEventFields(event)}>
