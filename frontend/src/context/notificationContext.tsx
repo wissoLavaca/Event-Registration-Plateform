@@ -35,7 +35,7 @@ export const NotificationProvider: React.FC<{ children: ReactNode }> = ({ childr
         try {
             const data: NotificationsResponse = await notificationService.fetchUserNotifications(token);
             
-            const newToastedInThisFetch = new Set<number>(); // Track IDs toasted in *this* specific fetch
+            const newToastedInThisFetch = new Set<number>(); 
 
             const newUnreadForToasting = data.notifications.filter(
                 n => !n.is_read && !toastedNotificationIds.has(n.id_notification)
@@ -50,14 +50,13 @@ export const NotificationProvider: React.FC<{ children: ReactNode }> = ({ childr
                 toast.info(n.message, {
                     toastId: `notif-${n.id_notification}`,
                 });
-                newToastedInThisFetch.add(n.id_notification); // Add to locally tracked set
+                newToastedInThisFetch.add(n.id_notification); 
             });
 
             setNotifications(data.notifications);
             setUnreadCount(data.unreadCount);
 
-            // After processing, update the main toastedNotificationIds state
-            // with the IDs that were just toasted in this run.
+
             if (newToastedInThisFetch.size > 0) {
                 setToastedNotificationIds(prevToastedIds => {
                     const updatedSet = new Set(prevToastedIds);
@@ -75,18 +74,16 @@ export const NotificationProvider: React.FC<{ children: ReactNode }> = ({ childr
         } finally {
             setIsLoading(false);
         }
-    }, [token, user]); // <<<< REMOVE toastedNotificationIds from dependency array
+    }, [token, user]); 
 
     useEffect(() => {
         if (token && user) {
             fetchNotifications();
-            // Optional: Set up polling for new notifications
-            // const intervalId = setInterval(fetchNotifications, 15000); // Poll every 15 seconds
-            // return () => clearInterval(intervalId);
+
         } else {
             setNotifications([]);
             setUnreadCount(0);
-            setToastedNotificationIds(new Set()); // Clear toasted IDs on logout
+            setToastedNotificationIds(new Set()); 
         }
     }, [token, user, fetchNotifications]);
 
