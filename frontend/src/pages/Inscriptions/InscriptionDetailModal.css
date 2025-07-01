@@ -135,21 +135,6 @@
   text-decoration-color: var(--primary-color);
 }
 
-/* Section for "Réponses au formulaire" - will now use .modal-section and .modal-section-title */
-/* .form-responses-section {
-  margin-top: 28px; 
-}
-
-.form-responses-section h3 { 
-  font-size: 1.15rem; 
-  color: var(--text-primary);
-  font-weight: 600;
-  margin-bottom: 16px; 
-  padding-bottom: 8px;
-  border-bottom: 1px solid var(--border-color-subtle, var(--border-color)); 
-} */
-
-/* List for individual form field responses */
 .field-responses-list {
   list-style-type: none;
   padding-left: 0;
