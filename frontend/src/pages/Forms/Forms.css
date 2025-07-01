@@ -86,40 +86,50 @@
   border-color: var(--primary-color); /* ADDED green border on hover */
 }
 
-.form-card-header { /* ADDED to ensure it doesn't shrink and to add bottom margin */
+.form-card-header { 
   margin-bottom: 12px;
   flex-shrink: 0;
 }
 
-.form-card-header h3 { /* Changed from h2 to h3 to match JSX */
+.form-card-header h3 { 
   color: var(--text-primary); 
-  margin-top: 0; /* Remove default top margin */
+  margin-top: 0; 
   margin-bottom: 8px;
-  font-size: 1.15rem; /* Adjusted size */
+  font-size: 1.15rem; 
 }
 
-.form-description { /* Assuming this class is used for the description <p> tag */
-  color: var(--text-secondary);
-  font-size: 0.9em;
-  margin-bottom: 16px;
-  flex-grow: 1; /* ADDED to make description take available space */
-  min-height: 40px; /* Optional: ensure a minimum space for description */
-}
-
-.form-meta { /* Container for start date etc. */
-  margin-bottom: 16px;
-  font-size: 0.85em;
+.form-description {
   color: var(--text-muted);
-  flex-shrink: 0; /* Ensure it doesn't shrink */
+  font-size: 0.9rem;
+  margin-bottom: 15px;
+  flex-grow: 1; 
+}
+
+.form-meta {
+  margin-bottom: 20px;
+  font-size: 0.9rem;
+  color: var(--text-muted);
+}
+
+.meta-item {
+  display: flex;
+  align-items: center;
+  gap: 8px; 
+}
+
+.meta-item i {
+  color: var(--primary-color); 
+  font-size: 1rem;
+  line-height: 1; 
 }
 
 .form-actions {
-  margin-top: auto; /* Pushes actions to the bottom */
+  margin-top: auto; 
   padding-top: 16px;
   border-top: 1px solid var(--border-color); 
   display: flex;
   gap: 10px;
-  justify-content: flex-end; /* Align buttons to the right */
+  justify-content: flex-end; /* Changed from flex-start to flex-end */
   flex-shrink: 0; /* Ensure actions bar doesn't shrink */
 }
 
@@ -174,4 +184,52 @@
 }
 .delete-btn:hover {
   background-color: rgba(var(--danger-color-rgb), 0.25); 
+}
+
+/* Dark mode overrides for better readability */
+.dark-mode .forms-page,
+.dark-mode .form-card,
+.dark-mode .form-card-header h3,
+.dark-mode .form-description,
+.dark-mode .form-meta,
+.dark-mode .meta-item,
+.dark-mode .form-actions button,
+.dark-mode .view-inscriptions-btn {
+  color: #f1f5f9 !important; /* Very light gray/white for text */
+}
+
+.dark-mode .form-description,
+.dark-mode .form-meta {
+  color: #cbd5e1 !important; /* Softer light gray for secondary text */
+}
+
+.dark-mode .form-card {
+  background: #232b39 !important;
+  border-color: #334155 !important;
+}
+
+.dark-mode .forms-header,
+.dark-mode .forms-filters {
+  background: #1a2233 !important;
+  color: #f1f5f9 !important;
+  border-color: #334155 !important;
+}
+
+.dark-mode .search-bar input {
+  background: #232b39 !important;
+  color: #f1f5f9 !important;
+  border-color: #334155 !important;
+}
+
+/* Dark mode color variables */
+.dark-mode {
+  --text-primary: #f1f5f9;
+  --text-muted: #cbd5e1;
+  --card-bg: #232b39;
+  --border-color: #334155;
+  --background-body: #181e29;
+  --background-content: #1a2233;
+  --input-bg: #232b39;
+  --input-border: #334155;
+  --input-focus-border: #4ade80;
 }
