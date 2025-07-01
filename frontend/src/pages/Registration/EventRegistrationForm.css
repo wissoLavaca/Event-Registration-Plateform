@@ -2,127 +2,119 @@
   max-width: 700px;
   margin: 2rem auto;
   padding: 2rem;
-  /* background-color: #f9f9f9; */ /* Old */
-  background-color: var(--background-content); /* New */
+  background-color: var(--background-content);
   border-radius: 8px;
-  /* box-shadow: 0 0 15px rgba(0, 0, 0, 0.1); */ /* Old */
-  box-shadow: 0 0 15px rgba(var(--shadow-color-rgb), 0.1); /* New */
-  border: 1px solid var(--border-color); /* New */
+  box-shadow: 0 0 15px rgba(var(--shadow-color-rgb), 0.1);
+  border: 1px solid var(--border-color);
 }
 
 .event-registration-form-container h1 {
   text-align: center;
   margin-bottom: 1.5rem;
-  /* color: #333; */ /* Old */
-  color: var(--text-primary); /* New */
+  color: var(--text-primary);
 }
 
-.form-group { /* Common class, ensure consistency */
-  margin-bottom: 1.5rem; /* Add some space between form groups */
+.form-group {
+  margin-bottom: 1.5rem;
 }
 
 .form-group label {
   display: block;
   margin-bottom: 0.5rem;
   font-weight: bold;
-  /* color: #555; */ /* Old */
-  color: var(--text-secondary); /* New */
+  color: var(--text-secondary);
 }
 
-.form-group label:first-child { /* Style for the main field label (e.g., "plz *") */
-  display: block;
-  margin-bottom: 0.5rem;
+/* Only the main label is bold and large */
+.form-group > label {
   font-weight: bold;
+  font-size: 1.15rem;
+  margin-bottom: 0.5rem;
+  display: block;
 }
 
-/* Styling for Checkbox Groups and Radio Groups */
+/* Checkbox & Radio Groups */
 .checkbox-group,
 .radio-group {
   display: flex;
-  flex-direction: column; /* Stacks options vertically */
-  gap: 0.75rem;           /* Vertical gap between options */
-  align-items: flex-start;/* Aligns the start of each option (horizontally) to the left,
-                             ensuring inputs are vertically aligned under each other. */
+  flex-direction: column;
+  gap: 0.2rem;
+  align-items: flex-start;
+  margin-top: 6px;
+  padding-left: 0;
 }
 
+/* Option labels (checkbox/radio) are normal weight and size */
 .checkbox-option,
 .radio-option {
   display: flex;
-  align-items: center;    /* Vertically aligns the input and its label within each option line */
-  gap: 0.5rem;            /* Horizontal gap between the input and its label */
-  width: fit-content;     /* Ensures the option container is only as wide as its content,
-                             preventing labels from being pushed too far from the input. */
-  justify-content: flex-start; /* Explicitly set to ensure items stay at the start */
-  /* DEBUGGING: Add a border to see the actual bounds of this container */
-  /* border: 1px solid red;  */
+  align-items: center;
+  justify-content: flex-start; /* <-- Add this */
+  gap: 8px;
+  font-size: 1rem;
+  font-weight: normal;
+  margin-bottom: 0.5rem;
+  cursor: pointer;
+  width: auto; /* <-- Change from 100% to auto */
+  padding-left: 0;
+  line-height: 1.2;
+  box-sizing: border-box;
 }
 
-/* .checkbox-option:last-child, (No specific last-child styling needed for vertical layout with gap) */
-/* .radio-option:last-child { */
-  /* margin-right: 0; */ 
-/* } */
+.option-label-text {
+  display: block;
+  flex: 0 1 auto;
+  min-width: 0;
+  white-space: normal;
+}
 
+.checkbox-option > *,
+.radio-option > * {
+  font-weight: normal !important;
+}
+
+/* Inputs inside options */
 .checkbox-option input[type="checkbox"],
 .radio-option input[type="radio"] {
-  margin: 0; /* Reset any default browser margin */
-  flex-shrink: 0; /* Prevent the input from shrinking if the label is very long */
-  /* Inputs typically don't grow by default, which is desired here */
+  margin: 0 2px 0 0;
+  flex-shrink: 0;
+  accent-color: var(--primary-color);
+  vertical-align: middle;
 }
 
-.checkbox-option label,
-.radio-option label {
-  font-weight: normal;
-  margin-bottom: 0;
-  text-align: left;
-  margin-left: 0;     /* The 'gap' on the parent .checkbox-option handles spacing */
-  padding: 0;
-  width: auto;        /* Label is as wide as its text */
-  flex-grow: 0;       /* Label does not expand */
-  white-space: nowrap;/* Prevents text wrapping in labels, keeping them on one line */
-  /* DEBUGGING: Add a border to see the actual bounds of the label */
-  /* border: 1px solid blue; */
-}
-
+/* Other input styles */
 .form-group input[type="text"],
 .form-group input[type="number"],
 .form-group input[type="date"],
-.form-group input[type="email"],
 .form-group textarea,
 .form-group select {
   width: 100%;
   padding: 0.75rem;
-  /* border: 1px solid #ccc; */ /* Old */
-  border: 1px solid var(--input-border); /* New */
-  background-color: var(--input-bg); /* New */
-  color: var(--text-primary); /* New */
+  border: 1px solid var(--input-border);
+  background-color: var(--input-bg);
+  color: var(--text-primary);
   border-radius: 4px;
   box-sizing: border-box;
   font-size: 1rem;
 }
+
 .form-group input:focus,
 .form-group textarea:focus,
 .form-group select:focus {
-  border-color: var(--input-focus-border); /* New */
+  border-color: var(--input-focus-border);
   outline: none;
-  box-shadow: 0 0 0 2px rgba(var(--primary-color-rgb), 0.15); /* New */
-}
-
-.form-group input[type="checkbox"] {
-  margin-right: 0.5rem;
-  vertical-align: middle;
-  accent-color: var(--primary-color); /* New */
+  box-shadow: 0 0 0 2px rgba(var(--primary-color-rgb), 0.15);
 }
 
 .help-text {
   display: block;
   font-size: 0.85rem;
-  /* color: #777; */ /* Old */
-  color: var(--text-muted); /* New */
+  color: var(--text-muted);
   margin-top: 0.25rem;
 }
 
 .required-asterisk {
-  color: var(--danger-color); /* New */
+  color: var(--danger-color);
   margin-left: 0.25rem;
 }
 
@@ -130,9 +122,8 @@
   display: block;
   width: 100%;
   padding: 0.75rem;
-  /* background-color: #28a745; */ /* Old */
-  background-color: var(--success-color); /* New */
-  color: var(--text-on-primary); /* New */
+  background-color: var(--success-color);
+  color: var(--text-on-primary);
   border: none;
   border-radius: 4px;
   font-size: 1.1rem;
@@ -140,29 +131,27 @@
   transition: background-color 0.3s ease;
 }
 .submit-button:hover {
-  /* background-color: #218838; */ /* Old */
-  opacity: 0.9; /* New */
+  opacity: 0.9;
 }
 .submit-button:disabled {
-  /* background-color: #ccc; */ /* Old */
-  background-color: var(--text-muted); /* New */
-  color: var(--background-content); /* New */
+  background-color: var(--text-muted);
+  color: var(--background-content);
   cursor: not-allowed;
 }
 
 .loading-indicator, .success-message {
   text-align: center;
   padding: 2rem;
-  color: var(--text-secondary); /* New */
+  color: var(--text-secondary);
 }
 .success-message {
-  color: var(--success-color); /* New */
-  background-color: rgba(var(--success-color-rgb), 0.1); /* New */
-  border: 1px solid rgba(var(--success-color-rgb), 0.3); /* New */
+  color: var(--success-color);
+  background-color: rgba(var(--success-color-rgb), 0.1);
+  border: 1px solid rgba(var(--success-color-rgb), 0.3);
   border-radius: 4px;
 }
 
-.error-message { /* Already styled in Login.css, ensure consistency or make it global */
+.error-message {
   color: var(--danger-color);
   background-color: rgba(var(--danger-color-rgb), 0.1);
   border: 1px solid rgba(var(--danger-color-rgb), 0.3);
@@ -174,20 +163,16 @@
 
 .back-button {
   background: transparent;
-  /* border: 1px solid #ccc; */ /* Old */
-  border: 1px solid var(--border-color); /* New */
-  color: var(--text-link); /* New */
+  border: 1px solid var(--border-color);
+  color: var(--text-link);
   padding: 0.5rem 1rem;
   margin-bottom: 1rem;
   cursor: pointer;
   border-radius: 4px;
 }
 .back-button:hover {
-  /* background-color: #eee; */ /* Old */
-  background-color: var(--background-elevated); /* New */
+  background-color: var(--background-elevated);
 }
-
-/* ... .file-input-container, .file-input-hidden ... */
 
 .file-input-container {
   border: 2px dashed var(--border-color);
@@ -198,32 +183,26 @@
   cursor: pointer;
   transition: all 0.3s ease;
 }
-
 .file-input-container:hover {
   border-color: var(--primary-color);
   background-color: rgba(var(--primary-color-rgb), 0.05);
 }
-
 .file-input-hidden {
   display: none;
 }
-
 .upload-icon {
   font-size: 2rem;
   color: var(--text-muted);
   margin-bottom: 1rem;
 }
-
 .upload-text {
   color: var(--text-secondary);
   margin-bottom: 0.5rem;
 }
-
 .upload-hint {
   font-size: 0.85rem;
   color: var(--text-muted);
 }
-
 .file-name-display {
   margin-top: 1rem;
   padding: 0.5rem;
@@ -231,22 +210,14 @@
   border-radius: 4px;
   color: var(--success-color);
 }
-
 .file-name-display.hint {
   background-color: transparent;
   color: var(--text-muted);
 }
 
-/* Ensure form-group can accommodate this new layout if needed */
-.form-group {
-  margin-bottom: 1.5rem;
-  /* any other styles */
-}
-
-/* Styles for the delete registration button */
 .delete-registration-button {
-  background-color: #dc3545; /* Red background */
-  color: white; /* White text */
+  background-color: #dc3545;
+  color: white;
   padding: 10px 20px;
   border: none;
   border-radius: 5px;
@@ -255,12 +226,21 @@
   margin-top: 20px;
   transition: background-color 0.3s ease;
 }
-
 .delete-registration-button:hover {
-  background-color: #c82333; /* Darker red on hover */
+  background-color: #c82333;
+}
+.delete-registration-button:disabled {
+  background-color: #e0a800;
+  cursor: not-allowed;
 }
 
-.delete-registration-button:disabled {
-  background-color: #e0a800; /* Orange background when disabled */
-  cursor: not-allowed;
+.info-message {
+  color: var(--danger-color);
+  background-color: rgba(var(--danger-color-rgb), 0.1);
+  border: 1px solid rgba(var(--danger-color-rgb), 0.3);
+  padding: 1rem;
+  border-radius: 4px;
+  margin-top: 1.5rem;
+  text-align: center;
+  font-weight: 500;
 }
