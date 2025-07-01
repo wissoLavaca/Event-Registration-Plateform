@@ -1,14 +1,13 @@
 :root {
-    --primary-color: #1DB954; /* Main Green */
+    --primary-color: #1DB954; 
     --primary-color-rgb: 29, 185, 84;
     
-    /* Adjust secondary and accent if they clash, or make them shades of green/neutral */
-    --secondary-color: #128A4A; /* Darker Green */
+    --secondary-color: #128A4A; 
     --secondary-color-rgb: 18, 138, 74;
-    --accent-color: #2DC26B; /* Lighter Green */
+    --accent-color: #2DC26B; 
     --accent-color-rgb: 45, 194, 107;
 
-    --success-color: #10b981; /* Keep or adjust */
+    --success-color: #10b981; 
     --success-color-rgb: 16, 185, 129;
     --warning-color: #f59e0b;
     --warning-color-rgb: 245, 158, 11;
@@ -30,7 +29,6 @@
     --border-color: rgba(148, 163, 184, 0.3); /* Light border color */
 }
 
-/* Define variables for light theme (applied by default or via body.light-theme) */
 body, body.light-theme {
     --primary-color: #1DB954; /* Main Green */
     --primary-color-rgb: 29, 185, 84;
@@ -62,28 +60,25 @@ body, body.light-theme {
     
     --border-color: rgba(148, 163, 184, 0.3);
     --border-color-strong: rgba(148, 163, 184, 0.5);
-    --shadow-color-rgb: 0, 0, 0; /* For box shadows, e.g., rgba(var(--shadow-color-rgb), 0.1) */
+    --shadow-color-rgb: 0, 0, 0; 
     --input-bg: #ffffff;
     --input-border: var(--border-color);
     --input-focus-border: var(--primary-color);
 
-    /* NEW: Spotlight color for light theme */
-    --spotlight-color: #e2e8f0; /* A slightly off-white or very light grey for the spotlight */
-                                /* Or var(--background-content) if you want it to match content areas */
+    --spotlight-color: #e2e8f0; 
 
-    /* Light Mode Defaults for inscription cards (ensure these are also here or in :root) */
+    /* Light Mode Defaults for inscription cards  */
     --card-background-inscription: #ffffff;
     --card-border-inscription: #e2e8f0; 
     --card-background-inscription-hover: #f7fafc; 
-    --text-title-inscription: #0f172a; /* Using --text-primary from light theme */
-    --text-secondary-inscription: #64748b; /* Using --text-muted from light theme */
+    --text-title-inscription: #0f172a; 
+    --text-secondary-inscription: #64748b; 
 }
 
-/* Define variables for dark theme (applied via body.dark-theme) */
 body.dark-theme {
-    --primary-color: #1DB954; /* Keep green, or adjust for dark mode contrast */
+    --primary-color: #1DB954; 
     --primary-color-rgb: 29, 185, 84;
-    --secondary-color: #2DC26B; /* Lighter green for dark mode */
+    --secondary-color: #2DC26B;
     --secondary-color-rgb: 45, 194, 107;
     --accent-color: #128A4A;
     --accent-color-rgb: 18, 138, 74;
@@ -99,54 +94,48 @@ body.dark-theme {
     --text-primary: #f3f4f6;
     --text-secondary: #cbd5e1;
     --text-muted: #9ca3af;
-    --text-on-primary: #ffffff; /* Or #000000 if primary is very light in dark mode */
-    --text-link: var(--secondary-color); /* Lighter green for links in dark mode */
+    --text-on-primary: #ffffff; 
+    --text-link: var(--secondary-color); 
     
     --border-color: rgba(71, 85, 105, 0.5);
     --border-color-strong: rgba(71, 85, 105, 0.8);
-    --shadow-color-rgb: 200, 200, 200; /* Lighter shadows for dark mode, or use overlay */
+    --shadow-color-rgb: 200, 200, 200;
     --input-bg: #1e293b;
     --input-border: var(--border-color);
     --input-focus-border: var(--primary-color);
 
-    /* NEW: Spotlight color for dark theme */
-    --spotlight-color: var(--background-elevated); /* Lighter slate/blue for the spotlight */
-                                                /* Or #161e2e (a bit darker than content) */
+    --spotlight-color: var(--background-elevated); 
 
-    /* ADD THESE FOR "Mes Inscriptions" CARDS DARK MODE */
-    --card-background-inscription: var(--background-content); /* Use existing dark card background */
-    --card-border-inscription: var(--border-color);          /* Use existing dark border color */
-    --card-background-inscription-hover: var(--background-elevated); /* Slightly lighter dark for hover */
-    --text-title-inscription: var(--text-primary);           /* Use existing dark theme primary text */
-    --text-secondary-inscription: var(--text-muted);         /* Use existing dark theme muted text */
+    --card-background-inscription: var(--background-content); 
+    --card-border-inscription: var(--border-color);          
+    --card-background-inscription-hover: var(--background-elevated); 
+    --text-title-inscription: var(--text-primary);           
+    --text-secondary-inscription: var(--text-muted);         
 }
 
-/* Base body styles using the variables */
 body {
   margin: 0;
   min-height: 100vh;
   color: var(--text-primary);
-  transition: background-color 0.3s ease, color 0.3s ease; /* Smooth theme transitions */
-  overflow-x: hidden; /* Prevents horizontal scrollbars on the body */
+  transition: background-color 0.3s ease, color 0.3s ease; 
+  overflow-x: hidden; 
 
-  /* --- GLOBAL RADIAL GRADIENT BACKGROUND --- */
-  background-color: var(--background-body); /* Fallback color - use the darkest/lightest body color */
+  background-color: var(--background-body); 
   background-image: radial-gradient(
-    ellipse at center 10%, /* Shape: ellipse, Position: centered horizontally, 10% from the top */
+    ellipse at center 10%, 
     var(--spotlight-color) 0%,
-    var(--background-body) 75% /* Use --background-body as the outer part of the gradient */
+    var(--background-body) 75% 
   );
   background-repeat: no-repeat;
-  background-attachment: fixed; /* Keeps the gradient fixed during scroll */
+  background-attachment: fixed; 
 }
 
-/* Scrollbar styles - adapt for theming */
 ::-webkit-scrollbar {
   width: 6px;
   height: 6px;
 }
 ::-webkit-scrollbar-track {
-  background: rgba(var(--shadow-color-rgb), 0.05); /* Use shadow color for track */
+  background: rgba(var(--shadow-color-rgb), 0.05); 
   border-radius: 10px;
 }
 ::-webkit-scrollbar-thumb {
@@ -167,7 +156,7 @@ body {
   50% { transform: scale(1.15); opacity: 0.8; }
   100% { transform: scale(1); opacity: 1; }
 }
-.pulse-animation { /* Utility class from target */
+.pulse-animation { 
     animation: pulse 2s infinite;
 }
 
