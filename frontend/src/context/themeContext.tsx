@@ -16,9 +16,7 @@ export const ThemeProvider: React.FC<{ children: ReactNode }> = ({ children }) =
   });
 
   useEffect(() => {
-    // Remove previous theme classes
     document.body.classList.remove('light-theme', 'dark-theme');
-    // Add current theme class
     document.body.classList.add(`${theme}-theme`);
     localStorage.setItem('theme', theme);
   }, [theme]);
