@@ -1,7 +1,7 @@
 .forms-page {
   padding: 24px;
-  background-color: var(--background-body); /* New */
-  color: var(--text-primary); /* New */
+  background-color: var(--background-body);
+  color: var(--text-primary);
 }
 
 .forms-header {
@@ -10,24 +10,21 @@
   align-items: center;
   margin-bottom: 24px;
   padding-bottom: 15px;
-  border-bottom: 1px solid var(--border-color); /* New */
+  border-bottom: 1px solid var(--border-color);
 }
 
 .title-section h1 {
   margin-bottom: 8px;
-  /* color: #333; */ /* Old */
-  color: var(--text-primary); /* New */
+  color: var(--text-primary);
 }
 
 .title-section p {
-  /* color: #666; */ /* Old */
-  color: var(--text-muted); /* New */
+  color: var(--text-muted);
 }
 
-.add-form-btn { /* This seems to be for adding a new form/event for forms */
-  /* background-color: #4ade80; */ /* Old */
-  background-color: var(--primary-color); /* New */
-  color: var(--text-on-primary); /* New */
+.add-form-btn {
+  background-color: var(--primary-color);
+  color: var(--text-on-primary);
   border: none;
   padding: 12px 24px;
   border-radius: 8px;
@@ -36,30 +33,28 @@
   transition: background-color 0.2s;
 }
 .add-form-btn:hover {
-  /* background-color: #22c55e; */ /* Old */
-  opacity: 0.9; /* New */
+  opacity: 0.9;
 }
 
 .forms-filters {
   margin-bottom: 24px;
   padding: 15px;
-  background-color: var(--background-content); /* New */
-  border: 1px solid var(--border-color); /* New */
+  background-color: var(--background-content);
+  border: 1px solid var(--border-color);
   border-radius: 8px;
 }
 
 .search-bar input {
   width: 300px;
   padding: 10px 16px;
-  /* border: 1px solid #ddd; */ /* Old */
-  border: 1px solid var(--input-border); /* New */
-  background-color: var(--input-bg); /* New */
-  color: var(--text-primary); /* New */
+  border: 1px solid var(--input-border);
+  background-color: var(--input-bg);
+  color: var(--text-primary);
   border-radius: 8px;
   font-size: 14px;
 }
 .search-bar input:focus {
-  border-color: var(--input-focus-border); /* New */
+  border-color: var(--input-focus-border);
   outline: none;
 }
 
@@ -69,40 +64,40 @@
   gap: 24px;
 }
 
-.form-card { /* Represents an event card for which forms are managed */
-  background: var(--card-bg); 
+.form-card {
+  background: var(--card-bg);
   border-radius: 8px;
-  box-shadow: 0 2px 10px rgba(var(--shadow-color-rgb),0.05); 
+  box-shadow: 0 2px 10px rgba(var(--shadow-color-rgb),0.05);
   padding: 20px;
   display: flex;
   flex-direction: column;
   border: 1px solid var(--border-color);
-  transition: transform 0.2s ease-out, box-shadow 0.2s ease-out, border-color 0.2s ease-out; /* ADDED transitions */
+  transition: transform 0.2s ease-out, box-shadow 0.2s ease-out, border-color 0.2s ease-out;
 }
 
 .form-card:hover {
-  transform: translateY(-5px); /* ADDED lift effect */
-  box-shadow: 0 6px 15px rgba(var(--shadow-color-rgb), 0.07); /* ENHANCED shadow on hover */
-  border-color: var(--primary-color); /* ADDED green border on hover */
+  transform: translateY(-5px);
+  box-shadow: 0 6px 15px rgba(var(--shadow-color-rgb), 0.07);
+  border-color: var(--primary-color);
 }
 
-.form-card-header { 
+.form-card-header {
   margin-bottom: 12px;
   flex-shrink: 0;
 }
 
-.form-card-header h3 { 
-  color: var(--text-primary); 
-  margin-top: 0; 
+.form-card-header h3 {
+  color: var(--text-primary);
+  margin-top: 0;
   margin-bottom: 8px;
-  font-size: 1.15rem; 
+  font-size: 1.15rem;
 }
 
 .form-description {
   color: var(--text-muted);
   font-size: 0.9rem;
   margin-bottom: 15px;
-  flex-grow: 1; 
+  flex-grow: 1;
 }
 
 .form-meta {
@@ -114,60 +109,55 @@
 .meta-item {
   display: flex;
   align-items: center;
-  gap: 8px; 
+  gap: 8px;
 }
 
 .meta-item i {
-  color: var(--primary-color); 
+  color: var(--primary-color);
   font-size: 1rem;
-  line-height: 1; 
+  line-height: 1;
 }
 
 .form-actions {
-  margin-top: auto; 
+  margin-top: auto;
   padding-top: 16px;
-  border-top: 1px solid var(--border-color); 
+  border-top: 1px solid var(--border-color);
   display: flex;
   gap: 10px;
-  justify-content: flex-end; /* Changed from flex-start to flex-end */
-  flex-shrink: 0; /* Ensure actions bar doesn't shrink */
+  justify-content: flex-end;
+  flex-shrink: 0;
 }
 
-
-/* General button style to reset defaults and add common properties */
 .form-actions button {
   border-radius: 6px;
   padding: 8px 16px;
-  font-size: 0.875rem; /* 14px */
+  font-size: 0.875rem;
   font-weight: 500;
   cursor: pointer;
   transition: background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease, opacity 0.2s ease;
-  border: 1px solid transparent; /* Base for border transition */
-  display: inline-flex; /* For icon alignment */
-  align-items: center; /* For icon alignment */
-  gap: 6px; /* Space between icon and text */
+  border: 1px solid transparent;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
 }
 
-.form-actions button i { /* Style for icons within buttons */
-  font-size: 1.1em; /* Slightly larger icon */
+.form-actions button i {
+  font-size: 1.1em;
 }
 
-
-/* UPDATED .edit-btn style */
 .edit-btn {
-  background-color: var(--primary-button-bg, var(--primary-color)); /* Use a specific variable or fallback to primary */
+  background-color: var(--primary-button-bg, var(--primary-color));
   color: var(--primary-button-text, var(--text-on-primary));
   border-color: var(--primary-button-bg, var(--primary-color));
 }
 .edit-btn:hover {
-  background-color: var(--primary-button-hover-bg, var(--primary-color-dark)); /* Darker shade for hover */
+  background-color: var(--primary-button-hover-bg, var(--primary-color-dark));
   border-color: var(--primary-button-hover-bg, var(--primary-color-dark));
   opacity: 0.9;
 }
 
-/* UPDATED .view-inscriptions-btn style */
 .view-inscriptions-btn {
-  background-color: var(--secondary-button-bg, var(--surface-button)); /* Use a specific variable or a subtle background */
+  background-color: var(--secondary-button-bg, var(--surface-button));
   color: var(--secondary-button-text, var(--text-primary));
   border-color: var(--secondary-button-border, var(--border-color-strong));
 }
@@ -177,16 +167,14 @@
   color: var(--secondary-button-hover-text, var(--primary-color));
 }
 
-/* Styles for .delete-btn if they are general utility classes */
 .delete-btn {
-  background-color: rgba(var(--danger-color-rgb), 0.15); 
-  color: var(--danger-color); 
+  background-color: rgba(var(--danger-color-rgb), 0.15);
+  color: var(--danger-color);
 }
 .delete-btn:hover {
-  background-color: rgba(var(--danger-color-rgb), 0.25); 
+  background-color: rgba(var(--danger-color-rgb), 0.25);
 }
 
-/* Dark mode overrides for better readability */
 .dark-mode .forms-page,
 .dark-mode .form-card,
 .dark-mode .form-card-header h3,
@@ -195,12 +183,12 @@
 .dark-mode .meta-item,
 .dark-mode .form-actions button,
 .dark-mode .view-inscriptions-btn {
-  color: #f1f5f9 !important; /* Very light gray/white for text */
+  color: #f1f5f9 !important;
 }
 
 .dark-mode .form-description,
 .dark-mode .form-meta {
-  color: #cbd5e1 !important; /* Softer light gray for secondary text */
+  color: #cbd5e1 !important;
 }
 
 .dark-mode .form-card {
@@ -221,7 +209,6 @@
   border-color: #334155 !important;
 }
 
-/* Dark mode color variables */
 .dark-mode {
   --text-primary: #f1f5f9;
   --text-muted: #cbd5e1;
