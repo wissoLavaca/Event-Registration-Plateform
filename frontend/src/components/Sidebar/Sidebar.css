@@ -3,14 +3,10 @@
   top: 0;
   left: 0;
   height: 100%;
-  width: 260px;
-  background: linear-gradient(to bottom, var(--sidebar-bg), var(--sidebar-hover));
-  z-index: 100; /* Ensure it's above other content if needed, but layout should handle it */
-  transition: all 0.4s ease;
-  box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
-  border-right: 1px solid var(--border-color);
-  display: flex; /* Added for internal flex structure */
-  flex-direction: column; /* Stack logo, nav-links, profile */
+  width: 300px;
+  background: var(--sidebar-bg);
+  z-index: 1000;
+  transition: width 0.3s ease;
 }
 
 .sidebar.close {
@@ -18,66 +14,141 @@
 }
 
 .sidebar .logo-details {
-  height: 60px; /* Or your desired height */
+  height: 60px;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  padding: 0 20px;
+}
+
+.sidebar .logo-image {
+  height: 40px;
+  width: 40px;
+  object-fit: contain;
+  transition: all 0.3s ease;
+}
+
+.sidebar.close .logo-image {
+  margin: 0 auto;
+}
+
+.sidebar .nav-links {
+  height: calc(100% - 120px);
+  padding: 30px 0 0 0;
+  overflow: auto;
+}
+
+.sidebar.close .nav-links {
+  overflow: visible;
+}
+
+.sidebar .nav-links .link_name {
+  transition: opacity 0.3s ease;
+  opacity: 1;
+}
+
+.sidebar.close .nav-links .link_name {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.sidebar .nav-links li .sub-menu.blank {
+  position: absolute;
+  left: 100%;
+  top: -10px;
+  margin-top: 0;
+  padding: 8px 16px;
+  border-radius: 6px;
+  background: var(--background-elevated);
+  box-shadow: var(--shadow-md);
+  opacity: 0;
+  pointer-events: none;
+  transition: 0s;
+  white-space: nowrap;
+  z-index: 100;
+  border: 1px solid var(--border-color);
+}
+
+.sidebar.close .nav-links li:hover .sub-menu.blank {
+  top: 50%;
+  transform: translateY(-50%);
+  transition: all 0.3s ease;
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.sidebar:not(.close) .nav-links li .sub-menu.blank {
+  display: none;
+}
+
+.sidebar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 260px;
+  background: linear-gradient(to bottom, var(--sidebar-bg), var(--sidebar-hover));
+  z-index: 100;
+  transition: all 0.4s ease;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+  border-right: 1px solid var(--border-color);
+  display: flex;
+  flex-direction: column;
+}
+
+.sidebar.close {
+  width: 78px;
+}
+
+.sidebar .logo-details {
+  height: 60px;
   width: 100%;
   display: flex;
   align-items: center;
   justify-content: center;
-  /* border-bottom: 1px solid var(--border-color); */ /* Keep or remove based on preference */
-  padding: 0 20px; /* Adjust padding as needed */
+  padding: 0 20px;
   box-sizing: border-box;
-  background-color: var(--sidebar-bg); /* Ensure it has a background */
-  border-bottom: 1px solid var(--border-color); /* Add border if not already there */
+  background-color: var(--sidebar-bg);
+  border-bottom: 1px solid var(--border-color);
 }
 .sidebar.close .logo-details {
-  padding: 0; /* Remove padding when closed */
-  justify-content: center; /* Center the logo image when closed */
+  padding: 0;
+  justify-content: center;
 }
 
-/* Styles for your Mobilis logo image */
 .sidebar .logo-details .logo-image {
-  height: 100px; /* Adjust size as needed */
-  width: auto;  /* Maintain aspect ratio */
-  margin-right: 10px; /* Space between logo and text */
+  height: 100px;
+  width: auto;
+  margin-right: 10px;
   transition: all 0.3s ease;
 }
 
 .sidebar.close .logo-details .logo-image {
-  margin-right: 0; /* No margin when text is hidden */
-  height: 60px; /* Optionally slightly smaller when closed */
+  margin-right: 0;
+  height: 60px;
 }
 
-/* Styles for the "Event Registration" text */
 .sidebar .logo-details .logo-name-text {
-  font-size: 18px; /* Adjust size as needed */
-  color: var(--text-darker); /* Or your desired title color */
+  font-size: 18px;
+  color: var(--text-darker);
   font-weight: 600;
-  white-space: nowrap; /* Prevent wrapping */
+  white-space: nowrap;
   transition: opacity 0.3s ease, transform 0.3s ease;
-  /* font-family: 'Orbitron', sans-serif; */ /* Uncomment if you want Orbitron font */
 }
 
 .sidebar.close .logo-details .logo-name-text {
   opacity: 0;
   pointer-events: none;
-  transform: translateX(-10px); /* Optional: slight animation */
+  transform: translateX(-10px);
 }
 
-/* REMOVE or COMMENT OUT old animated logo styles if not used: */
-/*
-.logo-container { ... }
-.logo-ring { ... }
-.logo-core { ... }
-.sidebar .logo-details .logo_name { ... } // This was for the animated logo's text
-*/
-
 .sidebar .nav-links {
-  flex-grow: 1; /* Allows logout item to be pushed to the bottom */
-  padding: 20px 0 0 0; /* Remove bottom padding to allow logout to sit flush if needed */
+  flex-grow: 1;
+  padding: 20px 0 0 0;
   overflow-y: auto;
   overflow-x: hidden;
-  display: flex; /* Added to make nav-links a flex container */
-  flex-direction: column; /* Stack items vertically */
+  display: flex;
+  flex-direction: column;
 }
 
 .sidebar.close .nav-links {
@@ -92,18 +163,18 @@
   position: relative;
   list-style: none;
   transition: all 0.4s ease;
-  margin-bottom: 15px; /* Add this line for spacing */
+  margin-bottom: 15px;
 }
 
 .sidebar .nav-links li:hover {
   background: var(--sidebar-hover);
 }
 
-.sidebar .nav-links li.active { /* From target */
+.sidebar .nav-links li.active {
   background: rgba(var(--primary-color-rgb), 0.1);
   border-left: 3px solid var(--primary-color);
 }
-.sidebar .nav-links li.active > a, /* Target direct children for active state */
+.sidebar .nav-links li.active > a,
 .sidebar .nav-links li.active > a i {
     color: var(--primary-color);
 }
@@ -111,8 +182,7 @@
     color: var(--primary-color);
 }
 
-
-.sidebar .nav-links li .iocn-link { /* For dropdown arrows if implemented */
+.sidebar .nav-links li .iocn-link {
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -122,7 +192,7 @@
   display: block;
 }
 
-.sidebar .nav-links li i { /* Icon styling */
+.sidebar .nav-links li i {
   height: 50px;
   min-width: 78px;
   text-align: center;
@@ -133,11 +203,7 @@
   transition: all 0.3s ease;
 }
 
-/* .sidebar .nav-links li.active i {
-  color: var(--primary-color);
-} */
-
-.sidebar .nav-links li.showMenu i.arrow { /* For dropdown arrows */
+.sidebar .nav-links li.showMenu i.arrow {
   transform: rotate(-180deg);
 }
 
@@ -149,52 +215,45 @@
   display: flex;
   align-items: center;
   text-decoration: none;
-  color: var(--text-muted); /* Default color for link text */
-  width: 100%; /* Ensure link takes full width for hover */
+  color: var(--text-muted);
+  width: 100%;
 }
  .sidebar .nav-links li a:hover,
  .sidebar .nav-links li a:hover i,
  .sidebar .nav-links li a:hover .link_name {
-    color: var(--text-light); /* Hover color for icon and text */
+    color: var(--text-light);
  }
-
 
 .sidebar .nav-links li a .link_name {
   font-size: 15px;
   font-weight: 500;
-  /* color: var(--text-muted); */ /* Handled by parent 'a' */
   transition: all 0.3s ease;
 }
-
-/* .sidebar .nav-links li.active a .link_name {
-  color: var(--primary-color);
-} */
 
 .sidebar.close .nav-links li a .link_name {
   opacity: 0;
   pointer-events: none;
 }
 
-/* Sub-menu / Tooltip styles from target */
 .sidebar .nav-links li .sub-menu {
   padding: 6px 6px 14px 80px;
   margin-top: -10px;
-  background: rgba(15, 23, 42, 0.8); /* var(--background-darker) with opacity */
+  background: rgba(15, 23, 42, 0.8);
   display: none;
 }
 
-.sidebar .nav-links li.showMenu .sub-menu { /* If you implement JS dropdowns */
+.sidebar .nav-links li.showMenu .sub-menu {
   display: block;
 }
 
-.sidebar .nav-links li .sub-menu span.link_name, /* For clickable items in tooltip */
+.sidebar .nav-links li .sub-menu span.link_name,
 .sidebar .nav-links li .sub-menu a {
   color: var(--text-muted);
   font-size: 14px;
   padding: 8px 0;
   opacity: 0.8;
   transition: all 0.3s ease;
-  display: block; /* Ensure they are block for padding */
+  display: block;
   cursor: pointer;
 }
 .sidebar .nav-links li .sub-menu span.link_name:hover,
@@ -204,10 +263,10 @@
   padding-left: 5px;
 }
 
-.sidebar.close .nav-links li .sub-menu { /* Tooltip base style */
+.sidebar.close .nav-links li .sub-menu {
   position: absolute;
   left: 100%;
-  top: -10px; /* Initial position for animation */
+  top: -10px;
   margin-top: 0;
   padding: 10px 20px;
   border-radius: 0 6px 6px 0;
@@ -216,48 +275,43 @@
   pointer-events: none;
   background: var(--sidebar-hover);
   box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
-  transition: opacity 0.3s ease, top 0.3s ease; /* Smooth transition */
+  transition: opacity 0.3s ease, top 0.3s ease;
   border: 1px solid var(--border-color);
   white-space: nowrap;
-  z-index: 101; /* Ensure tooltip is above other elements */
+  z-index: 101;
 }
 
-.sidebar.close .nav-links li:hover .sub-menu { /* Show tooltip */
+.sidebar.close .nav-links li:hover .sub-menu {
   top: 0;
   opacity: 1;
   pointer-events: auto;
-  /* transition: all 0.4s ease; */ /* Already defined above */
 }
 
-
-
-.sidebar.close .nav-links li .sub-menu .link_name { /* Text inside tooltip */
-  font-size: 15px; /* Match .link_name */
+.sidebar.close .nav-links li .sub-menu .link_name {
+  font-size: 15px;
   opacity: 1;
   display: block;
-  color: var(--text-light); /* Ensure visibility */
+  color: var(--text-light);
 }
 
-.sidebar .nav-links li .sub-menu.blank { /* For items that are just tooltips */
-  opacity: 0; /* Hidden when sidebar is open */
+.sidebar .nav-links li .sub-menu.blank {
+  opacity: 0;
   pointer-events: none;
 }
 
-.sidebar.close .nav-links li:hover .sub-menu.blank { /* Tooltip positioning */
+.sidebar.close .nav-links li:hover .sub-menu.blank {
   top: 50%;
   transform: translateY(-50%);
 }
 
-/* Profile Details */
 .sidebar .profile-details {
-  /* position: fixed; bottom: 0; */ /* Removed, now part of flex column */
-  width: 100%; /* Full width of sidebar */
+  width: 100%;
   display: flex;
   align-items: center;
-  justify-content: flex-start; /* Align items to the start */
+  justify-content: flex-start;
   background-color: var(--sidebar-hover);
   backdrop-filter: blur(5px);
-  padding: 12px 15px; /* Keep padding */
+  padding: 12px 15px;
   border-top: 1px solid var(--border-color);
   transition: all 0.4s ease;
   box-sizing: border-box;
@@ -287,8 +341,6 @@
   margin-right: 0;
 }
 
-
-
 .sidebar .profile-details .profile_name,
 .sidebar .profile-details .job {
   color: var(--text-dark);
@@ -307,42 +359,40 @@
   color: var(--text-muted);
 }
 
-/* New Logout Link Item Styling */
 .sidebar .nav-links li.logout-link-item {
-  margin-top: auto; /* This pushes the logout item to the very bottom */
-  position: relative; /* For sub-menu/tooltip positioning */
+  margin-top: auto;
+  position: relative;
   list-style: none;
   transition: all 0.4s ease;
-  border-top: 1px solid var(--border-color); /* Visually separates it like profile-details did */
+  border-top: 1px solid var(--border-color);
 }
 
 .sidebar .nav-links li.logout-link-item:hover {
-  background: var(--sidebar-hover); /* Same hover as other items */
+  background: var(--sidebar-hover);
 }
 
 .sidebar .nav-links li.logout-link-item a {
   display: flex;
   align-items: center;
   text-decoration: none;
-  color: var(--text-muted); /* Default color like other links */
+  color: var(--text-muted);
   width: 100%;
-  height: 50px; /* Match other link items height */
-  /* padding: 0 25px; */ /* Icons handle their own padding/min-width */
+  height: 50px;
 }
 
 .sidebar .nav-links li.logout-link-item a:hover,
 .sidebar .nav-links li.logout-link-item a:hover i,
 .sidebar .nav-links li.logout-link-item a:hover .link_name {
-  color: var(--primary-color); /* Green hover, same as other links */
+  color: var(--primary-color);
 }
 
 .sidebar .nav-links li.logout-link-item i {
   height: 50px;
-  min-width: 78px; /* Consistent with other icons */
+  min-width: 78px;
   text-align: center;
   line-height: 50px;
-  color: var(--text-muted); /* Default icon color */
-  font-size: 20px; /* Consistent icon size */
+  color: var(--text-muted);
+  font-size: 20px;
   cursor: pointer;
   transition: all 0.3s ease;
 }
@@ -350,7 +400,6 @@
 .sidebar .nav-links li.logout-link-item .link_name {
   font-size: 15px;
   font-weight: 500;
-  /* color is inherited from 'a' tag */
   transition: all 0.3s ease;
 }
 
@@ -359,11 +408,10 @@
   pointer-events: none;
 }
 
-/* Tooltip for logout item when sidebar is closed */
 .sidebar.close .nav-links li.logout-link-item .sub-menu.blank {
   position: absolute;
   left: 100%;
-  top: 50%; /* Vertically center tooltip */
+  top: 50%;
   transform: translateY(-50%);
   margin-top: 0;
   padding: 10px 20px;
@@ -388,7 +436,7 @@
   font-size: 15px;
   opacity: 1;
   display: block;
-  color: var(--text-dark); /* Ensure visibility in tooltip */
+  color: var(--text-dark);
 }
 .sidebar .nav-links li.logout-link-item .sub-menu.blank a {
   color: var(--text-muted);
@@ -396,7 +444,7 @@
   padding: 8px 0;
   opacity: 0.8;
   transition: all 0.3s ease;
-  display: block; /* Ensure they are block for padding */
+  display: block;
   cursor: pointer;
 }
 
