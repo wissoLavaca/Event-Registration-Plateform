@@ -6,8 +6,6 @@ import * as XLSX from 'xlsx';
 import jsPDF from 'jspdf'; 
 import { CellHookData, type UserOptions } from 'jspdf-autotable';
 
-
-
 interface jsPDFWithAutoTable extends jsPDF {
   autoTable: (options: UserOptions | any) => jsPDFWithAutoTable;
 }
@@ -42,7 +40,7 @@ interface Inscription {
 }
 
 interface jsPDFWithAutoTable extends jsPDF {
-  autoTable: (options: any /* or UserOptions */) => jsPDFWithAutoTable; 
+  autoTable: (options: any) => jsPDFWithAutoTable; 
 }
 
 const EventInscriptionsPage: React.FC = () => {
@@ -55,18 +53,14 @@ const EventInscriptionsPage: React.FC = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedInscription, setSelectedInscription] = useState<Inscription | null>(null);
 
- 
   const [searchTerm, setSearchTerm] = useState<string>(''); 
   const [selectedDepartment, setSelectedDepartment] = useState<string>(''); 
   const [selectedDate, setSelectedDate] = useState<string>('');
   const [filteredInscriptions, setFilteredInscriptions] = useState<Inscription[]>([]);
   const [uniqueDepartments, setUniqueDepartments] = useState<string[]>([]);
   
-
-
   useEffect(() => {
     const fetchInscriptions = async () => {
-      
       if (!eventId) return;
       setIsLoading(true);
       setError(null);
@@ -142,7 +136,6 @@ const EventInscriptionsPage: React.FC = () => {
   }, [searchTerm, selectedDepartment, selectedDate, inscriptions]);
 
   const handleOpenModal = (inscription: Inscription) => {
-     console.log("Opening modal for inscription:", JSON.stringify(inscription, null, 2)); // Add this line
     setSelectedInscription(inscription);
     setIsModalOpen(true);
   };
@@ -152,7 +145,6 @@ const EventInscriptionsPage: React.FC = () => {
     setSelectedInscription(null);
   };
 
-  // --- NEW HANDLERS FOR FILTER INPUTS ---
   const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setSearchTerm(event.target.value);
   };
@@ -170,7 +162,6 @@ const EventInscriptionsPage: React.FC = () => {
     setSelectedDepartment('');
     setSelectedDate('');
   };
-
 
   const getFormattedFileName = (baseName: string) => {
     const date = new Date();
@@ -232,7 +223,6 @@ const EventInscriptionsPage: React.FC = () => {
     return { headers, rows, dataToExport };
   };
 
-
   const handleExportCSV = async () => {
     const { headers, rows } = getExportData();
 
@@ -293,12 +283,8 @@ const EventInscriptionsPage: React.FC = () => {
   };
 
   const handleExportPDF = async () => {
-    console.log("handleExportPDF: PDF export initiated.");
     const { headers, rows } = getExportData();
-    console.log("handleExportPDF: Export data - Headers:", headers);
-    console.log("handleExportPDF: Export data - Rows count:", rows.length);
     if (rows.length === 0) {
-      console.warn("handleExportPDF: No data to export to PDF.");
       alert("Aucune donnée à exporter en PDF.");
       return;
     }
@@ -341,7 +327,6 @@ const EventInscriptionsPage: React.FC = () => {
     });
 
     const pdfBlob = doc.output('blob');
-    console.log("handleExportPDF: PDF blob generated.");
 
     triggerDownload(pdfBlob, `${getFormattedFileName("inscriptions")}.pdf`);
   };
@@ -355,7 +340,6 @@ const EventInscriptionsPage: React.FC = () => {
     document.body.removeChild(link);
     URL.revokeObjectURL(link.href);
   };
-
 
   if (isLoading) {
     return <div className="loading-message">Chargement des inscriptions...</div>;
@@ -416,7 +400,6 @@ const EventInscriptionsPage: React.FC = () => {
         <table className="inscriptions-table">
           <thead>
             <tr>
-              {/* <th>ID Inscription</th> You can choose to show this or not */}
               <th>Prénom</th>
               <th>Nom</th>
               <th>Département</th>
@@ -425,17 +408,15 @@ const EventInscriptionsPage: React.FC = () => {
             </tr>
           </thead>
           <tbody>
-            {/* Render filteredInscriptions instead of inscriptions */}
             {filteredInscriptions.map((inscription) => (
               <tr key={inscription.id_inscription}>
-                {/* <td>{inscription.id_inscription}</td> */}
                 <td>{inscription.user?.first_name || 'N/A'}</td>
                 <td>{inscription.user?.last_name || 'N/A'}</td>
                 <td>{inscription.user?.departement?.name_departement || 'N/A'}</td>
                 <td>{new Date(inscription.created_at).toLocaleDateString()}</td>
                 <td>
-                  <button onClick={() => handleOpenModal(inscription)} className="details-btn icon-btn"> {/* Added icon-btn class */}
-                    <i className="fi fi-rr-eye"></i> {/* Eye icon for "Voir" */}
+                  <button onClick={() => handleOpenModal(inscription)} className="details-btn icon-btn">
+                    <i className="fi fi-rr-eye"></i>
                     Voir
                   </button>
                 </td>
