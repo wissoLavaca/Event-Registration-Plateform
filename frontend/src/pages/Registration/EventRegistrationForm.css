@@ -25,7 +25,6 @@
   color: var(--text-secondary);
 }
 
-/* Only the main label is bold and large */
 .form-group > label {
   font-weight: bold;
   font-size: 1.15rem;
@@ -33,7 +32,6 @@
   display: block;
 }
 
-/* Checkbox & Radio Groups */
 .checkbox-group,
 .radio-group {
   display: flex;
@@ -44,18 +42,17 @@
   padding-left: 0;
 }
 
-/* Option labels (checkbox/radio) are normal weight and size */
 .checkbox-option,
 .radio-option {
   display: flex;
   align-items: center;
-  justify-content: flex-start; /* <-- Add this */
+  justify-content: flex-start;
   gap: 8px;
   font-size: 1rem;
   font-weight: normal;
   margin-bottom: 0.5rem;
   cursor: pointer;
-  width: auto; /* <-- Change from 100% to auto */
+  width: auto;
   padding-left: 0;
   line-height: 1.2;
   box-sizing: border-box;
@@ -73,7 +70,6 @@
   font-weight: normal !important;
 }
 
-/* Inputs inside options */
 .checkbox-option input[type="checkbox"],
 .radio-option input[type="radio"] {
   margin: 0 2px 0 0;
@@ -82,7 +78,6 @@
   vertical-align: middle;
 }
 
-/* Other input styles */
 .form-group input[type="text"],
 .form-group input[type="number"],
 .form-group input[type="date"],
