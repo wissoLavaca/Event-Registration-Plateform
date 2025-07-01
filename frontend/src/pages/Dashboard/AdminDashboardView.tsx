@@ -16,13 +16,14 @@ import {
 } from 'chart.js';
 import { Bar, Line, Pie } from 'react-chartjs-2';
 import { useAuth } from '../../context/authContext';
+import { useTheme } from '../../context/themeContext';
 import { useNotifications } from '../../context/notificationContext';
 import { UINotificationType } from '../../types/notification.types';
 import { formatDistanceToNow, parseISO, subDays, isWithinInterval, startOfYear, endOfYear } from 'date-fns'; // Added date-fns functions
 import { fr } from 'date-fns/locale';
 import { FaChevronLeft, FaChevronRight } from 'react-icons/fa';
 
-// Helper function to generate dynamic colors
+
 const generateHslaColor = (index: number, totalItems: number, saturation: number = 70, lightness: number = 60, alpha: number = 0.6): string => {
   const hue = (index * (360 / Math.max(1, totalItems))) % 360;
   return `hsla(${hue}, ${saturation}%, ${lightness}%, ${alpha})`;
@@ -100,10 +101,11 @@ type TimeRange = '30d' | '90d' | '1y';
 const AdminDashboardView = () => {
   const { user, token } = useAuth();
   const { notifications, isLoading: isLoadingNotifications, error: notificationsError } = useNotifications();
+  const { theme } = useTheme(); // Use the theme from context
 
   // --- THEME STATE ---
   // Default to 'light', or you could load a preference from localStorage
-  const [currentTheme, setCurrentTheme] = useState<'light' | 'dark'>('light');
+  // const [currentTheme, setCurrentTheme] = useState<'light' | 'dark'>('light');
 
   // --- Chart Style State ---
   // Initial values are less critical as useEffect will set them based on currentTheme
@@ -141,14 +143,14 @@ const AdminDashboardView = () => {
   const [currentInscriptionsPage, setCurrentInscriptionsPage] = useState(1);
 
   // ILLUSTRATIVE: Function to toggle theme (you'll call this from a button)
-  const handleToggleTheme = () => {
-    setCurrentTheme(prevTheme => {
-      const newTheme = prevTheme === 'light' ? 'dark' : 'light';
-      // Optional: Save theme preference to localStorage
-      // localStorage.setItem('appTheme', newTheme);
-      return newTheme;
-    });
-  };
+  // const handleToggleTheme = () => {
+  //   setCurrentTheme(prevTheme => {
+  //     const newTheme = prevTheme === 'light' ? 'dark' : 'light';
+  //     // Optional: Save theme preference to localStorage
+  //     // localStorage.setItem('appTheme', newTheme);
+  //     return newTheme;
+  //   });
+  // };
 
   // Optional: useEffect to load theme from localStorage on initial mount
   // useEffect(() => {
@@ -162,8 +164,8 @@ const AdminDashboardView = () => {
 
   // This useEffect hook handles theme changes for chart styling AND body class
   useEffect(() => {
-    console.log(`Applying theme: ${currentTheme}`); // For debugging
-    if (currentTheme === 'dark') {
+    console.log(`Applying theme: ${theme}`); // For debugging
+    if (theme === 'dark') {
       // Dark Mode
       ChartJS.defaults.color = '#FFFFFF';
       ChartJS.defaults.scale.ticks.color = '#FFFFFF';
@@ -173,8 +175,6 @@ const AdminDashboardView = () => {
         gridColor: 'rgba(255, 255, 255, 0.15)',
         legendLabelColor: '#FFFFFF'
       });
-      document.body.classList.add('dark-theme');
-      document.body.classList.remove('light-theme');
     } else {
       // Light Mode
       ChartJS.defaults.color = '#000000';
@@ -185,21 +185,14 @@ const AdminDashboardView = () => {
         gridColor: 'rgba(0, 0, 0, 0.1)',
         legendLabelColor: '#000000'
       });
-      document.body.classList.add('light-theme');
-      document.body.classList.remove('dark-theme');
     }
-
-    // Optional: Cleanup if this component can unmount and you want to remove body classes
-    // return () => {
-    //   document.body.classList.remove('dark-theme', 'light-theme');
-    // };
-  }, [currentTheme]); // Re-run when currentTheme changes
+  }, [theme]); 
 
   useEffect(() => {
     if (!token) return;
     const headers = { 'Authorization': `Bearer ${token}` };
 
-    // Fetch Admin Stats (eventCount, userCount)
+    // Fetch Admin Stats 
     setIsLoadingStats(true);
     fetch('http://localhost:3001/api/events/count', { headers }).then(res => res.json()).then(data => setEventCount(data.count)).catch(() => setEventCount(0));
     fetch('http://localhost:3001/api/users/count', { headers }).then(res => res.json()).then(data => setUserCount(data.count)).catch(() => setUserCount(0)).finally(() => setIsLoadingStats(false));
@@ -212,7 +205,7 @@ const AdminDashboardView = () => {
       .catch(err => { console.error("Error fetching registrations per event:", err); setRegistrationsPerEventData([]); })
       .finally(() => setIsLoadingRegPerEvent(false));
     
-    // Fetch ALL Registrations Over Time
+    // Fetch all the Registrations 
     setIsLoadingRegOverTime(true);
     fetch('http://localhost:3001/api/admin/dashboard/registrations-over-time', { headers })
       .then(res => res.ok ? res.json() : Promise.reject(res))
@@ -223,7 +216,7 @@ const AdminDashboardView = () => {
       .catch(err => { console.error("Error fetching registrations over time:", err); setAllRegistrationsOverTimeData([]); })
       .finally(() => setIsLoadingRegOverTime(false));
 
-    // Fetch Registrations By Department
+    // Fetch Registrations per Department
     setIsLoadingRegByDept(true);
     fetch('http://localhost:3001/api/admin/dashboard/registrations-by-department', { headers })
       .then(res => res.ok ? res.json() : Promise.reject(res))
@@ -246,7 +239,6 @@ const AdminDashboardView = () => {
     } else { setIsLoadingEmployeeData(false); }
   }, [token, user]);
 
-  // useEffect to filter registrationsOverTimeData when allRegistrationsOverTimeData or selectedTimeRange changes
   useEffect(() => {
     if (!allRegistrationsOverTimeData.length) {
       setFilteredRegistrationsOverTimeData([]);
@@ -300,12 +292,18 @@ const AdminDashboardView = () => {
   const regPerEventChartOptions = {
     responsive: true,
     maintainAspectRatio: false,
-    indexAxis: 'x' as const, // Changed from 'y' to 'x' for vertical bars
+    indexAxis: 'x' as const,
+    layout: {
+      padding: {
+        bottom: 80 // Adds space at the bottom for long labels
+      }
+    },
     plugins: {
       legend: {
         display: true,
+        position: 'top' as const, // Add 'as const' here
         labels: {
-          color: chartStyleOptions.legendLabelColor, // Apply black/white color
+          color: chartStyleOptions.legendLabelColor,
         }
       },
       title: {
@@ -313,16 +311,27 @@ const AdminDashboardView = () => {
       },
     },
     scales: {
-      x: { // Now Category Axis (Event Names)
-        ticks: { color: chartStyleOptions.tickColor }, // Apply black/white color
-        grid: { display: false } // Typically no grid for category axis
+      x: {
+        ticks: {
+          color: chartStyleOptions.tickColor,
+          // This callback shortens long labels to prevent overlap
+          callback: function(this: Scale, value: number | string): string {
+            const label = this.getLabelForValue(Number(value));
+            if (label.length > 25) { // Adjust character limit as needed
+              return label.substring(0, 25) + '...';
+            }
+            return label;
+          }
+        },
+        grid: { display: false }
       },
-      y: { // Now Value Axis (Registration Count)
+      y: {
         beginAtZero: true,
-        ticks: { color: chartStyleOptions.tickColor,
-          stepSize: 1, 
-         }, // Apply black/white color
-        grid: { color: chartStyleOptions.gridColor }    // Applied here
+        ticks: {
+          color: chartStyleOptions.tickColor,
+          stepSize: 1,
+        },
+        grid: { color: chartStyleOptions.gridColor }
       }
     }
   };
@@ -534,7 +543,7 @@ const AdminDashboardView = () => {
   return (
     // Add a class to the main dashboard view for more specific CSS targeting if needed
     // Or rely on the body class set by the useEffect
-    <div className={`admin-dashboard-view dashboard ${currentTheme}-mode-active`}>
+    <div className={`admin-dashboard-view dashboard ${theme}-mode-active`}>
       {/* ILLUSTRATIVE: Add a theme toggle button somewhere accessible */}
       {/* <button onClick={handleToggleTheme} style={{ position: 'fixed', top: '10px', right: '10px', zIndex: 1000 }}>
         Switch to {currentTheme === 'light' ? 'Dark' : 'Light'} Mode
@@ -608,7 +617,7 @@ const AdminDashboardView = () => {
             }
           </div>
 
-          <div className="chart-container chart-container-half">
+          <div className="chart-container chart-container-half chart-container-centered">
             <h3>Inscriptions par Département</h3>
             {isLoadingRegByDept ? 
               <p>Chargement...</p> : 
