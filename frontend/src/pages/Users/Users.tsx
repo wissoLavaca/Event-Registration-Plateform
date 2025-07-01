@@ -70,7 +70,7 @@ const Users: React.FC = () => {
     title: 'Confirmation'
   });
   const [userToDeleteId, setUserToDeleteId] = useState<number | null>(null);
-  // --- End State for Confirmation Modal ---
+  
 
   // --- Fetch Users ---
   useEffect(() => {
@@ -200,40 +200,16 @@ const Users: React.FC = () => {
           const jsonUsers = XLSX.utils.sheet_to_json<any>(worksheet, { raw: false, dateNF: 'yyyy-mm-dd' });
 
           const usersToUpload = jsonUsers.map(row => {
-            // Helper function to convert Excel date serial number to YYYY-MM-DD
-            // const excelDateToJSDate = (serial: number) => {
-            //   if (typeof serial === 'number' && serial > 0) {
-            //     const utc_days  = Math.floor(serial - 25569);
-            //     const utc_value = utc_days * 86400;                                        
-            //     const date_info = new Date(utc_value * 1000);
-                
-            //     const fractional_day = serial - Math.floor(serial) + 0.0000001;
-            //     let total_seconds = Math.floor(86400 * fractional_day);
-            //     const seconds = total_seconds % 60;
-            //     total_seconds -= seconds;
-            //     const hours = Math.floor(total_seconds / (60 * 60));
-            //     const minutes = Math.floor(total_seconds / 60) % 60;
-                
-            //     // Create a date in local timezone then format to YYYY-MM-DD
-            //     const localDate = new Date(date_info.getFullYear(), date_info.getMonth(), date_info.getDate(), hours, minutes, seconds);
-            //     return localDate.toISOString().split('T')[0];
-            //   }
-            //   return serial; // Return original if not a number or not a typical Excel date serial
-            // };
-
-            // The `raw: false` and `dateNF` option in sheet_to_json should handle date conversion.
-            // If it doesn't, the excelDateToJSDate helper can be used.
-            // Ensure the column name for birth_date is correctly identified from the Excel sheet.
             const birthDateValue = row.birthDate || row.birth_date || row["Date de naissance"];
 
             return {
               first_name: row.firstName || row.first_name || row["Prénom"],
-              last_name: row.lastName || row.last_name || row["Nom"], // Changed "Nom de famille" to "Nom"
+              last_name: row.lastName || row.last_name || row["Nom"], 
               username: row.username || row["Nom d'utilisateur"],
               password: row.password || row.Password || row["Mot de passe"], 
               role_name: row.roleName || row.role_name || row.Role || row["Rôle"],
               departement_name: row.departementName || row.departement_name || row.Departement || row["Département"],
-              birth_date: birthDateValue, // This should now be a string like "YYYY-MM-DD"
+              birth_date: birthDateValue, 
               registration_number: row.registrationNumber || row.registration_number || row["Numéro d'immatriculation"],
             };
           });
