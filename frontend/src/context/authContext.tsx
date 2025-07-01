@@ -25,7 +25,7 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
   const [token, setToken] = useState<string | null>(() => localStorage.getItem('authToken'));
   const [user, setUser] = useState<User | null>(null);
-  const [isLoading, setIsLoading] = useState(true); // Start as true
+  const [isLoading, setIsLoading] = useState(true); 
 
   useEffect(() => {
     setIsLoading(true);
@@ -33,7 +33,6 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
       try {
         const decodedToken = jwtDecode<User & { exp: number }>(token); 
         
-        // Check if token is expired
         if (decodedToken.exp * 1000 < Date.now()) {
           console.log("Token expired, logging out.");
           logout(); 
@@ -56,8 +55,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
   const login = (newToken: string, userDataFromLogin?: Partial<User>) => {
     localStorage.setItem('authToken', newToken);
     setToken(newToken);
-    // Optionally, if login response already has user data, set it immediately
-    // to avoid a flicker if decoding takes a moment or if token doesn't have all fresh data
+
    if (userDataFromLogin && userDataFromLogin.username) {
     setUser(prevUser => ({
         userId: userDataFromLogin.userId ?? prevUser?.userId ?? 0,
@@ -75,8 +73,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     localStorage.removeItem('authToken');
     setToken(null);
     setUser(null);
-    // Consider redirecting to login page here
-    // e.g., window.location.href = '/login';
+
   };
 
   const updateUserProfilePicture = (newProfilePictureUrl: string | null) => {
@@ -84,9 +81,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
       if (!prevUser) return null;
       return { ...prevUser, profilePictureUrl: newProfilePictureUrl };
     });
-    // Note: This only updates the context. The token in localStorage still has the old URL.
-    // For full consistency, you might re-fetch user data or issue a new token after profile pic update,
-    // but for immediate UI update in navbar, this is often sufficient.
+
   };
 
   return (
