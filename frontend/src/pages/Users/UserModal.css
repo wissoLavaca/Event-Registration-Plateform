@@ -4,8 +4,7 @@
   left: 0;
   right: 0;
   bottom: 0;
-  /* background-color: rgba(0, 0, 0, 0.5); */ /* Old */
-  background-color: rgba(var(--shadow-color-rgb), 0.5); /* New */
+  background-color: rgba(var(--shadow-color-rgb), 0.5);
   display: flex;
   justify-content: center;
   align-items: center;
@@ -13,17 +12,16 @@
 }
 
 .user-modal {
-  /* background: white; */ /* Old */
-  background: var(--background-elevated); /* New */
-  color: var(--text-primary); /* New */
+  background: var(--background-elevated);
+  color: var(--text-primary);
   border-radius: 8px;
   padding: 24px;
   width: 100%;
   max-width: 600px;
   max-height: 90vh;
   overflow-y: auto;
-  border: 1px solid var(--border-color); /* New */
-  box-shadow: 0 5px 15px rgba(var(--shadow-color-rgb), 0.1); /* New */
+  border: 1px solid var(--border-color);
+  box-shadow: 0 5px 15px rgba(var(--shadow-color-rgb), 0.1);
 }
 
 .modal-header {
@@ -31,14 +29,13 @@
   justify-content: space-between;
   align-items: center;
   margin-bottom: 24px;
-  border-bottom: 1px solid var(--border-color); /* New */
-  padding-bottom: 15px; /* Added padding */
+  border-bottom: 1px solid var(--border-color);
+  padding-bottom: 15px;
 }
 
 .modal-header h2 {
   margin: 0;
-  /* color: #333; */ /* Old */
-  color: var(--text-primary); /* New */
+  color: var(--text-primary);
 }
 
 .close-button {
@@ -46,14 +43,13 @@
   border: none;
   font-size: 24px;
   cursor: pointer;
-  /* color: #666; */ /* Old */
-  color: var(--text-muted); /* New */
+  color: var(--text-muted);
 }
 .close-button:hover {
-  color: var(--text-primary); /* New */
+  color: var(--text-primary);
 }
 
-.form-row { /* ... display, gap ... */ }
+.form-row {  }
 .form-row .form-group { flex: 1; }
 
 .form-group { margin-bottom: 16px; }
@@ -61,28 +57,25 @@
 .form-group label {
   display: block;
   margin-bottom: 8px;
-  /* color: #333; */ /* Old */
-  color: var(--text-secondary); /* New */
+  color: var(--text-secondary);
   font-weight: 500;
 }
 
-.form-group input, .form-group select { /* Combined for consistency */
+.form-group input, .form-group select {
   width: 100%;
   padding: 8px 12px;
-  /* border: 1px solid #ddd; */ /* Old */
-  border: 1px solid var(--input-border); /* New */
-  background-color: var(--input-bg); /* New */
-  color: var(--text-primary); /* New */
+  border: 1px solid var(--input-border);
+  background-color: var(--input-bg);
+  color: var(--text-primary);
   border-radius: 4px;
   font-size: 14px;
-  box-sizing: border-box; /* Added for better padding behavior */
+  box-sizing: border-box;
 }
 
 .form-group input:focus, .form-group select:focus {
-  /* border-color: #4ade80; */ /* Old */
-  border-color: var(--input-focus-border); /* New */
+  border-color: var(--input-focus-border);
   outline: none;
-  box-shadow: 0 0 0 2px rgba(var(--primary-color-rgb), 0.15); /* New */
+  box-shadow: 0 0 0 2px rgba(var(--primary-color-rgb), 0.15);
 }
 
 .form-actions {
@@ -90,39 +83,34 @@
   justify-content: flex-end;
   gap: 12px;
   margin-top: 24px;
-  padding-top: 15px; /* Added padding */
-  border-top: 1px solid var(--border-color); /* New */
+  padding-top: 15px;
+  border-top: 1px solid var(--border-color);
 }
 
 .cancel-button {
   padding: 8px 16px;
-  /* border: 1px solid #ddd; */ /* Old */
-  border: 1px solid var(--border-color); /* New */
+  border: 1px solid var(--border-color);
   border-radius: 4px;
-  /* background: white; */ /* Old */
-  background: var(--background-elevated); /* New */
-  /* color: #666; */ /* Old */
-  color: var(--text-secondary); /* New */
+  background: var(--background-elevated);
+  color: var(--text-secondary);
   cursor: pointer;
 }
 .cancel-button:hover {
-  background-color: var(--border-color); /* New */
+  background-color: var(--border-color);
 }
 
 .save-button {
   padding: 8px 16px;
   border: none;
   border-radius: 4px;
-  /* background: #4ade80; */ /* Old */
-  background: var(--primary-color); /* New */
-  color: var(--text-on-primary); /* New */
+  background: var(--primary-color);
+  color: var(--text-on-primary);
   cursor: pointer;
 }
 .save-button:hover {
-  /* background: #22c55e; */ /* Old */
-  opacity: 0.9; /* New */
+  opacity: 0.9;
 }
 .save-button:disabled {
-  background-color: var(--text-muted); /* New */
-  color: var(--background-content); /* New */
+  background-color: var(--text-muted);
+  color: var(--background-content);
 }
