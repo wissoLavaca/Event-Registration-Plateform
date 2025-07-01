@@ -15,9 +15,8 @@ const Login: React.FC<LoginProps> = ({ onLoginSuccess }) => {
   const [isLoading, setIsLoading] = useState(false);
   
   useEffect(() => {
-    // This effect runs when the component mounts and removes the dark-mode class from the body.
     document.body.classList.remove('dark-mode');
-  }, []); // The empty dependency array means this effect runs only once.
+  }, []);
   
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -25,13 +24,11 @@ const Login: React.FC<LoginProps> = ({ onLoginSuccess }) => {
     setIsLoading(true);
 
     try {
-      
       const response = await fetch('http://localhost:3001/api/auth/login', { 
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        
         body: JSON.stringify({ username: username, password: password }),
       });
 
@@ -41,12 +38,11 @@ const Login: React.FC<LoginProps> = ({ onLoginSuccess }) => {
         if (data.token) {
           localStorage.setItem('authToken', data.token);
           onLoginSuccess(data.token, {
-  userId: data.userId,
-  roleId: data.roleId,
-  username: data.username,
-  profilePictureUrl: data.profilePictureUrl,
-}); 
-    
+            userId: data.userId,
+            roleId: data.roleId,
+            username: data.username,
+            profilePictureUrl: data.profilePictureUrl,
+          }); 
         } else {
           setError('Login successful, but no token received.');
         }
