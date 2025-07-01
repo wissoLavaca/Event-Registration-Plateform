@@ -3,56 +3,54 @@
   justify-content: center;
   align-items: center;
   min-height: 100vh;
-  background-color: #e9f5e9; /* Light green background like the image's outer area */
+  background-color: #e9f5e9;
 }
 
 .login-container {
   background-color: white;
-  padding: 50px 40px; /* Increased padding */
-  border-radius: 10px; /* Slightly more rounded corners */
+  padding: 50px 40px;
+  border-radius: 10px;
   box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
   text-align: center;
   width: 100%;
-  max-width: 450px; /* Slightly wider container */
+  max-width: 450px;
 }
 
 .login-logo {
-  width: 300px; /* Increased from 200px */
-  margin-bottom: 40px; /* Increased margin to maintain proportions */
+  width: 300px;
+  margin-bottom: 40px;
 }
 
-/* Removed h2 styles as the title is removed */
-
 .login-form .form-group {
-  margin-bottom: 25px; /* Increased margin */
+  margin-bottom: 25px;
   text-align: left;
 }
 
 .login-form label {
   display: block;
-  margin-bottom: 10px; /* Increased margin */
-  color: #149b3c; /* Green label color */
+  margin-bottom: 10px;
+  color: #149b3c;
   font-weight: 500;
-  font-size: 16px; /* Slightly larger font */
+  font-size: 16px;
 }
 
 .login-form input {
   width: 100%;
-  padding: 12px 15px; /* Increased padding */
-  border: 1px solid #ced4da; /* Lighter border */
+  padding: 12px 15px;
+  border: 1px solid #ced4da;
   border-radius: 5px;
   box-sizing: border-box;
   font-size: 16px;
 }
 
 .login-form input::placeholder {
-  color: #adb5bd; /* Placeholder color */
+  color: #adb5bd;
 }
 
 .login-form input:focus {
-  border-color: #149b3c; /* Green border on focus */
+  border-color: #149b3c;
   outline: none;
-  box-shadow: 0 0 0 0.2rem rgba(20, 155, 60, 0.25); /* Subtle green shadow on focus */
+  box-shadow: 0 0 0 0.2rem rgba(20, 155, 60, 0.25);
 }
 
 .password-input-container {
@@ -62,17 +60,17 @@
 }
 
 .password-input-container input {
-  padding-right: 80px; /* Make space for the toggle button */
+  padding-right: 80px;
 }
 
 .password-toggle-button {
   position: absolute;
-  right: 1px; /* Position inside the input field */
+  right: 1px;
   top: 1px;
   bottom: 1px;
   background-color: transparent;
   border: none;
-  color: #149b3c; /* Green color for the button text */
+  color: #149b3c;
   cursor: pointer;
   padding: 0 15px;
   font-size: 14px;
@@ -84,26 +82,26 @@
 }
 
 .error-message {
-  color: #dc3545; /* Standard error red */
+  color: #dc3545;
   margin-bottom: 20px;
   font-size: 14px;
-  text-align: center; /* Center error message */
+  text-align: center;
 }
 
 .login-button {
   width: 100%;
-  padding: 15px; /* Increased padding */
-  background-color: #149b3c; /* Main green color */
+  padding: 15px;
+  background-color: #149b3c;
   color: white;
   border: none;
   border-radius: 5px;
-  font-size: 18px; /* Larger font */
-  font-weight: 600; /* Bolder font */
+  font-size: 18px;
+  font-weight: 600;
   cursor: pointer;
   transition: background-color 0.3s ease;
-  margin-top: 10px; /* Add some space above the button */
+  margin-top: 10px;
 }
 
 .login-button:hover {
-  background-color: #0f7a2f; /* Darker green on hover */
+  background-color: #0f7a2f;
 }
