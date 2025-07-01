@@ -205,6 +205,7 @@
   box-shadow: 0 2px 4px rgba(0,0,0,0.05);
   display: flex;
   flex-direction: column;
+  align-items: flex-start; /* This is the key change: align items to the start (left) */
   border: 1px solid transparent;
   transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
 }
@@ -216,9 +217,10 @@
 }
 
 .chart-container h3 { /* Applies to "Évolution des Inscriptions" as well */
+  width: 100%;
+  text-align: center; /* This keeps your title centered */
   margin-top: 0;
-  margin-bottom: 10px; /* Reduced margin to make space */
-  text-align: center;
+  margin-bottom: 20px;
   font-size: 1.1rem;
   color: var(--text-primary, #333);
   font-weight: 600; /* Ensure title is bold */
@@ -1035,4 +1037,9 @@
   .activity-timestamp {
     color: var(--primary-color-light); /* Or a specific info color for dark mode */
   }
+}
+
+/* Add this new rule to center the content of specific chart containers */
+.chart-container.chart-container-centered {
+  align-items: center;
 }
