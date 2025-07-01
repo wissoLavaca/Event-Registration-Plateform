@@ -196,7 +196,7 @@
 
 .field-item .field-label-text { /* Class for just the "Label (type)" text */
   font-size: 1.05em; /* Slightly larger */
-  color: #333;
+  color: var(--text-primary); /* Use theme variable for better contrast in dark mode */
   font-weight: 500; /* Bolder label */
 }
 
@@ -305,9 +305,9 @@
 }
 
 .modification-locked-message {
-  background-color: var(--warning-bg-light, #fff3cd); /* Light yellow background */
-  color: var(--warning-text-dark, #856404);      /* Dark yellow/brown text */
-  border: 1px solid var(--warning-border, #ffeeba);   /* Yellow border */
+  background-color: var(--warning-bg-light, #ff012b); /* Light yellow background */
+  color: var(--warning-text-dark, #664d03);      /* Dark text for readability on light background */
+  border: 1px solid var(--warning-border, #ffecb5);   /* Yellow border */
   padding: 15px;
   border-radius: var(--border-radius-md, 8px);
   margin: 15px 0;
