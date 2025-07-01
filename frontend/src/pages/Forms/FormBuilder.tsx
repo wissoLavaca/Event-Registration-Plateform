@@ -5,21 +5,15 @@ import FieldModal from './FieldModal';
 import './FormBuilder.css';
 import  { type Event }  from '../Events/Events'; 
 
-// Define this in a shared types file (e.g., src/types/form.types.ts)
-// or alongside FieldModalProps if not already shared.
 export interface ModalSubmitData {
   label: string;
   is_required: boolean;
   options?: Array<{ id?: string | number; value: string; is_default?: boolean }>;
   placeholder?: string;
   helpText?: string;
-  // ... any other common field properties from your 'Field' type
-
-  id_type: number; // The ID of the selected FormFieldType (this is crucial)
-  id_form_field_type: number; // This might be redundant if it's the same as id_type.
-                             // If so, you can eventually consolidate to just id_type.
-
-  id?: string | number; // Field's own ID, present only when editing
+  id_type: number;
+  id_form_field_type: number;
+  id?: string | number;
 }
 
 interface FormFieldTypeFromAPI {
@@ -27,7 +21,6 @@ interface FormFieldTypeFromAPI {
   field_name: string;
 }
 
-// Frontend representation of a field
 interface Field {
   id: number | string; 
   label: string;
@@ -43,9 +36,8 @@ interface Field {
   sequence: number; 
 }
 
-// Backend representation of a field (when fetching existing fields)
 interface BackendField {
-  id_field: number; // This is the ID from the backend
+  id_field: number;
   label: string;
   type: FormFieldTypeFromAPI; 
   help_text?: string;
@@ -73,7 +65,7 @@ interface DraggableFieldProps {
   index: number;
   moveField: (dragIndex: number, hoverIndex: number) => void;
   onEdit: (field: Field) => void;
-  onDelete: (id: string | number) => void; // Stays the same, receives the 'id'
+  onDelete: (id: string | number) => void;
   canModify: boolean; 
 }
 
@@ -82,8 +74,8 @@ const DraggableField: React.FC<DraggableFieldProps> = ({ field, index, moveField
 
   const [{ isOver }, drop] = useDrop({
     accept: ItemTypes.FIELD,
-    hover(item: { index: number; id: string | number }, monitor) { // item.id refers to field.id
-      if (!ref.current || !canModify) return; // Prevent reorder if modifications are locked
+    hover(item: { index: number; id: string | number }, monitor) {
+      if (!ref.current || !canModify) return;
       const dragIndex = item.index;
       const hoverIndex = index;
       if (dragIndex === hoverIndex) return;
@@ -104,7 +96,7 @@ const DraggableField: React.FC<DraggableFieldProps> = ({ field, index, moveField
 
   const [{ isDragging }, drag] = useDrag({
     type: ItemTypes.FIELD,
-    item: { index, id: field.id }, // CORRECTED: Uses field.id
+    item: { index, id: field.id },
     canDrag: () => canModify, 
     collect: (monitor) => ({
       isDragging: monitor.isDragging(),
@@ -128,14 +120,12 @@ const DraggableField: React.FC<DraggableFieldProps> = ({ field, index, moveField
         {field.isRequired && <span className="required-badge">Obligatoire</span>}
       </div>
       <div className="field-actions">
-        {/* <button onClick={() => onEdit(field)} className="edit-btn" disabled={!canModify}>Modifier</button> */} {/* <-- THIS LINE IS REMOVED/COMMENTED OUT */}
         <button onClick={() => onDelete(field.id)} className="delete-btn" disabled={!canModify}>Supprimer</button> 
       </div>
     </div>
   );
 };
 
-// Interface for data coming from FieldModal
 interface FieldDataFromModal {
   type: string;
   label: string;
@@ -147,8 +137,8 @@ interface FieldDataFromModal {
   minValue?: number;
   maxValue?: number;
   acceptedFileTypes?: string;
-  id_form_field_type: number; // This is the numeric ID of the type
-  id?: string | number; // Optional: for updates
+  id_form_field_type: number;
+  id?: string | number;
 }
 
 const FormBuilder: React.FC<FormBuilderProps> = ({ eventToManageFieldsFor, onBack }) => {
@@ -157,21 +147,19 @@ const FormBuilder: React.FC<FormBuilderProps> = ({ eventToManageFieldsFor, onBac
   const [editingField, setEditingField] = useState<Field | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [availableFieldTypes, setAvailableFieldTypes] = useState<FormFieldTypeFromAPI[]>([]);
-  const [canModifyFields, setCanModifyFields] = useState(true); // State to control modification
+  const [canModifyFields, setCanModifyFields] = useState(true);
 
-  // Fetch available form field types from backend
   useEffect(() => {
     const fetchTypes = async () => {
       const token = localStorage.getItem("authToken");
       try {
-        const response = await fetch('http://localhost:3001/api/form-field-types', { // ADJUST API ENDPOINT IF NEEDED
+        const response = await fetch('http://localhost:3001/api/form-field-types', {
           headers: { Authorization: `Bearer ${token}` },
         });
         if (!response.ok) throw new Error('Failed to fetch form field types');
         const data: FormFieldTypeFromAPI[] = await response.json();
         setAvailableFieldTypes(Array.isArray(data) ? data : []);
       } catch (error) {
-        console.error("Error fetching form field types:", error);
         setAvailableFieldTypes([]);
         alert("Erreur lors du chargement des types de champs. Certaines fonctionnalités peuvent être limitées.");
       }
@@ -179,7 +167,6 @@ const FormBuilder: React.FC<FormBuilderProps> = ({ eventToManageFieldsFor, onBac
     fetchTypes();
   }, []);
 
-  // Fetch existing fields for the event
   useEffect(() => {
     if (eventToManageFieldsFor) {
       const fetchEventFields = async () => {
@@ -190,25 +177,18 @@ const FormBuilder: React.FC<FormBuilderProps> = ({ eventToManageFieldsFor, onBac
             headers: { Authorization: `Bearer ${token}` },
           });
           if (!response.ok) {
-            console.error("Fetch event fields API response not OK:", response);
             throw new Error('Failed to fetch event fields');
           }
-          // Assuming the API for GET /form-fields returns options as string[] directly
-          // Let's adjust BackendField interface for this specific fetch if needed, or handle it in map
           const data: Array<Omit<BackendField, 'options'> & { options?: string[] | Array<{ id_dropdown_option: number; value_option: string }> }> = await response.json();
-          console.log("RAW DATA from API (/form-fields):", JSON.stringify(data, null, 2));
 
           const mappedFields: Field[] = data.map(backendField => {
             let fieldOptions: string[] = [];
             if (Array.isArray(backendField.options)) {
-              // Check if the first element is a string (meaning it's already string[])
-              // or an object (meaning it's Array<{ id_dropdown_option: number; value_option: string }>)
               if (backendField.options.length > 0 && typeof backendField.options[0] === 'string') {
                 fieldOptions = backendField.options as string[];
               } else if (backendField.options.length > 0 && typeof backendField.options[0] === 'object' && backendField.options[0] !== null && 'value_option' in backendField.options[0]) {
                 fieldOptions = (backendField.options as Array<{ id_dropdown_option: number; value_option: string }>).map(opt => opt.value_option);
               }
-              // If it's an empty array, it will default to []
             }
 
             return {
@@ -228,11 +208,8 @@ const FormBuilder: React.FC<FormBuilderProps> = ({ eventToManageFieldsFor, onBac
             };
           }).sort((a, b) => a.sequence - b.sequence);
 
-          console.log("MAPPED FIELDS before setFields:", JSON.stringify(mappedFields, null, 2));
-
           setFields(mappedFields);
         } catch (error) {
-          console.error("Error fetching event fields:", error);
           alert("Erreur lors du chargement des champs existants pour cet événement.");
           setFields([]);
         } finally {
@@ -245,28 +222,21 @@ const FormBuilder: React.FC<FormBuilderProps> = ({ eventToManageFieldsFor, onBac
     }
   }, [eventToManageFieldsFor]);
 
-  // Determine if fields can be modified based on event's registration start date
   useEffect(() => {
     if (eventToManageFieldsFor?.registration_start_date) {
       try {
         const registrationStartDate = new Date(eventToManageFieldsFor.registration_start_date);
         const now = new Date();
-        // Set canModifyFields to true if current date is before registration start date
         setCanModifyFields(now < registrationStartDate);
       } catch (error) {
-        console.error("Invalid registration_start_date:", eventToManageFieldsFor.registration_start_date, error);
-        setCanModifyFields(false); // Default to false if date is invalid
+        setCanModifyFields(false);
       }
     } else {
-      // If no registration_start_date is provided, or event is not loaded yet,
-      // default to allowing modifications. Or you might want to default to false.
-      // For safety, if the date is crucial for this rule, and it's missing, consider disallowing modifications.
-      console.warn("Registration start date is missing for event. Modifications might be locked by default or allowed based on policy.");
-      setCanModifyFields(eventToManageFieldsFor ? false : true); // Example: Lock if event exists but no date, allow if no event yet (initial load)
+      setCanModifyFields(eventToManageFieldsFor ? false : true);
     }
   }, [eventToManageFieldsFor]);
 
-  const handleAddField = (dataFromModal: FieldDataFromModal) => { // CHANGED parameter type
+  const handleAddField = (dataFromModal: FieldDataFromModal) => {
     if (!canModifyFields) {
         alert("Les modifications sont verrouillées car la période d'inscription a commencé.");
         return;
@@ -275,9 +245,9 @@ const FormBuilder: React.FC<FormBuilderProps> = ({ eventToManageFieldsFor, onBac
       id: Date.now().toString(),
       label: dataFromModal.label,
       type: dataFromModal.type,
-      id_type: dataFromModal.id_form_field_type, // Use the numeric type ID from modal
+      id_type: dataFromModal.id_form_field_type,
       isRequired: dataFromModal.isRequired,
-      options: dataFromModal.options || [], // Ensure options is an array
+      options: dataFromModal.options || [],
       minLength: dataFromModal.minLength,
       maxLength: dataFromModal.maxLength,
       minValue: dataFromModal.minValue,
@@ -285,7 +255,7 @@ const FormBuilder: React.FC<FormBuilderProps> = ({ eventToManageFieldsFor, onBac
       acceptedFileTypes: dataFromModal.acceptedFileTypes,
       sequence: fields.length,
     };
-    setFields(prevFields => [...prevFields, newField]); // Use functional update
+    setFields(prevFields => [...prevFields, newField]);
     setEditingField(null);
   };
 
@@ -298,9 +268,7 @@ const FormBuilder: React.FC<FormBuilderProps> = ({ eventToManageFieldsFor, onBac
     setIsModalOpen(true); 
   };
 
-  // Ensure FieldDataFromModal (if you defined it) matches what FieldModal sends
-  // For simplicity, assuming FieldModal sends an object compatible with 'Field' properties plus 'id_form_field_type'
-  const handleUpdateField = (dataFromModal: FieldDataFromModal) => { // CHANGED parameter type
+  const handleUpdateField = (dataFromModal: FieldDataFromModal) => {
     if (!canModifyFields) {
         alert("Les modifications sont verrouillées car la période d'inscription a commencé.");
         return;
@@ -309,7 +277,6 @@ const FormBuilder: React.FC<FormBuilderProps> = ({ eventToManageFieldsFor, onBac
     const idToUpdate = editingField?.id || dataFromModal.id;
 
     if (!idToUpdate) {
-        console.error("Cannot update field: No ID found for the field to update.");
         return;
     }
 
@@ -320,9 +287,9 @@ const FormBuilder: React.FC<FormBuilderProps> = ({ eventToManageFieldsFor, onBac
             ...f,
             label: dataFromModal.label || f.label,
             type: dataFromModal.type || f.type,
-            id_type: dataFromModal.id_form_field_type, // Use numeric type ID from modal
+            id_type: dataFromModal.id_form_field_type,
             isRequired: dataFromModal.isRequired !== undefined ? dataFromModal.isRequired : f.isRequired,
-            options: dataFromModal.options || f.options || [], // Ensure options is an array
+            options: dataFromModal.options || f.options || [],
             minLength: dataFromModal.minLength !== undefined ? dataFromModal.minLength : f.minLength,
             maxLength: dataFromModal.maxLength !== undefined ? dataFromModal.maxLength : f.maxLength,
             minValue: dataFromModal.minValue !== undefined ? dataFromModal.minValue : f.minValue,
@@ -337,24 +304,20 @@ const FormBuilder: React.FC<FormBuilderProps> = ({ eventToManageFieldsFor, onBac
     setIsModalOpen(false);
   };
 
-
   const handleDeleteField = (id: string | number) => {
     if (!canModifyFields) {
         alert("Les modifications sont verrouillées car la période d'inscription a commencé.");
         return;
     }
-    // The filter logic is already correct if 'id' is the consistent identifier
     setFields(fields.filter(field => field.id !== id).map((f, index) => ({ ...f, sequence: index })));
   };
 
   const moveField = useCallback((dragIndex: number, hoverIndex: number) => {
-    if (!canModifyFields) return; // Prevent moving if modifications are locked
-
+    if (!canModifyFields) return;
     setFields((prevFields) => {
       const newFields = [...prevFields];
       const [draggedItem] = newFields.splice(dragIndex, 1);
       newFields.splice(hoverIndex, 0, draggedItem);
-      // Update sequence numbers after reordering
       return newFields.map((field, index) => ({ ...field, sequence: index }));
     });
   }, [canModifyFields]); 
@@ -368,11 +331,8 @@ const FormBuilder: React.FC<FormBuilderProps> = ({ eventToManageFieldsFor, onBac
     setIsLoading(true);
     const token = localStorage.getItem("authToken");
 
-    console.log("STATE OF 'fields' AT START OF handleSaveEventFields:", JSON.stringify(fields, null, 2)); // <--- ADD THIS
-
     const payloadFields = fields.map((f, index) => {
       if (typeof f.id_type === 'undefined' || f.id_type === null) {
-        console.error('CRITICAL: Field is missing id_form_field_type before sending to backend:', f);
         alert(`Erreur critique: Le type du champ "${f.label}" n'a pas été correctement défini. Veuillez réessayer ou contacter le support.`);
         throw new Error(`Le type du champ "${f.label}" n'a pas été correctement défini.`);
       }
@@ -384,7 +344,6 @@ const FormBuilder: React.FC<FormBuilderProps> = ({ eventToManageFieldsFor, onBac
         sequence: index, 
       };
       
-      // Add type-specific properties
       if (f.type === 'text' || f.type === 'textarea') {
         fieldPayload.min_length = f.minLength;
         fieldPayload.max_length = f.maxLength;
@@ -392,20 +351,13 @@ const FormBuilder: React.FC<FormBuilderProps> = ({ eventToManageFieldsFor, onBac
         fieldPayload.min_value = f.minValue;
         fieldPayload.max_value = f.maxValue;
       } else if (f.type === 'select' || f.type === 'radio' || f.type === 'checkbox') {
-        console.log(`Field ${f.label} (type ${f.type}) being mapped. f.options:`, f.options); // <--- ADD THIS
         fieldPayload.options = f.options; 
       } else if (f.type === 'file') {
         fieldPayload.accepted_file_types = f.acceptedFileTypes;
       }
 
-      // Only include id_form_field if it's an existing field (numeric ID) AND your backend uses it for updates
-      // If your PUT /events/:id/fields replaces all fields, this is not needed.
-      // if (typeof f.id === 'number') {
-      //   fieldPayload.id_form_field = f.id; 
-      // }
       return fieldPayload;
     });
-    console.log("FRONTEND PAYLOAD TO /api/events/:eventId/fields (PUT):", JSON.stringify(payloadFields, null, 2)); // <--- THIS LOG IS VITAL
 
     try {
       const response = await fetch(`http://localhost:3001/api/events/${eventToManageFieldsFor.id_event}/fields`, {
@@ -418,14 +370,12 @@ const FormBuilder: React.FC<FormBuilderProps> = ({ eventToManageFieldsFor, onBac
       });
 
       if (!response.ok) {
-        const errorData = await response.json(); // Try to parse as JSON
-        console.error("Backend error response:", errorData);
+        const errorData = await response.json();
         throw new Error(errorData.message || errorData.error || `HTTP error! status: ${response.status}`);
       }
       alert('Champs du formulaire enregistrés avec succès pour l\'événement!');
-      onBack(); // Go back after successful save
+      onBack();
     } catch (error) {
-      console.error('Erreur lors de l\'enregistrement des champs:', error);
       if (error instanceof Error) {
         alert(`Erreur: ${error.message}`);
       } else {
@@ -436,18 +386,15 @@ const FormBuilder: React.FC<FormBuilderProps> = ({ eventToManageFieldsFor, onBac
     }
   };
 
-  // Debugging: Log current field IDs
   useEffect(() => {
-    console.log("Current field IDs:", fields.map(f => f.id));
   }, [fields]);
 
   return (
     <DndProvider backend={HTML5Backend}>
       <div className="form-builder-container">
-        {/* MOVED AND MODIFIED Back Button */}
-        <div className="form-builder-top-nav"> {/* New wrapper for the back button */}
-          <button onClick={onBack} className="back-btn icon-btn"> {/* Added icon-btn class for styling */}
-            <i className="fi fi-rr-arrow-left"></i> {/* Left arrow icon */}
+        <div className="form-builder-top-nav">
+          <button onClick={onBack} className="back-btn icon-btn">
+            <i className="fi fi-rr-arrow-left"></i>
             Retour à la liste des événements
           </button>
         </div>
@@ -461,15 +408,14 @@ const FormBuilder: React.FC<FormBuilderProps> = ({ eventToManageFieldsFor, onBac
                     alert("Les modifications sont verrouillées car la période d'inscription a commencé.");
                     return;
                 }
-                setEditingField(null); // Ensure modal opens for adding, not editing
+                setEditingField(null);
                 setIsModalOpen(true);
               }} 
               className="add-field-btn"
-              disabled={!canModifyFields || isLoading} // Disable if cannot modify or is loading
+              disabled={!canModifyFields || isLoading}
             >
               + Ajouter un champ
             </button>
-            {/* The "Retour à la liste des événements" button was originally here */}
           </div>
         </div>
 
@@ -486,7 +432,7 @@ const FormBuilder: React.FC<FormBuilderProps> = ({ eventToManageFieldsFor, onBac
           {fields.length === 0 && !isLoading && <p>Aucun champ défini pour cet événement. Cliquez sur "Ajouter un champ" pour commencer.</p>}
           {fields.map((field, index) => (
             <DraggableField
-              key={field.id} // CORRECTED: Uses field.id
+              key={field.id}
               index={index}
               field={field}
               moveField={moveField}
@@ -501,7 +447,7 @@ const FormBuilder: React.FC<FormBuilderProps> = ({ eventToManageFieldsFor, onBac
           <button 
             onClick={handleSaveEventFields} 
             className="save-all-btn" 
-            disabled={!canModifyFields || isLoading} // Disable if cannot modify or is loading
+            disabled={!canModifyFields || isLoading}
           >
             {isLoading ? 'Enregistrement...' : 'Enregistrer tous les champs'}
           </button>
@@ -515,8 +461,8 @@ const FormBuilder: React.FC<FormBuilderProps> = ({ eventToManageFieldsFor, onBac
           }}
           onAdd={editingField ? handleUpdateField : handleAddField}
           availableFieldTypes={availableFieldTypes}
-          initialData={editingField} // Pass editingField to pre-fill modal
-          key={editingField ? `edit-${editingField.id}` : 'add'} // Consider this if modal state isn't resetting properly
+          initialData={editingField}
+          key={editingField ? `edit-${editingField.id}` : 'add'}
         />
       </div>
     </DndProvider>
