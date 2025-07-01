@@ -4,8 +4,8 @@ import './EventInscriptionsPage.css';
 import InscriptionDetailModal from './InscriptionDetailModal';
 import * as XLSX from 'xlsx';
 import jsPDF from 'jspdf'; 
-import { type UserOptions } from 'jspdf-autotable';
-import JSZip from 'jszip';
+import { CellHookData, type UserOptions } from 'jspdf-autotable';
+
 
 
 interface jsPDFWithAutoTable extends jsPDF {
@@ -41,10 +41,8 @@ interface Inscription {
   created_at: string;
 }
 
-// Helper type for jspdf-autotable
 interface jsPDFWithAutoTable extends jsPDF {
-  // You can use 'any' for options, or 'UserOptions' if imported
-  autoTable: (options: any /* or UserOptions */) => jsPDFWithAutoTable; // Returning jsPDFWithAutoTable allows chaining
+  autoTable: (options: any /* or UserOptions */) => jsPDFWithAutoTable; 
 }
 
 const EventInscriptionsPage: React.FC = () => {
@@ -57,17 +55,13 @@ const EventInscriptionsPage: React.FC = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedInscription, setSelectedInscription] = useState<Inscription | null>(null);
 
-  // --- NEW STATE FOR FILTERS ---
-  const [searchTerm, setSearchTerm] = useState<string>(''); // For name search
-  const [selectedDepartment, setSelectedDepartment] = useState<string>(''); // For department filter
-  const [selectedDate, setSelectedDate] = useState<string>(''); // For submission date filter
+ 
+  const [searchTerm, setSearchTerm] = useState<string>(''); 
+  const [selectedDepartment, setSelectedDepartment] = useState<string>(''); 
+  const [selectedDate, setSelectedDate] = useState<string>('');
   const [filteredInscriptions, setFilteredInscriptions] = useState<Inscription[]>([]);
   const [uniqueDepartments, setUniqueDepartments] = useState<string[]>([]);
-  // --- END NEW STATE ---
-
-  // --- NEW STATE FOR EXPORT OPTIONS ---
-  const [includeAttachments, setIncludeAttachments] = useState<boolean>(false);
-  // --- END NEW STATE FOR EXPORT ---
+  
 
 
   useEffect(() => {
@@ -102,9 +96,8 @@ const EventInscriptionsPage: React.FC = () => {
         }
         const data: Inscription[] = await inscriptionsRes.json();
         setInscriptions(data);
-        setFilteredInscriptions(data); // Initialize filteredInscriptions
+        setFilteredInscriptions(data); 
 
-        // Extract unique departments for the filter dropdown
         const departments = new Set<string>();
         data.forEach(inscription => {
           if (inscription.user?.departement?.name_departement) {
@@ -122,11 +115,9 @@ const EventInscriptionsPage: React.FC = () => {
     fetchInscriptions();
   }, [eventId]);
 
-  // --- NEW useEffect FOR APPLYING FILTERS ---
   useEffect(() => {
     let currentInscriptions = [...inscriptions];
 
-    // Apply search term filter (name)
     if (searchTerm) {
       currentInscriptions = currentInscriptions.filter(inscription =>
         (inscription.user?.first_name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -134,14 +125,12 @@ const EventInscriptionsPage: React.FC = () => {
       );
     }
 
-    // Apply department filter
     if (selectedDepartment) {
       currentInscriptions = currentInscriptions.filter(inscription =>
         inscription.user?.departement?.name_departement === selectedDepartment
       );
     }
 
-    // Apply date filter
     if (selectedDate) {
       currentInscriptions = currentInscriptions.filter(inscription => {
         const inscriptionDate = new Date(inscription.created_at).toISOString().split('T')[0];
@@ -151,7 +140,6 @@ const EventInscriptionsPage: React.FC = () => {
 
     setFilteredInscriptions(currentInscriptions);
   }, [searchTerm, selectedDepartment, selectedDate, inscriptions]);
-  // --- END NEW useEffect ---
 
   const handleOpenModal = (inscription: Inscription) => {
      console.log("Opening modal for inscription:", JSON.stringify(inscription, null, 2)); // Add this line
@@ -182,9 +170,7 @@ const EventInscriptionsPage: React.FC = () => {
     setSelectedDepartment('');
     setSelectedDate('');
   };
-  // --- END NEW HANDLERS ---
 
-  // --- NEW EXPORT HANDLERS ---
 
   const getFormattedFileName = (baseName: string) => {
     const date = new Date();
@@ -194,12 +180,9 @@ const EventInscriptionsPage: React.FC = () => {
   };
   
   const getExportData = () => {
-    // Determine which set of inscriptions to export
-    // For now, let's assume we always export filtered results.
-    // You could add a toggle or separate buttons for "Export All" vs "Export Filtered"
+
     const dataToExport = filteredInscriptions;
 
-    // Dynamically create headers based on unique form field labels
     const allFieldLabels = new Set<string>();
     dataToExport.forEach(inscription => {
       inscription.fieldResponses.forEach(fr => {
@@ -229,15 +212,13 @@ const EventInscriptionsPage: React.FC = () => {
             row.push(response.response_text);
           } else if (response.response_file_path) {
             let pathValue = response.response_file_path;
-            // Attempt to remove a "Fichier: " prefix if it exists, accommodating potential space
             if (pathValue.toLowerCase().startsWith("fichier:")) {
-              pathValue = pathValue.substring(pathValue.indexOf(':') + 1).trim(); // Get string after first colon and trim
+              pathValue = pathValue.substring(pathValue.indexOf(':') + 1).trim();
             }
             
-            // Now, get the base filename from the potentially cleaned pathValue
             const actualFileName = pathValue.split(/[\\/]/).pop() || pathValue;
             
-            const fileUrl = `http://localhost:3001/uploads/${actualFileName.trim()}`; // Ensure no leading/trailing spaces in filename part of URL
+            const fileUrl = `http://localhost:3001/uploads/${actualFileName.trim()}`; 
             row.push(fileUrl);
           } else {
             row.push('');
@@ -253,7 +234,7 @@ const EventInscriptionsPage: React.FC = () => {
 
 
   const handleExportCSV = async () => {
-    const { headers, rows, dataToExport } = getExportData();
+    const { headers, rows } = getExportData();
 
     const csvRows = rows.map(row => {
       return row.map(cell => {
@@ -264,8 +245,6 @@ const EventInscriptionsPage: React.FC = () => {
           const escapedUrl = fullUrl.replace(/"/g, '""');
           const escapedFileName = fileName.replace(/"/g, '""');
           
-          // Use LIEN_HYPERTEXTE for French Excel compatibility, based on screenshot context.
-          // If targeting multiple Excel languages, this becomes more complex.
           return `=LIEN_HYPERTEXTE("${escapedUrl}","${escapedFileName}")`; 
         }
         return cell;
@@ -276,38 +255,30 @@ const EventInscriptionsPage: React.FC = () => {
       headers.join(','),
       ...csvRows.map(row => row.map(cell => {
         const cellString = String(cell || '');
-        // If the cell is a formula, don't add extra quotes around it if it already starts with =
-        // and ensure internal quotes are doubled.
+
         if (cellString.startsWith('=')) {
-          return `"${cellString.replace(/"/g, '""')}"`; // Ensure formula is quoted and internal quotes doubled
+          return `"${cellString.replace(/"/g, '""')}"`; 
         }
-        // For other cells, quote and escape as before
         return `"${cellString.replace(/"/g, '""')}"`;
       }).join(','))
     ].join('\n');
 
-    const BOM = "\uFEFF"; // Byte Order Mark for UTF-8
+    const BOM = "\uFEFF"; 
     const blob = new Blob([BOM + csvContent], { type: 'text/csv;charset=utf-8;' });
     
-    if (includeAttachments && dataToExport.length > 0) {
-      await exportWithAttachments(blob, "csv", dataToExport);
-    } else {
-      triggerDownload(blob, `${getFormattedFileName("inscriptions")}.csv`);
-    }
+    triggerDownload(blob, `${getFormattedFileName("inscriptions")}.csv`);
   };
 
   const handleExportExcel = async () => {
-    const { headers, rows: dataRows, dataToExport } = getExportData(); // Renamed rows to dataRows for clarity
+    const { headers, rows: dataRows } = getExportData(); 
 
-    // Prepare data for Excel, converting URLs to actual Excel hyperlinks
     const excelRows = dataRows.map(row => {
       return row.map(cell => {
         if (typeof cell === 'string' && cell.startsWith('http://localhost:3001/uploads/')) {
           const fileName = cell.split('/').pop() || 'Lien vers le fichier';
-          // Format for Excel hyperlink: {v: "Display Text", l: { Target: "URL" }}
           return { v: fileName, l: { Target: cell, Tooltip: `Ouvrir ${fileName}` } };
         }
-        return cell; // Keep other cells as is
+        return cell; 
       });
     });
     
@@ -318,16 +289,12 @@ const EventInscriptionsPage: React.FC = () => {
     const excelBuffer = XLSX.write(workbook, { bookType: 'xlsx', type: 'array' });
     const blob = new Blob([excelBuffer], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8' });
 
-    if (includeAttachments && dataToExport.length > 0) {
-      await exportWithAttachments(blob, "xlsx", dataToExport);
-    } else {
-      triggerDownload(blob, `${getFormattedFileName("inscriptions")}.xlsx`);
-    }
+    triggerDownload(blob, `${getFormattedFileName("inscriptions")}.xlsx`);
   };
 
   const handleExportPDF = async () => {
     console.log("handleExportPDF: PDF export initiated.");
-    const { headers, rows, dataToExport } = getExportData();
+    const { headers, rows } = getExportData();
     console.log("handleExportPDF: Export data - Headers:", headers);
     console.log("handleExportPDF: Export data - Rows count:", rows.length);
     if (rows.length === 0) {
@@ -336,83 +303,47 @@ const EventInscriptionsPage: React.FC = () => {
       return;
     }
 
-    // Cast the jsPDF instance to your interface
     const doc = new jsPDF() as jsPDFWithAutoTable; 
     
     doc.text(`Inscriptions pour: ${eventTitle}`, 14, 15);
-    doc.autoTable({ // Now TypeScript should not complain
+    doc.autoTable({ 
       head: [headers],
-      body: rows.map(row => row.map(cell => String(cell || ''))),
+      body: rows.map(row => row.map(cell => {
+        const cellString = String(cell || '');
+        if (cellString.startsWith('http://localhost:3001/uploads/')) {
+          return cellString.split('/').pop() || '';
+        }
+        return cellString;
+      })),
       startY: 25,
       theme: 'grid',
       styles: { fontSize: 8 },
       headStyles: { fillColor: [22, 160, 133] },
       alternateRowStyles: { fillColor: [240, 240, 240] },
+      didParseCell: (data: CellHookData) => {
+        const originalCellData = rows[data.row.index]?.[data.column.index];
+        if (typeof originalCellData === 'string' && originalCellData.startsWith('http://localhost:3001/uploads/')) {
+          data.cell.styles.textColor = [0, 0, 255];
+        }
+      },
+      didDrawCell: (data: CellHookData) => {
+        const originalCellData = rows[data.row.index]?.[data.column.index];
+        if (typeof originalCellData === 'string' && originalCellData.startsWith('http://localhost:3001/uploads/')) {
+          doc.link(data.cell.x, data.cell.y, data.cell.width, data.cell.height, { url: originalCellData });
+          
+          const text = Array.isArray(data.cell.text) ? data.cell.text[0] : '';
+          const textWidth = doc.getTextWidth(text);
+          const textPos = data.cell.getTextPos(); 
+          doc.setDrawColor(0, 0, 255); 
+          doc.line(textPos.x, textPos.y + 3, textPos.x + textWidth, textPos.y + 3);
+        }
+      },
     });
 
     const pdfBlob = doc.output('blob');
     console.log("handleExportPDF: PDF blob generated.");
 
-    if (includeAttachments && dataToExport.length > 0) {
-      await exportWithAttachments(pdfBlob, "pdf", dataToExport);
-    } else {
-      triggerDownload(pdfBlob, `${getFormattedFileName("inscriptions")}.pdf`);
-    }
-  };
-
-  const exportWithAttachments = async (mainFileBlob: Blob, fileExtension: string, inscriptionsData: Inscription[]) => {
-    const zip = new JSZip();
-    zip.file(`${getFormattedFileName("inscriptions")}.${fileExtension}`, mainFileBlob);
-
-    const attachmentsFolder = zip.folder("attachments");
-    if (!attachmentsFolder) {
-        console.error("Failed to create attachments folder in zip");
-        triggerDownload(mainFileBlob, `${getFormattedFileName("inscriptions")}.${fileExtension}`); // fallback
-        return;
-    }
-
-    const filePathsToFetch: { url: string, name: string }[] = [];
-    inscriptionsData.forEach(inscription => {
-        inscription.fieldResponses.forEach(fr => {
-            if (fr.response_file_path) {
-                // IMPORTANT: This assumes response_file_path is a publicly accessible URL
-                // or a relative path that can be resolved to one (e.g., by prepending your backend URL).
-                // For example: `http://localhost:3001/${fr.response_file_path}` if paths are relative to backend root.
-                // Adjust this logic based on how your file paths are stored and served.
-                const fileName = fr.response_file_path.split('/').pop() || `attachment_${Date.now()}`;
-                // Ensure file paths are full URLs if they are not already
-                const fullUrl = fr.response_file_path.startsWith('http') ? fr.response_file_path : `http://localhost:3001${fr.response_file_path.startsWith('/') ? '' : '/'}${fr.response_file_path}`;
-                filePathsToFetch.push({ url: fullUrl, name: fileName });
-            }
-        });
-    });
-    
-    // Deduplicate file paths to avoid fetching the same file multiple times
-    const uniqueFilePaths = Array.from(new Map(filePathsToFetch.map(item => [item.url, item])).values());
-
-    try {
-        for (const fileInfo of uniqueFilePaths) {
-            try {
-                const response = await fetch(fileInfo.url);
-                if (!response.ok) {
-                    console.warn(`Failed to fetch attachment ${fileInfo.name} from ${fileInfo.url}: ${response.statusText}`);
-                    continue; // Skip this file
-                }
-                const blob = await response.blob();
-                attachmentsFolder.file(fileInfo.name, blob);
-            } catch (fetchError) {
-                console.warn(`Error fetching attachment ${fileInfo.name} from ${fileInfo.url}:`, fetchError);
-            }
-        }
-    } catch (error) {
-        console.error("Error processing attachments:", error);
-    }
-    
-
-    zip.generateAsync({ type: "blob" })
-        .then(function(content) {
-            triggerDownload(content, `${getFormattedFileName("inscriptions_with_attachments")}.zip`);
-        });
+    triggerDownload(pdfBlob, `${getFormattedFileName("inscriptions")}.pdf`);
   };
 
   const triggerDownload = (blob: Blob, fileName: string) => {
@@ -425,8 +356,6 @@ const EventInscriptionsPage: React.FC = () => {
     URL.revokeObjectURL(link.href);
   };
 
-  // --- END NEW EXPORT HANDLERS ---
-
 
   if (isLoading) {
     return <div className="loading-message">Chargement des inscriptions...</div>;
@@ -437,14 +366,13 @@ const EventInscriptionsPage: React.FC = () => {
 
   return (
     <div className="event-inscriptions-page">
-      {/* Ensure this Link is styled by .back-link in CSS */}
-      <Link to="/forms" className="back-link icon-link"> {/* Added icon-link class */}
-        <i className="fi fi-rr-arrow-left"></i> {/* Left arrow icon */}
+
+      <Link to="/forms" className="back-link icon-link"> 
+        <i className="fi fi-rr-arrow-left"></i> 
         Retour à la gestion des événements
       </Link>
       <h2>Inscriptions pour: {eventTitle}</h2>
 
-      {/* --- NEW FILTER UI --- */}
       <div className="filters-container">
         <input
           type="text"
@@ -471,27 +399,15 @@ const EventInscriptionsPage: React.FC = () => {
         />
         <button onClick={clearFilters} className="clear-filters-btn">Réinitialiser les filtres</button>
       </div>
-      {/* --- END NEW FILTER UI --- */}
 
-      {/* --- NEW EXPORT UI --- */}
       <div className="export-options-container">
-        <label className="export-checkbox-label">
-          <input
-            type="checkbox"
-            checked={includeAttachments}
-            onChange={(e) => setIncludeAttachments(e.target.checked)}
-          />
-          Inclure les pièces jointes (ZIP)
-        </label>
         <div className="export-buttons">
           <button onClick={handleExportCSV} className="export-btn csv-btn">Exporter en CSV</button>
           <button onClick={handleExportExcel} className="export-btn excel-btn">Exporter en Excel</button>
           <button onClick={handleExportPDF} className="export-btn pdf-btn">Exporter en PDF</button>
         </div>
       </div>
-      {/* --- END NEW EXPORT UI --- */}
-
-
+ 
       {filteredInscriptions.length === 0 && inscriptions.length > 0 ? (
         <p>Aucune inscription ne correspond à vos critères de recherche.</p>
       ) : inscriptions.length === 0 && !isLoading ? (
