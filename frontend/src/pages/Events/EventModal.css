@@ -4,7 +4,7 @@
     left: 0;
     right: 0;
     bottom: 0;
-    background-color: rgba(var(--shadow-color-rgb), 0.5); /* Theming for overlay */
+    background-color: rgba(var(--shadow-color-rgb), 0.5);
     display: flex;
     justify-content: center;
     align-items: center;
@@ -90,7 +90,6 @@
   
   .form-group label {
     color: var(--text-secondary);
-    /* ... display, margin ... */
   }
   
   .form-group input[type="text"],
@@ -143,14 +142,14 @@
     font-weight: 500;
   }
   
-  .modal-actions .save-btn { /* Or similar class */
+  .modal-actions .save-btn {
     background-color: var(--primary-color);
     color: var(--text-on-primary);
   }
   .modal-actions .save-btn:hover {
     opacity: 0.9;
   }
-  .modal-actions .cancel-btn { /* Or similar class */
+  .modal-actions .cancel-btn {
     background-color: var(--background-content);
     color: var(--text-secondary);
     border: 1px solid var(--border-color);
@@ -190,42 +189,39 @@
   }
   
   .status-display {
-    padding: 10px; /* Match input padding */
-    border: 1px solid var(--input-border, #ccc); /* Use theme variable for border */
-    background-color: var(--input-bg, #f9f9f9); /* Use theme variable for background */
-    color: var(--text-primary, #333); /* Use theme variable for text */
-    border-radius: 4px; /* Match input border-radius */
-    min-height: 40px; /* Match input height (adjust if padding is different) */
+    padding: 10px;
+    border: 1px solid var(--input-border, #ccc);
+    background-color: var(--input-bg, #f9f9f9);
+    color: var(--text-primary, #333);
+    border-radius: 4px;
+    min-height: 40px;
     display: flex;
     align-items: center;
-    box-sizing: border-box; /* Ensure padding and border are included in width/height */
-    width: 100%; /* Make it take full width like other inputs */
+    box-sizing: border-box;
+    width: 100%;
   }
   
   .cancel-event-button {
     padding: 10px 15px;
-    /* background-color: #ffc107; /* OLD Amber */
-    background-color: #e53935; /* NEW: Strong Red (consistent with .active state) */
-    color: white; /* Ensure text is white for contrast */
+    background-color: #e53935;
+    color: white;
     border: none;
     border-radius: 4px;
     cursor: pointer;
     margin-top: 10px;
-    width: 100%; 
-    text-align: center; /* Center the text */
-    font-weight: 500; /* Slightly bolder text */
-    transition: background-color 0.2s ease-in-out; /* Smooth transition for background */
+    width: 100%;
+    text-align: center;
+    font-weight: 500;
+    transition: background-color 0.2s ease-in-out;
   }
   
   .cancel-event-button.active {
-    background-color: #e53935; /* Red when active (cancelled) - This is good */
+    background-color: #e53935;
     color: white;
-    /* You might want to add styles if it should look disabled, e.g., opacity: 0.7; cursor: not-allowed; */
   }
   
-  .cancel-event-button:not(.active):hover { /* Apply hover only when not active, if desired */
-    /* opacity: 0.9; OLD hover */
-    background-color: #c62828; /* NEW: Darker red for hover */
+  .cancel-event-button:not(.active):hover {
+    background-color: #c62828;
   }
   
   @media (max-width: 768px) {
