@@ -73,7 +73,6 @@ const InscriptionDetailModal: React.FC<InscriptionDetailModalProps> = ({ isOpen,
           </div>
         </div>
         
-        {/* FORM RESPONSES SECTION */}
         {inscription.fieldResponses && inscription.fieldResponses.length > 0 && (
           <div className="modal-section">
             <h3 className="modal-section-title">Réponses au formulaire:</h3>
