@@ -1,10 +1,9 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import './FieldModal.css';
 
-// Interface for the structure of form field types fetched from the API
 interface FormFieldTypeFromAPI {
   id_type: number;
-  field_name: string; // e.g., "text", "number" - used as the value in the select
+  field_name: string;
 }
 
 interface FieldModalProps {
@@ -12,10 +11,9 @@ interface FieldModalProps {
   onClose: () => void;
   onAdd: (fieldData: FieldData & { id_form_field_type: number; id?: string | number }) => void;
   availableFieldTypes: FormFieldTypeFromAPI[];
-  initialData?: any; // Or a more specific type for pre-filling
+  initialData?: any;
 }
 
-// Local state for the modal's form
 interface FieldData {
   type: string;
   label: string;
@@ -27,24 +25,22 @@ interface FieldData {
   minValue?: number;
   maxValue?: number;
   acceptedFileTypes?: string;
-  // id?: string | number; // Add if modal handles id for editing directly
 }
 
-// Helper to get default values for type-specific properties
 const getTypeSpecificDefaults = (type: string): Partial<FieldData> => {
   switch (type) {
     case 'text':
     case 'textarea':
-      return { minLength: 0, maxLength: 100, options: [] }; // Text fields should not have options
+      return { minLength: 0, maxLength: 100, options: [] };
     case 'number':
-      return { minValue: 0, maxValue: 100, options: [] }; // Number fields should not have options
+      return { minValue: 0, maxValue: 100, options: [] };
     case 'checkbox':
     case 'radio':
     case 'select':
-      return { options: [] }; // Default for option-based types
+      return { options: [] };
     case 'file':
-      return { acceptedFileTypes: '.pdf,.doc,.docx', options: [] }; // File fields should not have options
-    default: // For 'date', 'email', or any other types without specific extra fields
+      return { acceptedFileTypes: '.pdf,.doc,.docx', options: [] };
+    default:
       return { options: [] };
   }
 };
@@ -58,7 +54,6 @@ const FieldModal: React.FC<FieldModalProps> = ({ isOpen, onClose, onAdd, availab
       label: '',
       helpText: '',
       isRequired: false,
-      // Apply general defaults and then specific ones
       minLength: typeDefaults.minLength !== undefined ? typeDefaults.minLength : 0,
       maxLength: typeDefaults.maxLength !== undefined ? typeDefaults.maxLength : 100,
       minValue: typeDefaults.minValue !== undefined ? typeDefaults.minValue : 0,
@@ -71,7 +66,6 @@ const FieldModal: React.FC<FieldModalProps> = ({ isOpen, onClose, onAdd, availab
   const [fieldData, setFieldData] = useState<FieldData>(getInitialFieldData());
   const [newOption, setNewOption] = useState('');
 
-  // Effect to reset form when modal is opened or available types change
   useEffect(() => {
     if (isOpen) {
       setFieldData(getInitialFieldData());
@@ -79,16 +73,13 @@ const FieldModal: React.FC<FieldModalProps> = ({ isOpen, onClose, onAdd, availab
     }
   }, [isOpen, getInitialFieldData]);
 
-
   const handleTypeChange = (selectedType: string) => {
     const typeDefaults = getTypeSpecificDefaults(selectedType);
     setFieldData(prevData => ({
-      // Preserve some user input if desired, or reset fully
-      label: prevData.label, // Keep label
-      helpText: prevData.helpText, // Keep help text
-      isRequired: prevData.isRequired, // Keep isRequired
+      label: prevData.label,
+      helpText: prevData.helpText,
+      isRequired: prevData.isRequired,
       type: selectedType,
-      // Apply new type-specific defaults, ensuring all keys are correctly set or cleared
       minLength: typeDefaults.minLength !== undefined ? typeDefaults.minLength : (selectedType === 'text' || selectedType === 'textarea' ? 0 : undefined),
       maxLength: typeDefaults.maxLength !== undefined ? typeDefaults.maxLength : (selectedType === 'text' || selectedType === 'textarea' ? 100 : undefined),
       minValue: typeDefaults.minValue !== undefined ? typeDefaults.minValue : (selectedType === 'number' ? 0 : undefined),
@@ -96,14 +87,12 @@ const FieldModal: React.FC<FieldModalProps> = ({ isOpen, onClose, onAdd, availab
       acceptedFileTypes: typeDefaults.acceptedFileTypes !== undefined ? typeDefaults.acceptedFileTypes : (selectedType === 'file' ? '.pdf,.doc,.docx' : undefined),
       options: typeDefaults.options !== undefined ? typeDefaults.options : [],
     }));
-    setNewOption(''); // Reset the new option input field
+    setNewOption('');
   };
 
   const handleAddOption = () => {
     if (newOption.trim()) {
-      // Ensure options is an array before spreading
       const currentOptions = Array.isArray(fieldData.options) ? fieldData.options : [];
-      console.log("Adding option. Current options:", currentOptions, "New option:", newOption.trim());
       setFieldData(prevData => ({
         ...prevData,
         options: [...currentOptions, newOption.trim()]
@@ -115,7 +104,6 @@ const FieldModal: React.FC<FieldModalProps> = ({ isOpen, onClose, onAdd, availab
   const handleRemoveOption = (indexToRemove: number) => {
     if (Array.isArray(fieldData.options)) {
       const updatedOptions = fieldData.options.filter((_, i) => i !== indexToRemove);
-      console.log("Removing option. Index:", indexToRemove, "New options:", updatedOptions);
       setFieldData(prevData => ({
         ...prevData,
         options: updatedOptions
@@ -134,13 +122,13 @@ const FieldModal: React.FC<FieldModalProps> = ({ isOpen, onClose, onAdd, availab
               <input
                 type="number"
                 placeholder="Min"
-                value={fieldData.minLength ?? ''} // Use ?? '' for controlled input if value can be undefined
+                value={fieldData.minLength ?? ''}
                 onChange={(e) => setFieldData({ ...fieldData, minLength: parseInt(e.target.value) || 0 })}
               />
               <input
                 type="number"
                 placeholder="Max"
-                value={fieldData.maxLength ?? ''} // Use ?? ''
+                value={fieldData.maxLength ?? ''}
                 onChange={(e) => setFieldData({ ...fieldData, maxLength: parseInt(e.target.value) || 100 })}
               />
             </div>
@@ -155,13 +143,13 @@ const FieldModal: React.FC<FieldModalProps> = ({ isOpen, onClose, onAdd, availab
               <input
                 type="number"
                 placeholder="Min"
-                value={fieldData.minValue ?? ''} // Use ?? ''
+                value={fieldData.minValue ?? ''}
                 onChange={(e) => setFieldData({ ...fieldData, minValue: parseInt(e.target.value) || 0 })}
               />
               <input
                 type="number"
                 placeholder="Max"
-                value={fieldData.maxValue ?? ''} // Use ?? ''
+                value={fieldData.maxValue ?? ''}
                 onChange={(e) => setFieldData({ ...fieldData, maxValue: parseInt(e.target.value) || 100 })}
               />
             </div>
@@ -175,7 +163,6 @@ const FieldModal: React.FC<FieldModalProps> = ({ isOpen, onClose, onAdd, availab
           <div className="form-group">
             <label>Options</label>
             <div className="options-list">
-              {/* Ensure fieldData.options is an array before mapping */}
               {Array.isArray(fieldData.options) && fieldData.options.map((option, index) => (
                 <div key={index} className="option-item">
                   <span>{option}</span>
@@ -209,7 +196,7 @@ const FieldModal: React.FC<FieldModalProps> = ({ isOpen, onClose, onAdd, availab
             <label>Types de fichiers acceptés</label>
             <input
               type="text"
-              value={fieldData.acceptedFileTypes ?? ''} // Use ?? ''
+              value={fieldData.acceptedFileTypes ?? ''}
               onChange={(e) => setFieldData({ ...fieldData, acceptedFileTypes: e.target.value })}
               placeholder=".pdf,.doc,.docx"
             />
@@ -225,7 +212,6 @@ const FieldModal: React.FC<FieldModalProps> = ({ isOpen, onClose, onAdd, availab
     const selectedTypeDefinition = availableFieldTypes.find(t => t.field_name === fieldData.type);
     if (!selectedTypeDefinition) {
       alert(`Erreur: Le type de champ "${fieldData.type}" est invalide ou non trouvé. Veuillez recharger ou contacter le support.`);
-      console.error("Available types:", availableFieldTypes, "Selected type string:", fieldData.type);
       return;
     }
 
@@ -233,16 +219,15 @@ const FieldModal: React.FC<FieldModalProps> = ({ isOpen, onClose, onAdd, availab
       ...fieldData,
       id_form_field_type: selectedTypeDefinition.id_type,
     };
-    if (initialData?.id) { // If editing, include the id
+    if (initialData?.id) {
       dataToSend.id = initialData.id;
     }
 
-    // Ensure options is an array, even if empty, for option-based types
     if (['checkbox', 'radio', 'select'].includes(fieldData.type)) {
       dataToSend.options = Array.isArray(fieldData.options) ? fieldData.options : [];
     } else {
       // @ts-ignore
-      delete dataToSend.options; // Or set to undefined
+      delete dataToSend.options;
     }
 
     onAdd(dataToSend);
@@ -250,16 +235,16 @@ const FieldModal: React.FC<FieldModalProps> = ({ isOpen, onClose, onAdd, availab
   };
 
   const getFieldTypeLabel = (fieldName: string): string => {
-  const labels: { [key: string]: string } = {
-    'text': 'Texte',
-    'number': 'Nombre',
-    'file': 'Fichier',
-    'date': 'Date',
-    'checkbox': 'Case à cocher',
-    'radio': 'Boutons radio'
+    const labels: { [key: string]: string } = {
+      'text': 'Texte',
+      'number': 'Nombre',
+      'file': 'Fichier',
+      'date': 'Date',
+      'checkbox': 'Case à cocher',
+      'radio': 'Boutons radio'
+    };
+    return labels[fieldName] || fieldName;
   };
-  return labels[fieldName] || fieldName;
-};
 
   if (!isOpen) return null;
 
@@ -276,7 +261,7 @@ const FieldModal: React.FC<FieldModalProps> = ({ isOpen, onClose, onAdd, availab
             <label>Type de champ*</label>
             <select
               value={fieldData.type}
-              onChange={(e) => handleTypeChange(e.target.value)} // Use the new handler
+              onChange={(e) => handleTypeChange(e.target.value)}
               required
             >
               {availableFieldTypes.length === 0 && <option value="text">Texte (chargement des types...)</option>}
