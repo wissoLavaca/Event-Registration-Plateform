@@ -1,7 +1,7 @@
 .users-page {
   padding: 24px;
-  background-color: var(--background-body); /* New */
-  color: var(--text-primary); /* New */
+  background-color: var(--background-body); 
+  color: var(--text-primary); 
 }
 
 .users-header {
@@ -10,23 +10,21 @@
   align-items: center;
   margin-bottom: 24px;
   padding-bottom: 15px;
-  border-bottom: 1px solid var(--border-color); /* New */
+  border-bottom: 1px solid var(--border-color); 
 }
 
 .title-section h1 {
   font-size: 24px;
   margin-bottom: 8px;
-  color: var(--text-primary); /* New */
+  color: var(--text-primary); 
 }
 .title-section p {
-  /* color: #666; */ /* Old */
-  color: var(--text-muted); /* New */
+  color: var(--text-muted); 
 }
 
 .add-user-btn {
-  /* background-color: #4ade80; */ /* Old */
-  background-color: var(--primary-color); /* New */
-  color: var(--text-on-primary); /* New */
+  background-color: var(--primary-color); 
+  color: var(--text-on-primary); 
   border: none;
   padding: 12px 24px;
   border-radius: 8px;
@@ -42,8 +40,8 @@
 }
 
 .upload-users-btn {
-   background-color: var(--primary-color); /* New */
-  color: var(--text-on-primary); /* New */
+   background-color: var(--primary-color); 
+  color: var(--text-on-primary); 
   border: none;
   padding: 12px 24px;
   border-radius: 8px;
@@ -69,22 +67,21 @@
   align-items: center;
   margin-bottom: 24px;
   padding: 15px;
-  background-color: var(--background-content); /* New */
-  border: 1px solid var(--border-color); /* New */
+  background-color: var(--background-content); 
+  border: 1px solid var(--border-color); 
   border-radius: 8px;
 }
 .filters-section label {
-  color: var(--text-secondary); /* New */
+  color: var(--text-secondary);
   margin-right: 8px;
 }
 
 .role-filter select, .search-bar input {
   padding: 8px 16px;
   border-radius: 6px;
-  /* border: 1px solid #ddd; */ /* Old */
-  border: 1px solid var(--input-border); /* New */
-  background-color: var(--input-bg); /* New */
-  color: var(--text-primary); /* New */
+  border: 1px solid var(--input-border);
+  background-color: var(--input-bg); 
+  color: var(--text-primary); 
 }
 .role-filter select {
   margin-left: 8px;
@@ -93,21 +90,19 @@
   width: 300px;
 }
 .role-filter select:focus, .search-bar input:focus {
-  border-color: var(--input-focus-border); /* New */
+  border-color: var(--input-focus-border); 
   outline: none;
 }
 
-.users-table-container { /* Added for consistency */
-  /* background: white; */ /* Old */
-  background: var(--background-content); /* New */
+.users-table-container { 
+  background: var(--background-content); 
   border-radius: 8px;
-  /* box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1); */ /* Old */
-  box-shadow: 0 1px 3px rgba(var(--shadow-color-rgb), 0.1); /* New */
+  box-shadow: 0 1px 3px rgba(var(--shadow-color-rgb), 0.1);
   overflow-x: auto;
-  border: 1px solid var(--border-color); /* New */
+  border: 1px solid var(--border-color); 
 }
 
-table { /* Assuming .users-table is inside .users-table-container */
+table { 
   width: 100%;
   border-collapse: collapse;
 }
@@ -115,47 +110,41 @@ table { /* Assuming .users-table is inside .users-table-container */
 th {
   text-align: left;
   padding: 16px;
-  /* border-bottom: 1px solid #eee; */ /* Old */
-  border-bottom: 1px solid var(--border-color-strong); /* New */
-  /* color: #666; */ /* Old */
-  color: var(--text-secondary); /* New */
-  font-weight: 600; /* Added for header emphasis */
+  border-bottom: 1px solid var(--border-color-strong); 
+  color: var(--text-secondary); 
+  font-weight: 600;
 }
 
 td {
   padding: 16px;
-  border-bottom: 1px solid var(--border-color); /* New */
-  color: var(--text-primary); /* New */
+  border-bottom: 1px solid var(--border-color);
+  color: var(--text-primary);
 }
 tbody tr:hover {
-  background-color: var(--sidebar-hover); /* Or a specific table hover variable */
+  background-color: var(--sidebar-hover); 
 }
 tbody tr:last-child td {
-  border-bottom: none; /* Remove border for last row */
+  border-bottom: none;
 }
 
 
 .user-avatar {
   width: 40px;
   height: 40px;
-  /* background-color: #eee; */ /* Old */
-  background-color: var(--background-elevated); /* New */
+  background-color: var(--background-elevated);
   border-radius: 50%;
-  object-fit: cover; /* Ensure image covers */
-  border: 2px solid var(--border-color); /* New */
+  object-fit: cover; 
+  border: 2px solid var(--border-color); 
 }
-/* .avatar-img specific border if different from .user-avatar */
 .avatar-img {
-  /* border: 2px solid #2ecc40; */ /* Old - this was very specific green */
-  /* If you want a theme-specific border for the image itself: */
-  /* border: 2px solid var(--primary-color); */
+
   object-fit: cover;
 }
 
 
 .user-name {
   font-weight: 500;
-  color: var(--text-primary); /* New */
+  color: var(--text-primary); 
 }
 
 
@@ -163,24 +152,21 @@ tbody tr:last-child td {
 .role-badge {
   padding: 6px 12px;
   border-radius: 20px;
-  font-size: 12px; /* Slightly smaller for badge */
+  font-size: 12px; 
   font-weight: 500;
   text-transform: capitalize;
 }
 .role-badge.admin {
-  /* background-color: #ffebee; */ /* Old - redish */
-  background-color: rgba(var(--danger-color-rgb), 0.15); /* New */
-  color: var(--danger-color); /* New */
+  background-color: rgba(var(--danger-color-rgb), 0.15); 
+  color: var(--danger-color); 
 }
-.role-badge.employee { /* Assuming 'employee' is another role */
-  /* background-color: #e3f2fd; */ /* Old - bluish */
-  background-color: rgba(var(--secondary-color-rgb), 0.15); /* New */
-  color: var(--secondary-color); /* New */
+.role-badge.employee { 
+  background-color: rgba(var(--secondary-color-rgb), 0.15);
+  color: var(--secondary-color); 
 }
-/* Add more role badge styles as needed */
 
 .department-name {
-  color: var(--text-secondary); /* New */
+  color: var(--text-secondary); 
 }
 
 .actions button {
@@ -201,26 +187,22 @@ tbody tr:last-child td {
 }
 
 .edit-btn {
-  /* background-color: #e3f2fd; */ /* Old */
-  background-color: rgba(var(--secondary-color-rgb), 0.2); /* New */
-  /* color: #1976d2; */ /* Old */
-  color: var(--secondary-color); /* New */
+  background-color: rgba(var(--secondary-color-rgb), 0.2);
+  color: var(--secondary-color);
 }
 .edit-btn:hover {
-  background-color: rgba(var(--secondary-color-rgb), 0.3); /* New */
+  background-color: rgba(var(--secondary-color-rgb), 0.3);
 }
 
 .delete-btn {
-  /* background-color: #ffebee; */ /* Old */
-  background-color: rgba(var(--danger-color-rgb), 0.2); /* New */
-  /* color: #d32f2f; */ /* Old */
-  color: var(--danger-color); /* New */
+  background-color: rgba(var(--danger-color-rgb), 0.2); 
+  color: var(--danger-color); 
 }
 .delete-btn:hover {
-  background-color: rgba(var(--danger-color-rgb), 0.3); /* New */
+  background-color: rgba(var(--danger-color-rgb), 0.3);
 }
 
-.error-message { /* Global error message style */
+.error-message { 
   color: var(--danger-color);
   background-color: rgba(var(--danger-color-rgb), 0.1);
   border: 1px solid rgba(var(--danger-color-rgb), 0.3);
@@ -229,7 +211,7 @@ tbody tr:last-child td {
   text-align: center;
   margin: 15px 0;
 }
-.loading-message { /* Global loading message style */
+.loading-message {
   text-align: center;
   padding: 20px;
   color: var(--text-muted);
