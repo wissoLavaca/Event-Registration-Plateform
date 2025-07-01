@@ -1,4 +1,4 @@
-import React, { useState } from 'react'; 
+import React, { useState, useEffect } from 'react'; 
 import type { User } from '../../context/authContext';
 import './Login.css';
 import mobilisLogo from '../../assets/mob.svg';
@@ -12,12 +12,17 @@ const Login: React.FC<LoginProps> = ({ onLoginSuccess }) => {
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
   
-
+  useEffect(() => {
+    // This effect runs when the component mounts and removes the dark-mode class from the body.
+    document.body.classList.remove('dark-mode');
+  }, []); // The empty dependency array means this effect runs only once.
   
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     setError(''); 
+    setIsLoading(true);
 
     try {
       
@@ -51,6 +56,8 @@ const Login: React.FC<LoginProps> = ({ onLoginSuccess }) => {
     } catch (err) {
       console.error('Login API call failed:', err);
       setError('An error occurred while logging in. Please try again.');
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -95,7 +102,9 @@ const Login: React.FC<LoginProps> = ({ onLoginSuccess }) => {
             </div>
           </div>
           {error && <p className="error-message">{error}</p>}
-          <button type="submit" className="login-button">Se Connecter</button>
+          <button type="submit" className="login-button" disabled={isLoading}>
+            {isLoading ? 'Connexion en cours...' : 'Se Connecter'}
+          </button>
         </form>
       </div>
     </div>
