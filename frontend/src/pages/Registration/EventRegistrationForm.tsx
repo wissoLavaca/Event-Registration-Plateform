@@ -1,9 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import './EventRegistrationForm.css';
-import ConfirmationModal from '../../components/Modal/ConfirmationModal'; // Adjust path as needed
+import ConfirmationModal from '../../components/Modal/ConfirmationModal';
 
-// Interface for the structure of a field fetched from backend
 interface BackendField {
   id_field: number;
   label: string;
@@ -18,24 +17,20 @@ interface BackendField {
   accepted_file_types?: string; 
 }
 
-// Interface for form data being collected
 interface FormDataState {
-  [key: string]: any; // Field ID as key (e.g., "field_123"), user's input as value (string, boolean, File, etc.)
+  [key: string]: any;
 }
 
-// Interface for a field response from the backend (when fetching existing registration)
 interface FieldResponseFromAPI {
-  id_response: number; // Added based on logs
-  id_inscription: number; // Added based on logs
-  // id_form_field: number; // The ID of the form field this response is for // OLD
-  id_field: number; // UPDATED to match backend log property name
+  id_response: number;
+  id_inscription: number;
+  id_field: number;
   response_text?: string | null;
   response_file_path?: string | null;
-  formField?: { // This nested structure seems correct based on logs
-    id_field: number; // This is the formField's own id_field, distinct from the response's id_field
+  formField?: {
+    id_field: number;
     label: string;
     type: { field_name: string };
-    // You might also have id_type, is_required, sequence here if your backend sends them nested under formField
   };
 }
 
@@ -44,17 +39,15 @@ interface ExistingRegistrationAPIResponse {
   fieldResponses: FieldResponseFromAPI[];
 }
 
-// ADD THIS INTERFACE FOR EVENT DETAILS
 interface EventDetails {
   title_event: string;
-  status: string; // To store the event's status
-  // Add other event properties if needed elsewhere in this component
+  status: string;
 }
 
 const EventRegistrationForm: React.FC = () => {
   const { eventId } = useParams<{ eventId: string }>();
   const navigate = useNavigate();
-  const [eventDetails, setEventDetails] = useState<EventDetails | null>(null); // Store full event details
+  const [eventDetails, setEventDetails] = useState<EventDetails | null>(null);
   const [fields, setFields] = useState<BackendField[]>([]);
   const [formData, setFormData] = useState<FormDataState>({});
   const [isLoading, setIsLoading] = useState(true);
@@ -64,18 +57,16 @@ const EventRegistrationForm: React.FC = () => {
   const [isReadOnly, setIsReadOnly] = useState(false);
   const [isLoadingRegistration, setIsLoadingRegistration] = useState(false);
 
-  // State for the confirmation modal
   const [isConfirmModalOpen, setIsConfirmModalOpen] = useState(false);
   const [confirmModalProps, setConfirmModalProps] = useState({
     message: '',
     onConfirmAction: () => {},
     confirmText: 'OK',
-    cancelText: 'Annuler', // Default to French
+    cancelText: 'Annuler',
     title: 'Confirmation'
   });
 
   const initializeEmptyFormData = (fieldsToInit: BackendField[]) => {
-    console.log("EventRegistrationForm: Initializing empty form data for fields:", fieldsToInit); // LOG A
     const initialData: FormDataState = {};
     fieldsToInit.forEach(field => {
       const fieldKey = `field_${field.id_field}`;
@@ -97,33 +88,29 @@ const EventRegistrationForm: React.FC = () => {
       }
     });
     setFormData(initialData);
-    console.log("EventRegistrationForm: Empty form data initialized:", initialData); // LOG B
   };
 
   useEffect(() => {
     const fetchEventAndFields = async () => {
       if (!eventId) return;
-      console.log("EventRegistrationForm: useEffect triggered for eventId:", eventId); // LOG 1
       setIsLoading(true);
       setIsLoadingRegistration(true);
       setError(null);
       setExistingRegistrationId(null);
       setIsReadOnly(false);
-      setEventDetails(null); // Reset event details
+      setEventDetails(null);
       const token = localStorage.getItem("authToken");
 
       let fetchedFieldsData: BackendField[] = [];
 
       try {
-        // --- Fetch Event Details ---
         const eventRes = await fetch(`http://localhost:3001/api/events/${eventId}`, {
           headers: { Authorization: `Bearer ${token}` },
         });
         if (!eventRes.ok) throw new Error('Failed to fetch event details.');
-        const eventData: EventDetails = await eventRes.json(); // Use the new interface
-        setEventDetails(eventData); // Store all event details including status
+        const eventData: EventDetails = await eventRes.json();
+        setEventDetails(eventData);
 
-        // --- Fetch Form Fields ---
         const fieldsRes = await fetch(`http://localhost:3001/api/events/${eventId}/form-fields`, {
           headers: { Authorization: `Bearer ${token}` },
         });
@@ -138,22 +125,16 @@ const EventRegistrationForm: React.FC = () => {
           fetchedFieldsData.sort((a, b) => a.sequence - b.sequence);
           setFields(fetchedFieldsData);
         }
-        console.log("EventRegistrationForm: Fetched form fields:", JSON.stringify(fetchedFieldsData, null, 2)); // LOG 2
 
-        // --- Check for Existing Registration ---
         try {
-          console.log("EventRegistrationForm: Checking for existing registration..."); // LOG 3
           const regCheckRes = await fetch(`http://localhost:3001/api/events/${eventId}/inscriptions/me`, {
             headers: { Authorization: `Bearer ${token}` },
           });
-          console.log("EventRegistrationForm: Existing registration API response status:", regCheckRes.status); // LOG 4
 
           if (regCheckRes.ok) {
             const registrationData: ExistingRegistrationAPIResponse = await regCheckRes.json();
-            console.log("EventRegistrationForm: Existing registration API response data:", JSON.stringify(registrationData, null, 2)); // LOG 5
 
             if (registrationData && registrationData.id_inscription && registrationData.fieldResponses) {
-              console.log("EventRegistrationForm: Existing registration FOUND. ID:", registrationData.id_inscription); // LOG 6
               setExistingRegistrationId(registrationData.id_inscription);
               setIsReadOnly(true);
 
@@ -161,8 +142,7 @@ const EventRegistrationForm: React.FC = () => {
               fetchedFieldsData.forEach(field => {
                 const fieldKey = `field_${field.id_field}`;
                 const response = registrationData.fieldResponses.find(
-                  // (r) => r.id_form_field === field.id_field // OLD - Likely incorrect based on logs
-                  (r) => r.id_field === field.id_field    // NEW - Assuming backend sends 'id_field' in fieldResponses
+                  (r) => r.id_field === field.id_field
                 );
 
                 if (response) {
@@ -178,8 +158,7 @@ const EventRegistrationForm: React.FC = () => {
                         return obj;
                       }, {} as {[key: string]: boolean});
                     } catch (parseError) {
-                      console.error(`Error parsing checkbox options for field ${field.id_field} from response_text: "${response.response_text}"`, parseError);
-                       populatedFormData[fieldKey] = field.options.reduce((obj, option) => {obj[option] = false; return obj;}, {} as {[key:string]:boolean});
+                      populatedFormData[fieldKey] = field.options.reduce((obj, option) => {obj[option] = false; return obj;}, {} as {[key:string]:boolean});
                     }
                   } else if (field.type.field_name === 'checkbox') {
                     populatedFormData[fieldKey] = response.response_text === 'true';
@@ -201,23 +180,18 @@ const EventRegistrationForm: React.FC = () => {
                   populatedFormData[fieldKey] = singleInitialData[fieldKey];
                 }
               });
-              console.log("EventRegistrationForm: Populated formData from existing registration:", JSON.stringify(populatedFormData, null, 2)); // LOG 7
               setFormData(populatedFormData);
             } else {
-              console.log("EventRegistrationForm: API returned OK but registration data is incomplete or missing. Initializing empty form. Data:", JSON.stringify(registrationData, null, 2)); // LOG 8
               initializeEmptyFormData(fetchedFieldsData);
             }
           } else if (regCheckRes.status === 404) {
-            console.log("EventRegistrationForm: No existing registration found (404). Initializing empty form."); // LOG 9
             initializeEmptyFormData(fetchedFieldsData);
           } else {
             const regErrorText = await regCheckRes.text();
-            console.error('EventRegistrationForm: Error checking existing registration. Status:', regCheckRes.status, "Response text:", regErrorText); // LOG 10
             setError(prev => prev ? `${prev}\nErreur lors de la vérification de l'inscription.` : 'Erreur lors de la vérification de l\'inscription.');
             initializeEmptyFormData(fetchedFieldsData);
           }
         } catch (regErr: any) {
-          console.error("EventRegistrationForm: Technical error during registration check:", regErr); // LOG 11
           setError(prev => prev ? `${prev}\nErreur technique lors de la vérification de l'inscription.` : 'Erreur technique lors de la vérification de l\'inscription.');
           initializeEmptyFormData(fetchedFieldsData);
         } finally {
@@ -225,25 +199,16 @@ const EventRegistrationForm: React.FC = () => {
         }
 
       } catch (err: any) {
-        console.error("EventRegistrationForm: Error fetching event/fields data:", err); // LOG 12
         setError(err.message || 'An error occurred while loading form data.');
         setFields([]);
         initializeEmptyFormData([]);
       } finally {
         setIsLoading(false);
-        // This console.log will show the state values *as they were when this finally block was entered*.
-        // For the most up-to-date state after all setters have potentially queued updates,
-        // it's better to log in the component body (like LOG 14).
-        // console.log("EventRegistrationForm: useEffect finally block. isReadOnly (at this point):", isReadOnly, "existingRegistrationId (at this point):", existingRegistrationId);
       }
     };
 
     fetchEventAndFields();
   }, [eventId]);
-
-  // LOG 14: Shows state on each render, good for seeing the result of state updates from useEffect
-  console.log("EventRegistrationForm: RENDERING. isReadOnly:", isReadOnly, "existingRegistrationId:", existingRegistrationId, "eventStatus:", eventDetails?.status, "formData:", JSON.stringify(formData, null, 2));
-
 
   const handleInputChange = (fieldId: number, value: any, optionKey?: string) => {
     const fieldKey = `field_${fieldId}`;
@@ -263,10 +228,9 @@ const EventRegistrationForm: React.FC = () => {
               fieldDefinition.accepted_file_types  || 'Non spécifié (vérifiez la configuration du formulaire)'
             }`
           );
-          // Clear the file input visually and from state
           const inputElement = document.getElementById(`field-${fieldId}`) as HTMLInputElement;
           if (inputElement) {
-            inputElement.value = ""; // Clears the selected file in the input element
+            inputElement.value = "";
           }
           setFormData(prev => ({ ...prev, [fieldKey]: null }));
           return;
@@ -274,21 +238,20 @@ const EventRegistrationForm: React.FC = () => {
       }
       setFormData(prev => ({
         ...prev,
-        [fieldKey]: file, // Store the single File object or null
+        [fieldKey]: file,
       }));
     } else if (actualFieldType === 'checkbox' && fieldDefinition.options && fieldDefinition.options.length > 0 && optionKey) {
-      // Checkbox group
       setFormData(prev => {
         const currentOptionsState = prev[fieldKey] as { [key: string]: boolean } || {};
         return {
           ...prev,
           [fieldKey]: {
             ...currentOptionsState,
-            [optionKey]: value // value is the boolean checked state
+            [optionKey]: value
           }
         };
       });
-    } else { // Handles text, number, date, single checkbox, radio
+    } else {
       setFormData(prev => ({
         ...prev,
         [fieldKey]: value,
@@ -309,7 +272,7 @@ const EventRegistrationForm: React.FC = () => {
   const handleDrop = (e: React.DragEvent, fieldId: number) => {
     e.preventDefault();
     e.currentTarget.classList.remove('dragover');
-    if (isReadOnly) return; // Prevent drop if read-only
+    if (isReadOnly) return;
 
     const fieldDefinition = fields.find(f => f.id_field === fieldId);
     if (!fieldDefinition || fieldDefinition.type.field_name !== 'file') return;
@@ -324,7 +287,6 @@ const EventRegistrationForm: React.FC = () => {
         );
         return;
       }
-      // Create a FileList-like object to pass to handleInputChange
       const dataTransfer = new DataTransfer();
       dataTransfer.items.add(droppedFile);
       handleInputChange(fieldId, dataTransfer.files, 'file');
@@ -354,9 +316,6 @@ const EventRegistrationForm: React.FC = () => {
             }
         } else if (field.type.field_name === 'checkbox' && (!field.options || field.options.length === 0)) { 
           if (fieldValue !== true) {
-            // alert(`Vous devez cocher "${field.label}".`); 
-            // setIsSubmitting(false);
-            // return;
           }
         } else if (!fieldValue && field.type.field_name !== 'checkbox') { 
           alert(`Le champ "${field.label}" est obligatoire.`);
@@ -407,24 +366,20 @@ const EventRegistrationForm: React.FC = () => {
         throw new Error(errorData.message || 'Échec de la soumission de l\'inscription.');
       }
 
-      // Replace alert with ConfirmationModal
       setConfirmModalProps({
         title: "Succès",
         message: "Inscription enregistrée avec succès!",
         onConfirmAction: () => {
-          // This action is called when "OK" is clicked on the modal
           navigate('/events', { state: { registrationSuccess: true, eventId: Number(eventId) } });
-          setIsConfirmModalOpen(false); // Close the modal
+          setIsConfirmModalOpen(false);
         },
         confirmText: "OK",
-        cancelText: "", // Pass empty string to hide the cancel button
+        cancelText: "",
       });
       setIsConfirmModalOpen(true);
 
     } catch (err: any) {
-      console.error('Submission error:', err);
       setError(err.message || 'Une erreur est survenue lors de la soumission.');
-      // Use modal for error message for consistency
       setConfirmModalProps({
         title: "Erreur",
         message: err.message || 'Une erreur est survenue lors de la soumission.',
@@ -440,11 +395,9 @@ const EventRegistrationForm: React.FC = () => {
 
   const handleDeleteRegistration = async () => {
     if (!existingRegistrationId) return;
-
-    // Open the modal instead of window.confirm
     setConfirmModalProps({
       message: "Êtes-vous sûr de vouloir supprimer votre inscription actuelle ? Vous pourrez vous réinscrire ensuite.",
-      onConfirmAction: () => performDeleteRegistration(), // Pass the actual delete function
+      onConfirmAction: () => performDeleteRegistration(),
       confirmText: "Supprimer",
       cancelText: "Annuler",
       title: "Confirmer la suppression"
@@ -453,10 +406,8 @@ const EventRegistrationForm: React.FC = () => {
   };
 
   const performDeleteRegistration = async () => {
-    // This is the logic that was previously inside the window.confirm block
-    if (!existingRegistrationId) return; // Should not happen if modal opened correctly
-
-    setIsConfirmModalOpen(false); // Close modal first
+    if (!existingRegistrationId) return;
+    setIsConfirmModalOpen(false);
     setIsSubmitting(true);
     setError(null);
     const token = localStorage.getItem("authToken");
@@ -472,7 +423,6 @@ const EventRegistrationForm: React.FC = () => {
         throw new Error(errorData.message || 'Échec de la suppression de l\'inscription.');
       }
 
-      // Use the modal for the success message, replacing the alert
       setConfirmModalProps({
         title: "Suppression réussie",
         message: "Inscription supprimée avec succès. Vous pouvez maintenant vous réinscrire.",
@@ -480,23 +430,21 @@ const EventRegistrationForm: React.FC = () => {
           setExistingRegistrationId(null);
           setIsReadOnly(false);
           initializeEmptyFormData(fields);
-          setIsConfirmModalOpen(false); // Close the success modal
+          setIsConfirmModalOpen(false);
         },
         confirmText: "OK",
-        cancelText: "", // Pass empty string to hide the cancel button
+        cancelText: "",
       });
       setIsConfirmModalOpen(true);
 
     } catch (err: any) {
-      console.error('Delete registration error:', err);
       setError(err.message || 'Une erreur est survenue lors de la suppression.');
-      // Also use the modal for error messages for consistency
       setConfirmModalProps({
         title: "Erreur",
         message: err.message || 'Une erreur est survenue lors de la suppression.',
         onConfirmAction: () => setIsConfirmModalOpen(false),
         confirmText: "OK",
-        cancelText: "", // Hide cancel button for error dialog
+        cancelText: "",
       });
       setIsConfirmModalOpen(true);
     } finally {
@@ -505,44 +453,38 @@ const EventRegistrationForm: React.FC = () => {
   };
 
   const handleModalConfirm = () => {
-    confirmModalProps.onConfirmAction(); // Execute the stored action
+    confirmModalProps.onConfirmAction();
   };
 
   const handleModalCancel = () => {
     setIsConfirmModalOpen(false);
   };
 
-  // Helper function to validate file type
-const isValidFileType = (file: File, acceptedTypesString?: string): boolean => {
-  if (!acceptedTypesString || acceptedTypesString.trim() === "") {
-    // If admin hasn't specified types, browser's default behavior for empty accept attribute applies.
-    // For stricter validation, you could return false here or have a default set of allowed types.
-    return true;
-  }
+  const isValidFileType = (file: File, acceptedTypesString?: string): boolean => {
+    if (!acceptedTypesString || acceptedTypesString.trim() === "") {
+      return true;
+    }
 
-  const acceptedTypesArray = acceptedTypesString.split(',').map(type => type.trim().toLowerCase());
-  const fileName = file.name.toLowerCase();
-  const fileMimeType = file.type.toLowerCase();
+    const acceptedTypesArray = acceptedTypesString.split(',').map(type => type.trim().toLowerCase());
+    const fileName = file.name.toLowerCase();
+    const fileMimeType = file.type.toLowerCase();
 
-  return acceptedTypesArray.some(type => {
-    // Check for exact MIME type match (e.g., "application/pdf")
-    if (type === fileMimeType) {
-      return true;
-    }
-    // Check for wildcard MIME type match (e.g., "image/*")
-    if (type.endsWith('/*') && fileMimeType.startsWith(type.slice(0, -2))) {
-      return true;
-    }
-    // Check for file extension match (e.g., ".pdf")
-    if (type.startsWith('.') && fileName.endsWith(type)) {
-      return true;
-    }
-    return false;
-  });
-};
+    return acceptedTypesArray.some(type => {
+      if (type === fileMimeType) {
+        return true;
+      }
+      if (type.endsWith('/*') && fileMimeType.startsWith(type.slice(0, -2))) {
+        return true;
+      }
+      if (type.startsWith('.') && fileName.endsWith(type)) {
+        return true;
+      }
+      return false;
+    });
+  };
 
   if (isLoading || isLoadingRegistration) return <div className="loading-indicator">Chargement du formulaire...</div>;
-  if (!eventDetails) return <div className="loading-indicator">Chargement des détails de l'événement...</div>; // Handle case where eventDetails is null
+  if (!eventDetails) return <div className="loading-indicator">Chargement des détails de l'événement...</div>;
 
   return (
     <div className="event-registration-form-container">
@@ -554,7 +496,6 @@ const isValidFileType = (file: File, acceptedTypesString?: string): boolean => {
         <p>Ce formulaire ne contient aucun champ pour le moment ou une erreur est survenue.</p>
       )}
 
-      {/* Render the Confirmation Modal */}
       <ConfirmationModal
         isOpen={isConfirmModalOpen}
         title={confirmModalProps.title}
@@ -601,8 +542,8 @@ const isValidFileType = (file: File, acceptedTypesString?: string): boolean => {
                   id={`field-${field.id_field}`}
                   value={formData[`field_${field.id_field}`] || ''}
                   onChange={e => handleInputChange(field.id_field, e.target.value)}
-                  required={!isReadOnly && field.is_required} // Corrected
-                  disabled={isSubmitting || isReadOnly} // Corrected
+                  required={!isReadOnly && field.is_required}
+                  disabled={isSubmitting || isReadOnly}
                 />
               )}
               {field.type.field_name === 'checkbox' && field.options && field.options.length > 0 && (
@@ -731,4 +672,3 @@ const isValidFileType = (file: File, acceptedTypesString?: string): boolean => {
 };
 
 export default EventRegistrationForm;
-
