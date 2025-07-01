@@ -2,7 +2,7 @@ import { useState, useEffect} from 'react';
 import { useNavigate } from 'react-router-dom';
 import FormBuilder from './FormBuilder';
 import {type Event} from '../Events/Events';
-import ConfirmationModal from '../../components/Modal/ConfirmationModal'; // <<<< ADD IMPORT
+import ConfirmationModal from '../../components/Modal/ConfirmationModal';
 import './Forms.css';
 
 const EventFieldManager = () => {
@@ -13,7 +13,6 @@ const EventFieldManager = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const navigate = useNavigate();
 
-  // --- State for Confirmation Modal ---
   const [isConfirmModalOpen, setIsConfirmModalOpen] = useState(false);
   const [confirmModalProps, setConfirmModalProps] = useState({
     message: '',
@@ -22,13 +21,12 @@ const EventFieldManager = () => {
     cancelText: 'Annuler',
     title: 'Confirmation'
   });
-  const [itemToDeleteId, setItemToDeleteId] = useState<number | null>(null); // To store ID for deletion
-  // --- End State for Confirmation Modal ---
+  const [itemToDeleteId, setItemToDeleteId] = useState<number | null>(null);
 
   const fetchEvents = () => {
     setIsLoading(true);
     const token = localStorage.getItem("authToken");
-    fetch('http://localhost:3001/api/events', { // Fetch events
+    fetch('http://localhost:3001/api/events', {
       headers: {
         'Content-Type': 'application/json',
         Authorization: `Bearer ${token}`,
@@ -56,7 +54,7 @@ const EventFieldManager = () => {
   }, []);
 
   const handleDeleteEventFields = async (eventId: number) => {
-    setItemToDeleteId(eventId); // Store the id
+    setItemToDeleteId(eventId);
     setConfirmModalProps({
       message: 'Êtes-vous sûr de vouloir supprimer tous les champs de formulaire pour cet événement ? Les réponses existantes pourraient être affectées.',
       onConfirmAction: () => performDeleteEventFields(),
@@ -69,7 +67,7 @@ const EventFieldManager = () => {
 
   const performDeleteEventFields = async () => {
     if (itemToDeleteId === null) return;
-    setIsConfirmModalOpen(false); // Close modal
+    setIsConfirmModalOpen(false);
 
     const token = localStorage.getItem("authToken");
     try {
@@ -92,10 +90,9 @@ const EventFieldManager = () => {
         alert('Une erreur inconnue est survenue.');
       }
     } finally {
-      setItemToDeleteId(null); // Reset stored ID
+      setItemToDeleteId(null);
     }
   };
-
 
   const handleModalConfirm = () => {
     confirmModalProps.onConfirmAction();
@@ -103,10 +100,10 @@ const EventFieldManager = () => {
 
   const handleModalCancel = () => {
     setIsConfirmModalOpen(false);
-    setItemToDeleteId(null); // Reset stored ID on cancel
+    setItemToDeleteId(null);
   };
 
-  const handleManageEventFields = (event: Event) => { // Parameter uses the imported Event type
+  const handleManageEventFields = (event: Event) => {
     setSelectedEventForFields(event);
     setShowFieldBuilder(true);
   };
@@ -114,17 +111,13 @@ const EventFieldManager = () => {
   const handleBackFromFieldBuilder = () => {
     setShowFieldBuilder(false);
     setSelectedEventForFields(null);
-    // fetchEvents(); 
   };
 
-  // This function is correctly defined and uses navigate
   const handleViewInscriptions = (eventId: number) => {
-    console.log("Navigating to inscriptions for eventId:", eventId); // Check this value
-  if (eventId === undefined || eventId === null) {
-    console.error("Event ID is undefined or null, cannot navigate.");
-    return;
-  }
-    navigate(`/admin/events/${eventId}/inscriptions`); 
+    if (eventId === undefined || eventId === null) {
+      return;
+    }
+    navigate(`/admin/events/${eventId}/inscriptions`);
   };
 
   const filteredEvents = events
@@ -139,7 +132,7 @@ const EventFieldManager = () => {
   }
 
   return (
-    <div className="forms-page"> 
+    <div className="forms-page">
       <div className="forms-header">
         <div className="title-section">
           <h1>Gestion des Champs par Événement</h1>
@@ -174,15 +167,11 @@ const EventFieldManager = () => {
           <div className="no-forms-message">
             <p>Aucun événement trouvé.</p>
           </div>
-         ) : (
-          filteredEvents.map(event => ( // 'event' here is of the imported Event type
-            <div key={event.id_event} className="form-card"> 
+        ) : (
+          filteredEvents.map(event => (
+            <div key={event.id_event} className="form-card">
               <div className="form-card-header">
                 <h3>{event.title_event}</h3>
-                {/* Display event status if available */}
-                {/* <span className={`status-badge status-${event.status_event}`}>
-                  
-                </span> */}
               </div>
               <p className="form-description">{event.description || 'Pas de description.'}</p>
               <div className="form-meta">
@@ -198,18 +187,13 @@ const EventFieldManager = () => {
                   <i className="fi fi-rr-settings"></i>
                   Gérer les Champs
                 </button>
-                {/* Add a button to trigger field deletion if needed, or integrate into Gérer les Champs */}
-                {/* For example, if you want a direct delete fields button: */}
-                {/* <button className="delete-fields-btn" onClick={() => handleDeleteEventFields(event.id_event)}>
-                  Supprimer les Champs
-                </button> */}
                 <button onClick={() => handleViewInscriptions(event.id_event)} className="view-inscriptions-btn">
                   Voir les inscriptions
-                </button> 
+                </button>
               </div>
             </div>
           ))
-    )}
+        )}
       </div>
     </div>
   );
