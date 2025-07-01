@@ -6,7 +6,6 @@ const BACKEND_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:3001'
 
 
 const Settings: React.FC = () => {
-  // State for password change
   const [passwordData, setPasswordData] = useState({
     currentPassword: '',
     newPassword: '',
@@ -15,16 +14,13 @@ const Settings: React.FC = () => {
   const [isPasswordSaving, setIsPasswordSaving] = useState(false);
   const [passwordMessage, setPasswordMessage] = useState<{ type: 'success' | 'error'; text: string } | null>(null);
 
-  // State for profile picture
   const [profileImage, setProfileImage] = useState<File | null>(null);
-  const [previewImage, setPreviewImage] = useState<string>(''); // For preview
+  const [previewImage, setPreviewImage] = useState<string>('');
   const [isProfileImageSaving, setIsProfileImageSaving] = useState(false);
   const [profileImageMessage, setProfileImageMessage] = useState<{ type: 'success' | 'error'; text: string } | null>(null);
 
-  // Auth context
-  const { user, updateUserProfilePicture, token } = useAuth(); // Assuming token is from useAuth for consistency
+  const { user, updateUserProfilePicture, token } = useAuth();
 
-  // Set initial preview image to current user's profile picture
   React.useEffect(() => {
     if (user?.profilePictureUrl) {
       const initialUrl = user.profilePictureUrl.startsWith('http') || user.profilePictureUrl.startsWith('blob:')
@@ -32,11 +28,10 @@ const Settings: React.FC = () => {
         : `${BACKEND_URL}${user.profilePictureUrl}`;
       setPreviewImage(initialUrl);
     } else {
-      setPreviewImage(''); // For default avatar
+      setPreviewImage('');
     }
   }, [user?.profilePictureUrl]);
 
-  // Handle password input change
   const handlePasswordInputChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setPasswordData(prev => ({
@@ -46,7 +41,6 @@ const Settings: React.FC = () => {
     setPasswordMessage(null);
   };
 
-  // Handle image file selection
   const handleImageChange = (e: ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {
       const file = e.target.files[0];
@@ -55,7 +49,7 @@ const Settings: React.FC = () => {
         setProfileImage(null);
         return;
       }
-      if (file.size > 2 * 1024 * 1024) { // 2MB limit
+      if (file.size > 2 * 1024 * 1024) {
         setProfileImageMessage({ type: 'error', text: 'L\'image est trop grande (max 2Mo).' });
         setProfileImage(null);
         return;
@@ -66,7 +60,6 @@ const Settings: React.FC = () => {
     }
   };
 
-  // Handle password form submit
   const handlePasswordSubmit = async (e: FormEvent) => {
     e.preventDefault();
     setPasswordMessage(null);
@@ -113,7 +106,6 @@ const Settings: React.FC = () => {
     }
   };
 
-  // Handle profile picture form submit
   const handleProfilePictureSubmit = async (e: FormEvent) => {
     e.preventDefault();
     setProfileImageMessage(null);
@@ -124,7 +116,6 @@ const Settings: React.FC = () => {
     }
 
     setIsProfileImageSaving(true);
-    // const token = localStorage.getItem("authToken"); // Prefer token from context if available
     if (!token) {
       setProfileImageMessage({ type: 'error', text: "Session expirée. Veuillez vous reconnecter." });
       setIsProfileImageSaving(false);
@@ -135,7 +126,7 @@ const Settings: React.FC = () => {
     formData.append('profilePicture', profileImage);
 
     try {
-      const response = await fetch(`${BACKEND_URL}/api/users/profile-picture`, { // Use BACKEND_URL
+      const response = await fetch(`${BACKEND_URL}/api/users/profile-picture`, {
         method: 'POST',
         headers: {
           'Authorization': `Bearer ${token}`
@@ -152,18 +143,13 @@ const Settings: React.FC = () => {
       setProfileImageMessage({ type: 'success', text: 'Photo de profil mise à jour avec succès !' });
 
       if (result.newProfilePictureUrl) {
-        // Ensure the URL is absolute before setting it for preview and context
         const fullNewUrl = result.newProfilePictureUrl.startsWith('http')
           ? result.newProfilePictureUrl
           : `${BACKEND_URL}${result.newProfilePictureUrl}`;
-        
-        console.log("New profile picture URL from backend:", result.newProfilePictureUrl);
-        console.log("Setting preview and context URL to:", fullNewUrl);
-
-        setPreviewImage(fullNewUrl); // Update preview on settings page
-        updateUserProfilePicture(fullNewUrl); // Update context
+        setPreviewImage(fullNewUrl);
+        updateUserProfilePicture(fullNewUrl);
       }
-      setProfileImage(null); // Clear the selected file
+      setProfileImage(null);
 
     } catch (error: any) {
       setProfileImageMessage({ type: 'error', text: error.message || 'Une erreur est survenue lors de la mise à jour de la photo.' });
@@ -175,7 +161,6 @@ const Settings: React.FC = () => {
   const handleDeleteProfilePicture = async () => {
     setProfileImageMessage(null);
     setIsProfileImageSaving(true);
-    // const token = localStorage.getItem("authToken"); // Prefer token from context
     if (!token) {
       setProfileImageMessage({ type: 'error', text: "Session expirée. Veuillez vous reconnecter." });
       setIsProfileImageSaving(false);
@@ -183,7 +168,7 @@ const Settings: React.FC = () => {
     }
 
     try {
-      const response = await fetch(`${BACKEND_URL}/api/users/profile-picture`, { // Use BACKEND_URL
+      const response = await fetch(`${BACKEND_URL}/api/users/profile-picture`, {
         method: 'DELETE',
         headers: {
           'Authorization': `Bearer ${token}`
@@ -194,17 +179,16 @@ const Settings: React.FC = () => {
       if (!response.ok) {
         throw new Error(result.message || "Erreur lors de la suppression de la photo.");
       }
-      
+
       setProfileImageMessage({ type: 'success', text: 'Photo de profil supprimée.' });
-      setPreviewImage(''); // For default avatar
-      updateUserProfilePicture(''); // Update context to reflect no picture
+      setPreviewImage('');
+      updateUserProfilePicture('');
     } catch (error: any) {
       setProfileImageMessage({ type: 'error', text: error.message || 'Une erreur est survenue lors de la suppression.' });
     } finally {
       setIsProfileImageSaving(false);
     }
   };
-
 
   return (
     <div className="settings-page">
@@ -220,8 +204,8 @@ const Settings: React.FC = () => {
                 className="profile-preview"
                 onError={(e) => { (e.target as HTMLImageElement).src = '/default-avatar.png'; console.error("Error loading profile image:", previewImage);}}
               />
-              <div className="upload-actions-container"> {/* Added a wrapper for buttons */}
-                <div className="upload-button-wrapper"> {/* Wrapper for input and label */}
+              <div className="upload-actions-container">
+                <div className="upload-button-wrapper">
                   <input
                     type="file"
                     id="profile-picture-input"
@@ -237,7 +221,7 @@ const Settings: React.FC = () => {
                 {user?.profilePictureUrl && previewImage && !previewImage.endsWith('/default-avatar.png') && (
                   <button
                     type="button"
-                    className="upload-button delete-picture-button" // Added 'upload-button' for base style, 'delete-picture-button' for color
+                    className="upload-button delete-picture-button"
                     onClick={handleDeleteProfilePicture}
                     disabled={isProfileImageSaving}
                   >
@@ -259,7 +243,6 @@ const Settings: React.FC = () => {
           </form>
         </div>
 
-        {/* Password Change Section */}
         <div className="settings-section">
           <h2>Changer le mot de passe</h2>
           <form onSubmit={handlePasswordSubmit} className="password-form">
