@@ -417,16 +417,22 @@ const EventRegistrationForm: React.FC = () => {
           setIsConfirmModalOpen(false); // Close the modal
         },
         confirmText: "OK",
-        cancelText: "Fermer", // The "Fermer" button will just close the modal via handleModalCancel
+        cancelText: "", // Pass empty string to hide the cancel button
       });
       setIsConfirmModalOpen(true);
 
     } catch (err: any) {
       console.error('Submission error:', err);
-      // For errors, you might also want to use the modal, or keep the alert for now.
-      // This example only changes the success message.
       setError(err.message || 'Une erreur est survenue lors de la soumission.');
-      alert(`Erreur: ${err.message}`);
+      // Use modal for error message for consistency
+      setConfirmModalProps({
+        title: "Erreur",
+        message: err.message || 'Une erreur est survenue lors de la soumission.',
+        onConfirmAction: () => setIsConfirmModalOpen(false),
+        confirmText: "OK",
+        cancelText: "",
+      });
+      setIsConfirmModalOpen(true);
     } finally {
       setIsSubmitting(false);
     }
@@ -466,15 +472,33 @@ const EventRegistrationForm: React.FC = () => {
         throw new Error(errorData.message || 'Échec de la suppression de l\'inscription.');
       }
 
-      alert('Inscription supprimée avec succès. Vous pouvez maintenant vous réinscrire.'); // You might replace this alert too
-      setExistingRegistrationId(null);
-      setIsReadOnly(false);
-      initializeEmptyFormData(fields);
+      // Use the modal for the success message, replacing the alert
+      setConfirmModalProps({
+        title: "Suppression réussie",
+        message: "Inscription supprimée avec succès. Vous pouvez maintenant vous réinscrire.",
+        onConfirmAction: () => {
+          setExistingRegistrationId(null);
+          setIsReadOnly(false);
+          initializeEmptyFormData(fields);
+          setIsConfirmModalOpen(false); // Close the success modal
+        },
+        confirmText: "OK",
+        cancelText: "", // Pass empty string to hide the cancel button
+      });
+      setIsConfirmModalOpen(true);
 
     } catch (err: any) {
       console.error('Delete registration error:', err);
       setError(err.message || 'Une erreur est survenue lors de la suppression.');
-      alert(`Erreur: ${err.message}`); // You might replace this alert too
+      // Also use the modal for error messages for consistency
+      setConfirmModalProps({
+        title: "Erreur",
+        message: err.message || 'Une erreur est survenue lors de la suppression.',
+        onConfirmAction: () => setIsConfirmModalOpen(false),
+        confirmText: "OK",
+        cancelText: "", // Hide cancel button for error dialog
+      });
+      setIsConfirmModalOpen(true);
     } finally {
       setIsSubmitting(false);
     }
@@ -581,38 +605,38 @@ const isValidFileType = (file: File, acceptedTypesString?: string): boolean => {
                   disabled={isSubmitting || isReadOnly} // Corrected
                 />
               )}
-              {field.type.field_name === 'checkbox' && (
-                <>
-                  {field.options && field.options.length > 0 ? (
-                    <div className="checkbox-group">
-                      {field.options.map(option => (
-                        <div key={option} className="checkbox-option">
-                          <input
-                            type="checkbox"
-                            id={`field-${field.id_field}-${option.replace(/\s+/g, '-')}`}
-                            checked={!!(formData[`field_${field.id_field}`] as { [key: string]: boolean })?.[option]}
-                            onChange={e => handleInputChange(field.id_field, e.target.checked, option)}
-                            disabled={isSubmitting || isReadOnly}
-                          />
-                          <label htmlFor={`field-${field.id_field}-${option.replace(/\s+/g, '-')}`}>{option}</label>
-                        </div>
-                      ))}
-                    </div>
-                  ) : (
-                    <input
-                      type="checkbox"
-                      id={`field-${field.id_field}`}
-                      checked={!!formData[`field_${field.id_field}`]}
-                      onChange={e => handleInputChange(field.id_field, e.target.checked)}
-                      disabled={isSubmitting || isReadOnly}
-                    />
-                  )}
-                </>
+              {field.type.field_name === 'checkbox' && field.options && field.options.length > 0 && (
+                <div className="checkbox-group">
+                  {field.options.map(option => (
+                    <label key={option} className="checkbox-option">
+                      <input
+                        type="checkbox"
+                        id={`field-${field.id_field}-${option.replace(/\s+/g, '-')}`}
+                        checked={!!(formData[`field_${field.id_field}`] as { [key: string]: boolean })?.[option]}
+                        onChange={e => handleInputChange(field.id_field, e.target.checked, option)}
+                        disabled={isSubmitting || isReadOnly}
+                      />
+                      <span className="option-label-text">{option}</span>
+                    </label>
+                  ))}
+                </div>
+              )}
+              {field.type.field_name === 'checkbox' && (!field.options || field.options.length === 0) && (
+                <label className="checkbox-option">
+                  <input
+                    type="checkbox"
+                    id={`field-${field.id_field}`}
+                    checked={!!formData[`field_${field.id_field}`]}
+                    onChange={e => handleInputChange(field.id_field, e.target.checked)}
+                    disabled={isSubmitting || isReadOnly}
+                  />
+                  <span className="option-label-text">{field.label}</span>
+                </label>
               )}
               {field.type.field_name === 'radio' && field.options && field.options.length > 0 && (
                 <div className="radio-group">
                   {field.options.map(option => (
-                    <div key={option} className="radio-option">
+                    <label key={option} className="radio-option">
                       <input
                         type="radio"
                         id={`field-${field.id_field}-${option.replace(/\s+/g, '-')}`}
@@ -622,17 +646,16 @@ const isValidFileType = (file: File, acceptedTypesString?: string): boolean => {
                         onChange={e => handleInputChange(field.id_field, e.target.value)}
                         disabled={isSubmitting || isReadOnly}
                       />
-                      <label htmlFor={`field-${field.id_field}-${option.replace(/\s+/g, '-')}`}>{option}</label>
-                    </div>
+                      <span className="option-label-text">{option}</span>
+                    </label>
                   ))}
                 </div>
               )}
               {field.type.field_name === 'file' && (
-                <div className={`file-input-wrapper ${isReadOnly ? 'read-only' : ''}`}> {/* Added wrapper for styling context */}
+                <div className={`file-input-wrapper ${isReadOnly ? 'read-only' : ''}`}>
                   {isReadOnly && formData[`field_${field.id_field}`] && (formData[`field_${field.id_field}`] as any).isExisting ? (
                     <div className="file-name-display read-only-file">
                       Fichier soumis: {(formData[`field_${field.id_field}`] as any).name}
-                      {/* Optionally add a download link here if you have the file URL */}
                     </div>
                   ) : (
                     <div 
@@ -681,17 +704,17 @@ const isValidFileType = (file: File, acceptedTypesString?: string): boolean => {
               )}
             </div>
           ))}
-          {isReadOnly && eventDetails?.status === "En cours" ? ( // MODIFIED CONDITION HERE
+          {isReadOnly && eventDetails?.status === "En cours" ? ( 
             <button
               type="button"
-              onClick={handleDeleteRegistration} // This now opens the modal
-              className="delete-registration-button" // You can style this to look like a delete button
+              onClick={handleDeleteRegistration} 
+              className="delete-registration-button" 
               disabled={isSubmitting}
             >
               Supprimer l'inscription et se réinscrire
             </button>
           ) : isReadOnly ? (
-             <p className="info-message">La modification ou suppression n'est pas possible.</p> // Optional: message when delete is not allowed
+             <p className="info-message">La modification ou suppression n'est pas possible.</p>
           ) : (
             <button
               type="submit"
