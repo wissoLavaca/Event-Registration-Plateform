@@ -19,10 +19,9 @@ import { useAuth } from '../../context/authContext';
 import { useTheme } from '../../context/themeContext';
 import { useNotifications } from '../../context/notificationContext';
 import { UINotificationType } from '../../types/notification.types';
-import { formatDistanceToNow, parseISO, subDays, isWithinInterval, startOfYear, endOfYear } from 'date-fns'; // Added date-fns functions
+import { formatDistanceToNow, parseISO, subDays, isWithinInterval, startOfYear, endOfYear } from 'date-fns';
 import { fr } from 'date-fns/locale';
 import { FaChevronLeft, FaChevronRight } from 'react-icons/fa';
-
 
 const generateHslaColor = (index: number, totalItems: number, saturation: number = 70, lightness: number = 60, alpha: number = 0.6): string => {
   const hue = (index * (360 / Math.max(1, totalItems))) % 360;
@@ -42,7 +41,6 @@ ChartJS.register(
   Filler
 );
 
-// Admin Chart Data Interfaces
 interface RegistrationsPerEvent {
   eventName: string;
   registrationcount: number;
@@ -56,7 +54,6 @@ interface RegistrationsByDepartment {
   registrationcount: number;
 }
 
-// Employee Data Interfaces
 interface MyEvent {
   id_event: string | number;
   title_event: string;
@@ -69,7 +66,6 @@ interface RegisteredEvent extends MyEvent {
   registrationDate: string;
 }
 
-// Helper functions (getNotificationIconClass, getIconBgClass, formatRelativeTime)
 const getNotificationIconClass = (type: UINotificationType): string => {
   switch (type) {
     case UINotificationType.EVENT_CREATED: return "fas fa-briefcase";
@@ -101,27 +97,18 @@ type TimeRange = '30d' | '90d' | '1y';
 const AdminDashboardView = () => {
   const { user, token } = useAuth();
   const { notifications, isLoading: isLoadingNotifications, error: notificationsError } = useNotifications();
-  const { theme } = useTheme(); // Use the theme from context
+  const { theme } = useTheme();
 
-  // --- THEME STATE ---
-  // Default to 'light', or you could load a preference from localStorage
-  // const [currentTheme, setCurrentTheme] = useState<'light' | 'dark'>('light');
-
-  // --- Chart Style State ---
-  // Initial values are less critical as useEffect will set them based on currentTheme
   const [chartStyleOptions, setChartStyleOptions] = useState({
     tickColor: '#000000',
     gridColor: 'rgba(0, 0, 0, 0.1)',
     legendLabelColor: '#000000'
   });
 
-  // Admin States
   const [eventCount, setEventCount] = useState<number | null>(null);
   const [userCount, setUserCount] = useState<number | null>(null);
   const [registrationsPerEventData, setRegistrationsPerEventData] = useState<RegistrationsPerEvent[]>([]);
-  // Store the full dataset from the API for registrations over time
   const [allRegistrationsOverTimeData, setAllRegistrationsOverTimeData] = useState<RegistrationsOverTime[]>([]);
-  // This will hold the currently displayed (filtered) data for registrations over time
   const [filteredRegistrationsOverTimeData, setFilteredRegistrationsOverTimeData] = useState<RegistrationsOverTime[]>([]);
   const [registrationsByDeptData, setRegistrationsByDeptData] = useState<RegistrationsByDepartment[]>([]);
   const [isLoadingStats, setIsLoadingStats] = useState(true);
@@ -129,10 +116,8 @@ const AdminDashboardView = () => {
   const [isLoadingRegOverTime, setIsLoadingRegOverTime] = useState(true);
   const [isLoadingRegByDept, setIsLoadingRegByDept] = useState(true);
 
-  // State for the selected time range for the registrations over time chart
-  const [selectedTimeRange, setSelectedTimeRange] = useState<TimeRange>('1y'); // Default to '1y'
+  const [selectedTimeRange, setSelectedTimeRange] = useState<TimeRange>('1y');
 
-  // AEmployee States
   const [myUpcomingEvents, setMyUpcomingEvents] = useState<MyEvent[]>([]);
   const [ongoingEvents, setOngoingEvents] = useState<MyEvent[]>([]);
   const [finishedEvents, setFinishedEvents] = useState<MyEvent[]>([]);
@@ -142,31 +127,9 @@ const AdminDashboardView = () => {
   const [employeeDataError, setEmployeeDataError] = useState<string | null>(null);
   const [currentInscriptionsPage, setCurrentInscriptionsPage] = useState(1);
 
-  // ILLUSTRATIVE: Function to toggle theme (you'll call this from a button)
-  // const handleToggleTheme = () => {
-  //   setCurrentTheme(prevTheme => {
-  //     const newTheme = prevTheme === 'light' ? 'dark' : 'light';
-  //     // Optional: Save theme preference to localStorage
-  //     // localStorage.setItem('appTheme', newTheme);
-  //     return newTheme;
-  //   });
-  // };
-
-  // Optional: useEffect to load theme from localStorage on initial mount
-  // useEffect(() => {
-  //   const savedTheme = localStorage.getItem('appTheme') as 'light' | 'dark' | null;
-  //   if (savedTheme) {
-  //     setCurrentTheme(savedTheme);
-  //   }
-  //   // If no saved theme, it defaults to 'light' from useState
-  // }, []);
-
-
-  // This useEffect hook handles theme changes for chart styling AND body class
   useEffect(() => {
-    console.log(`Applying theme: ${theme}`); // For debugging
+    console.log(`Applying theme: ${theme}`);
     if (theme === 'dark') {
-      // Dark Mode
       ChartJS.defaults.color = '#FFFFFF';
       ChartJS.defaults.scale.ticks.color = '#FFFFFF';
       ChartJS.defaults.plugins.legend.labels.color = '#FFFFFF';
@@ -176,7 +139,6 @@ const AdminDashboardView = () => {
         legendLabelColor: '#FFFFFF'
       });
     } else {
-      // Light Mode
       ChartJS.defaults.color = '#000000';
       ChartJS.defaults.scale.ticks.color = '#000000';
       ChartJS.defaults.plugins.legend.labels.color = '#000000';
@@ -192,20 +154,15 @@ const AdminDashboardView = () => {
     if (!token) return;
     const headers = { 'Authorization': `Bearer ${token}` };
 
-    // Fetch Admin Stats 
     setIsLoadingStats(true);
     fetch('http://localhost:3001/api/events/count', { headers }).then(res => res.json()).then(data => setEventCount(data.count)).catch(() => setEventCount(0));
     fetch('http://localhost:3001/api/users/count', { headers }).then(res => res.json()).then(data => setUserCount(data.count)).catch(() => setUserCount(0)).finally(() => setIsLoadingStats(false));
-
-    // Fetch Registrations Per Event
     setIsLoadingRegPerEvent(true);
     fetch('http://localhost:3001/api/admin/dashboard/registrations-per-event', { headers })
       .then(res => res.ok ? res.json() : Promise.reject(res))
       .then((data: RegistrationsPerEvent[]) => setRegistrationsPerEventData(data))
       .catch(err => { console.error("Error fetching registrations per event:", err); setRegistrationsPerEventData([]); })
       .finally(() => setIsLoadingRegPerEvent(false));
-    
-    // Fetch all the Registrations 
     setIsLoadingRegOverTime(true);
     fetch('http://localhost:3001/api/admin/dashboard/registrations-over-time', { headers })
       .then(res => res.ok ? res.json() : Promise.reject(res))
@@ -215,21 +172,17 @@ const AdminDashboardView = () => {
       })
       .catch(err => { console.error("Error fetching registrations over time:", err); setAllRegistrationsOverTimeData([]); })
       .finally(() => setIsLoadingRegOverTime(false));
-
-    // Fetch Registrations per Department
     setIsLoadingRegByDept(true);
     fetch('http://localhost:3001/api/admin/dashboard/registrations-by-department', { headers })
       .then(res => res.ok ? res.json() : Promise.reject(res))
       .then((data: RegistrationsByDepartment[]) => setRegistrationsByDeptData(data))
       .catch(err => { console.error("Error fetching registrations by department:", err); setRegistrationsByDeptData([]); })
       .finally(() => setIsLoadingRegByDept(false));
-    
-    // Fetch Employee Data
     if (user?.userId) {
       setIsLoadingEmployeeData(true); setEmployeeDataError(null);
       const fetchEventSummary = fetch(`http://localhost:3001/api/events/me/summary`, { headers })
         .then(res => res.ok ? res.json() : res.text().then(text => { throw new Error(`Failed to fetch event summary: ${res.status} ${text}`) }))
-        .then(data => { setMyUpcomingEvents(data.upcomingEvents || []); setOngoingEvents(data.ongoingEvents || []); setFinishedEvents(data.finishedEvents || []); setCancelledEvents(data.cancelledEvents || []); });
+        .then(data => { setMyUpcomingEvents(data.upcomingEvents || []); setOngoingEvents(data.ongoingEvents || []); setFinishedEvents(data.finishedEvents || []); setCancelledEvents(data.cancelled || []); });
       const fetchRegisteredEvents = fetch(`http://localhost:3001/api/events/me/registered`, { headers })
         .then(res => res.ok ? res.json() : res.text().then(text => { throw new Error(`Failed to fetch registered events: ${res.status} ${text}`) }))
         .then(data => setMyRegisteredEvents(data || []));
@@ -257,34 +210,30 @@ const AdminDashboardView = () => {
         filteredData = allRegistrationsOverTimeData.filter(d => isWithinInterval(parseISO(d.date), { start: ninetyDaysAgo, end: today }));
         break;
       case '1y':
-      default: // Default to '1y' which shows data for the current calendar year
+      default:
         const startOfTheCurrentYear = startOfYear(today);
         const endOfTheCurrentYear = endOfYear(today);
         filteredData = allRegistrationsOverTimeData.filter(d => isWithinInterval(parseISO(d.date), { start: startOfTheCurrentYear, end: endOfTheCurrentYear }));
-        // If '1y' should mean all available data, use:
-        // filteredData = [...allRegistrationsOverTimeData];
         break;
     }
     setFilteredRegistrationsOverTimeData(filteredData);
   }, [allRegistrationsOverTimeData, selectedTimeRange]);
 
-  // Admin Stats array
   const stats = [
     { title: "Total Événements", value: eventCount, icon: "fas fa-calendar-check", colorClass: "green" },
     { title: "Total Utilisateurs", value: userCount, icon: "fas fa-users", colorClass: "green" },
   ];
 
-  // Chart Data and Options
   const regPerEventChartData = {
     labels: registrationsPerEventData.map(d => d.eventName),
     datasets: [{
       label: 'Inscriptions par Événement',
       data: registrationsPerEventData.map(d => d.registrationcount),
       backgroundColor: registrationsPerEventData.map((_, index) =>
-        generateHslaColor(index, registrationsPerEventData.length, 70, 60, 0.85) // Increased alpha to 0.85
+        generateHslaColor(index, registrationsPerEventData.length, 70, 60, 0.85)
       ),
       borderColor: registrationsPerEventData.map((_, index) =>
-        generateHslaColor(index, registrationsPerEventData.length, 70, 60, 1) // Border is already opaque
+        generateHslaColor(index, registrationsPerEventData.length, 70, 60, 1)
       ),
       borderWidth: 1,
     }],
@@ -295,13 +244,13 @@ const AdminDashboardView = () => {
     indexAxis: 'x' as const,
     layout: {
       padding: {
-        bottom: 80 // Adds space at the bottom for long labels
+        bottom: 80
       }
     },
     plugins: {
       legend: {
         display: true,
-        position: 'top' as const, // Add 'as const' here
+        position: 'top' as const,
         labels: {
           color: chartStyleOptions.legendLabelColor,
         }
@@ -314,10 +263,9 @@ const AdminDashboardView = () => {
       x: {
         ticks: {
           color: chartStyleOptions.tickColor,
-          // This callback shortens long labels to prevent overlap
           callback: function(this: Scale, value: number | string): string {
             const label = this.getLabelForValue(Number(value));
-            if (label.length > 25) { // Adjust character limit as needed
+            if (label.length > 25) {
               return label.substring(0, 25) + '...';
             }
             return label;
@@ -341,15 +289,15 @@ const AdminDashboardView = () => {
     datasets: [{
       label: 'Inscriptions par Département',
       data: registrationsByDeptData.map(d => d.registrationcount),
-      backgroundColor: [ // New palette based on your request
-        'rgba(255, 99, 132, 0.85)',  // FF6384
-        'rgba(54, 162, 235, 0.85)',  // 36A2EB
-        'rgba(255, 206, 86, 0.85)',  // FFCE56
-        'rgba(75, 192, 192, 0.85)',  // 4BC0C0
-        'rgba(153, 102, 255, 0.85)', // 9966FF
-        'rgba(255, 159, 64, 0.85)'   // FF9F40
+      backgroundColor: [
+        'rgba(255, 99, 132, 0.85)',
+        'rgba(54, 162, 235, 0.85)',
+        'rgba(255, 206, 86, 0.85)',
+        'rgba(75, 192, 192, 0.85)',
+        'rgba(153, 102, 255, 0.85)',
+        'rgba(255, 159, 64, 0.85)'
       ],
-      borderColor: [ // Corresponding border colors (fully opaque)
+      borderColor: [
         'rgba(255, 99, 132, 1)',
         'rgba(54, 162, 235, 1)',
         'rgba(255, 206, 86, 1)',
@@ -371,7 +319,7 @@ const AdminDashboardView = () => {
           usePointStyle: true,
           pointStyle: 'circle',
           padding: 20,
-          color: chartStyleOptions.legendLabelColor, // Apply black/white color
+          color: chartStyleOptions.legendLabelColor,
         }
       },
       title: {
@@ -385,37 +333,29 @@ const AdminDashboardView = () => {
               label += ': ';
             }
             if (context.parsed !== null) {
-              // You might want to show percentage or raw value
               label += context.formattedValue;
-              // To calculate percentage for doughnut/pie:
-              // const total = context.dataset.data.reduce((acc: number, val: number) => acc + val, 0);
-              // const percentage = ((context.raw / total) * 100).toFixed(2) + '%';
-              // label += ` (${percentage})`;
             }
             return label;
           }
         }
       }
     },
-    // Add other options specific to your chart type (Doughnut, Pie, Bar, etc.)
-    // For Doughnut/Pie, you might not need scales.
-    // For Bar charts, you would define scales.x and scales.y similar to regOverTimeChartOptions
   };
 
   const regOverTimeChartData = {
     labels: filteredRegistrationsOverTimeData.map(d => d.date),
     datasets: [{
-      label: 'Inscriptions', // Simplified label
+      label: 'Inscriptions',
       data: filteredRegistrationsOverTimeData.map(d => d.registrationcount),
       fill: true,
-      backgroundColor: 'rgba(75, 192, 192, 0.2)', // Example: Teal area
-      borderColor: 'rgb(75, 192, 192)',       // Example: Teal line
+      backgroundColor: 'rgba(75, 192, 192, 0.2)',
+      borderColor: 'rgb(75, 192, 192)',
       tension: 0.4,
       pointBackgroundColor: 'rgb(75, 192, 192)',
       pointBorderColor: '#fff',
       pointHoverBackgroundColor: '#fff',
       pointHoverBorderColor: 'rgb(75, 192, 192)',
-      pointRadius: selectedTimeRange === '1y' ? 3 : 4, // Smaller points for yearly view if dense
+      pointRadius: selectedTimeRange === '1y' ? 3 : 4,
       pointHoverRadius: selectedTimeRange === '1y' ? 5 : 6,
     }],
   };
@@ -424,7 +364,7 @@ const AdminDashboardView = () => {
     maintainAspectRatio: false,
     plugins: {
       legend: {
-        display: false, // Your custom legend is used
+        display: false,
       },
       title: { display: false }
     },
@@ -445,7 +385,7 @@ const AdminDashboardView = () => {
       },
       x: {
         ticks: {
-          color: chartStyleOptions.tickColor, // Apply black/white color
+          color: chartStyleOptions.tickColor,
           autoSkip: true,
           maxRotation: selectedTimeRange === '1y' ? 0 : 45,
           minRotation: 0,
@@ -460,14 +400,13 @@ const AdminDashboardView = () => {
                 }
                 return dateObj.toLocaleDateString('fr-FR', { month: 'short', day: 'numeric' });
               } catch (e) {
-                // console.error("Error parsing or formatting date for chart tick:", e, "Input string:", dateStr);
                 return dateStr;
               }
             }
             return value;
           }
         },
-        grid: { display: false } // Or use chartStyleOptions.gridColor if x-axis grid is needed
+        grid: { display: false }
       }
     },
   };
@@ -523,9 +462,8 @@ const AdminDashboardView = () => {
     );
   };
 
-  const latestNotifications = notifications.slice(0, 4); // Get the latest 4 notifications
+  const latestNotifications = notifications.slice(0, 4);
 
-  // Pagination logic for "Mes Inscriptions"
   const indexOfLastInscription = currentInscriptionsPage * ITEMS_PER_INSCRIPTIONS_PAGE;
   const indexOfFirstInscription = indexOfLastInscription - ITEMS_PER_INSCRIPTIONS_PAGE;
   const currentMyInscriptions = myRegisteredEvents.slice(indexOfFirstInscription, indexOfLastInscription);
@@ -539,20 +477,11 @@ const AdminDashboardView = () => {
     setCurrentInscriptionsPage((prev) => Math.max(prev - 1, 1));
   };
 
-
   return (
-    // Add a class to the main dashboard view for more specific CSS targeting if needed
-    // Or rely on the body class set by the useEffect
     <div className={`admin-dashboard-view dashboard ${theme}-mode-active`}>
-      {/* ILLUSTRATIVE: Add a theme toggle button somewhere accessible */}
-      {/* <button onClick={handleToggleTheme} style={{ position: 'fixed', top: '10px', right: '10px', zIndex: 1000 }}>
-        Switch to {currentTheme === 'light' ? 'Dark' : 'Light'} Mode
-      </button> */}
-
-      {/* Admin Stats Grid */}
       <div className="stats-overview-grid">
-        {stats.map((stat) => ( // Changed from (stat, index)
-          <div key={stat.title} className={`stat-card-item ${stat.colorClass}`}> {/* Use stat.title if unique */}
+        {stats.map((stat) => (
+          <div key={stat.title} className={`stat-card-item ${stat.colorClass}`}>
             <div className="stat-icon-container">
               <i className={stat.icon}></i>
             </div>
@@ -563,8 +492,6 @@ const AdminDashboardView = () => {
           </div>
         ))}
       </div>
-      
-      {/* Employee Event Categories Summary */}
       {isLoadingEmployeeData && <p className="loading-message" style={{ textAlign: 'center', margin: '20px 0' }}>Chargement du résumé des événements...</p>}
       {employeeDataError && <p className="error-message" style={{ color: 'red', textAlign: 'center', margin: '20px 0' }}>Erreur (résumé événements): {employeeDataError}</p>}
       {!isLoadingEmployeeData && !employeeDataError && (
@@ -575,25 +502,20 @@ const AdminDashboardView = () => {
           {renderEventCard(cancelledEvents, "Événements Annulés", "cancelled")}
         </div>
       )}
-      
       <h2 className="section-title" style={{ marginTop: '40px' }}>Statistiques Administratives Détaillées</h2>
       <div className="charts-section">
-        {/* Inscriptions par Événement Chart (Full Width) */}
         <div className="chart-container chart-container-full">
           <h3>Inscriptions par Événement</h3>
           {isLoadingRegPerEvent ? <p>Chargement...</p> : (registrationsPerEventData.length > 0 ? <Bar options={regPerEventChartOptions} data={regPerEventChartData} /> : <p>Aucune donnée disponible.</p>)}
         </div>
-
-        {/* Other charts in a row */}
         <div className="chart-row">
-          {/* Évolution des Inscriptions Chart with Time Range Filters (Half Width) */}
           <div className="chart-container chart-container-half">
-            <h3>Évolution des Inscriptions</h3> {/* Centered by existing CSS */}
+            <h3>Évolution des Inscriptions</h3>
             <div className="chart-sub-header-controls">
               <div className="time-range-buttons">
                 {(['30d', '90d', '1y'] as TimeRange[]).map(range => (
                   <button
-                    key={range} // This was correctly identified as needing a key
+                    key={range}
                     className={`time-range-button ${selectedTimeRange === range ? 'active' : ''}`}
                     onClick={() => setSelectedTimeRange(range)}
                   >
@@ -616,13 +538,12 @@ const AdminDashboardView = () => {
               )
             }
           </div>
-
           <div className="chart-container chart-container-half chart-container-centered">
             <h3>Inscriptions par Département</h3>
             {isLoadingRegByDept ? 
               <p>Chargement...</p> : 
               (registrationsByDeptData.length > 0 ? 
-                <div className="chart-canvas-wrapper"> {/* Added wrapper */}
+                <div className="chart-canvas-wrapper">
                   <Pie options={regByDeptChartOptions} data={regByDeptChartData} />
                 </div> : 
                 <p>Aucune donnée disponible.</p>
@@ -631,9 +552,7 @@ const AdminDashboardView = () => {
           </div>
         </div>
       </div>
-
       <hr className="dashboard-divider" />
-
       <div className="dashboard-columns-wrapper">
         <section className="my-registered-events-table-section">
           <div className="section-header-with-pagination">
@@ -677,9 +596,8 @@ const AdminDashboardView = () => {
               ) : (<p className="no-events-message">Vous n'êtes inscrit à aucun événement.</p>)}
             </>
           )}
-          {!isLoadingEmployeeData && !employeeDataError && !user?.userId && (<p style={{ fontStyle: 'italic', textAlign: 'center', padding: '20px 0' }}>Section inscriptions personnelles non applicable.</p>)}
+          {!isLoadingEmployeeData && !employeeDataError && !user?.userId && (<p style={{ fontStyle: 'italic', textAlign: 'center', padding: '20px 0' }}>Section inscriptions personnelles non applicable (utilisateur non connecté).</p>)}
         </section>
-
         <section className="recent-activity-section">
           <div className="section-header-with-pagination">
             <h2 className="section-header">Activités récentes</h2>
