@@ -2,22 +2,20 @@ import React, { useState, useEffect, type ChangeEvent } from "react";
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/authContext';
 import EventModal from "./EventModal";
-import ConfirmationModal from '../../components/Modal/ConfirmationModal'; // <<<< ADD IMPORT
+import ConfirmationModal from '../../components/Modal/ConfirmationModal'; 
 import "./Events.css";
 
-// ADD THIS HELPER FUNCTION (can be inside or outside the component)
 const getStatusClass = (status: string): string => {
   if (!status) return '';
-  // Converts "À venir" to "status-a-venir", "En cours" to "status-en-cours", etc.
   return `status-${status
     .toLowerCase()
-    .normalize("NFD") // Normalize accented characters
-    .replace(/[\u0300-\u036f]/g, "") // Remove diacritics
-    .replace(/\s+/g, '-') // Replace spaces with hyphens
-    .replace(/[^a-z0-9-]/g, "")}`; // Remove any other special characters
+    .normalize("NFD") 
+    .replace(/[\u0300-\u036f]/g, "") 
+    .replace(/\s+/g, '-') 
+    .replace(/[^a-z0-9-]/g, "")}`; 
 };
 
-export interface Event { // Ensure this interface is consistent or shared
+export interface Event { 
   id_event: number;
   title_event: string;
   description: string | null; 
@@ -28,7 +26,7 @@ export interface Event { // Ensure this interface is consistent or shared
   registration_end_date: string;
 }
 
- interface EventFormData { // This should also be consistent or shared
+ interface EventFormData { 
   id_event?: number;
   title_event: string;
   description: string; 
@@ -459,18 +457,18 @@ const Events: React.FC = () => {
                 )}
               </div>
               <div className="event-actions">
-                {isAdmin && (
+                {isAdmin && event.status !== "Terminé" && event.status !== "En cours" && (
                   <>
                     <button
                       className="action-button edit"
-                      onClick={() => handleOpenEventModal(event)} // Use renamed function
+                      onClick={() => handleOpenEventModal(event)} 
                       disabled={isSaving}
                     >
                       Modifier
                     </button>
                     <button
                       className="action-button delete"
-                      onClick={() => handleDeleteEventClick(event.id_event)} // Use renamed click handler
+                      onClick={() => handleDeleteEventClick(event.id_event)}
                       disabled={isSaving}
                     >
                       Supprimer
