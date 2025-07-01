@@ -6,7 +6,6 @@ import * as XLSX from 'xlsx';
 
 const BACKEND_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:3001';
 
-// --- Interfaces ---
 interface Role {
   id_role: number;
   name_role: string;
@@ -40,7 +39,6 @@ interface UserFormData {
     role_name: string;
     departement_name: string;
 }
-// --- End of Interfaces ---
 
 const Users: React.FC = () => {
   const [users, setUsers] = useState<User[]>([]);
@@ -52,7 +50,7 @@ const Users: React.FC = () => {
 
   const [searchQuery, setSearchQuery] = useState<string>('');
   const [selectedRoleFilter, setSelectedRoleFilter] = useState<string>('Tous');
-  const [isUserModalOpen, setIsUserModalOpen] = useState<boolean>(false); // Renamed for clarity
+  const [isUserModalOpen, setIsUserModalOpen] = useState<boolean>(false);
   const [selectedUser, setSelectedUser] = useState<User | null>(null);
 
   const [availableRoles, setAvailableRoles] = useState<Role[]>([]);
@@ -60,7 +58,6 @@ const Users: React.FC = () => {
 
   const fileInputRef = useRef<HTMLInputElement>(null);
 
-  // --- State for Confirmation Modal ---
   const [isConfirmModalOpen, setIsConfirmModalOpen] = useState(false);
   const [confirmModalProps, setConfirmModalProps] = useState({
     message: '',
@@ -70,9 +67,7 @@ const Users: React.FC = () => {
     title: 'Confirmation'
   });
   const [userToDeleteId, setUserToDeleteId] = useState<number | null>(null);
-  
 
-  // --- Fetch Users ---
   useEffect(() => {
     const fetchUsers = async () => {
       setIsLoading(true);
@@ -93,22 +88,20 @@ const Users: React.FC = () => {
         });
 
         if (!response.ok) {
-          const responseText = await response.text(); // Read body ONCE as text
+          const responseText = await response.text();
           let errorMsg = `HTTP error! status: ${response.status}`;
           try {
-            const errorData = JSON.parse(responseText); // TRY to parse the text
+            const errorData = JSON.parse(responseText);
             errorMsg = errorData.message || errorMsg;
           } catch (parseError) {
-            // If JSON parsing fails, use the raw text (if not empty)
             if (responseText) {
               errorMsg = responseText;
             }
-            // Limit length of raw text error to avoid flooding the UI
             if (errorMsg.length > 200) errorMsg = `HTTP error! status: ${response.status}. Server returned a non-JSON error.`;
           }
           throw new Error(errorMsg);
         }
-        const data: User[] = await response.json(); // If response.ok, body is fresh for json()
+        const data: User[] = await response.json();
         setUsers(data);
       } catch (err: any) {
         console.error("Failed to fetch users:", err);
@@ -120,7 +113,6 @@ const Users: React.FC = () => {
     fetchUsers();
   }, []);
 
-  // --- Fetch Roles and Departments for Modal Dropdowns ---
   useEffect(() => {
     const fetchDropdownData = async () => {
       const token = localStorage.getItem('authToken');
@@ -129,24 +121,20 @@ const Users: React.FC = () => {
         return;
       }
       try {
-        // Fetch Roles
         const rolesResponse = await fetch('http://localhost:3001/api/roles', {
           headers: { 'Authorization': `Bearer ${token}` },
         });
         if (!rolesResponse.ok) {
-            // Assuming error from /api/roles is JSON. If not, apply same text-first logic.
             const errData = await rolesResponse.json();
             throw new Error(errData.message || 'Échec de la récupération des rôles');
         }
         const rolesData: Role[] = await rolesResponse.json();
         setAvailableRoles(rolesData);
 
-        // Fetch Departments
         const deptsResponse = await fetch('http://localhost:3001/api/departements', {
           headers: { 'Authorization': `Bearer ${token}` },
         });
         if (!deptsResponse.ok) {
-            // Assuming error from /api/departements is JSON. If not, apply same text-first logic.
             const errData = await deptsResponse.json();
             throw new Error(errData.message || 'Échec de la récupération des départements');
         }
@@ -162,18 +150,17 @@ const Users: React.FC = () => {
     fetchDropdownData();
   }, []);
 
-  // --- Event Handlers ---
   const handleAddUser = () => {
     setSelectedUser(null);
-    setError(null); // Clear main page error
-    setIsUserModalOpen(true); // Open UserModal
+    setError(null);
+    setIsUserModalOpen(true);
   };
 
   const handleTriggerFileUpload = () => {
-    setError(null); // Clear general errors
-    setBulkUploadError(null); // Clear previous bulk upload errors
-    setBulkUploadSuccess(null); // Clear previous bulk upload success messages
-    fileInputRef.current?.click(); // Trigger click on hidden file input
+    setError(null);
+    setBulkUploadError(null);
+    setBulkUploadSuccess(null);
+    fileInputRef.current?.click();
   };
 
   const handleFileUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -182,7 +169,7 @@ const Users: React.FC = () => {
       return;
     }
 
-    setIsSaving(true); // Use isSaving to indicate processing
+    setIsSaving(true);
     setBulkUploadError(null);
     setBulkUploadSuccess(null);
 
@@ -219,11 +206,10 @@ const Users: React.FC = () => {
           );
 
           if (validUsersToUpload.length === 0) {
-            throw new Error("Aucune donnée utilisateur valide trouvée dans le fichier Excel. Vérifiez les noms de colonnes (par exemple, firstName, lastName, username, roleName, departementName, password) et assurez-vous que les données sont présentes.");
+            throw new Error("Aucune donnée utilisateur valide trouvée dans le fichier Excel. Vérifiez les noms de colonnes (par exemple, firstName, lastName, username, roleName, departementName, pa[...]
           }
 
           console.log('Utilisateurs à téléverser (données brutes mappées):', JSON.stringify(validUsersToUpload, null, 2));
-
 
           const token = localStorage.getItem('authToken');
           if (!token) {
@@ -239,12 +225,9 @@ const Users: React.FC = () => {
             body: JSON.stringify(validUsersToUpload),
           });
 
-          const result = await response.json(); // Attempt to parse JSON regardless of response.ok for more details
+          const result = await response.json();
 
           if (!response.ok) {
-            // Backend should ideally send a structured error
-            // result.message might contain a general error
-            // result.errors might contain an array of specific errors
             let detailedErrorMessage = `Échec du téléversement groupé. Statut: ${response.status}.`;
             if (result.message) {
               detailedErrorMessage += ` Message: ${result.message}`;
@@ -254,13 +237,12 @@ const Users: React.FC = () => {
                 `Utilisateur ${index + 1} (${err.identifier || 'N/A'}): ${err.error || 'Erreur inconnue'}`
               ).join('\n');
               detailedErrorMessage += `\nErreurs spécifiques:\n${specificErrors}`;
-            } else if (typeof result.error === 'string') { // Handle single error message
+            } else if (typeof result.error === 'string') {
                 detailedErrorMessage += `\nErreur: ${result.error}`;
             }
             throw new Error(detailedErrorMessage);
           }
           
-          // Handle success case, potentially with partial failures if backend supports it
           let successMessage = result.message || `${validUsersToUpload.length} utilisateurs traités.`;
           if (result.createdCount !== undefined && result.failedCount !== undefined) {
             successMessage = `Traitement groupé terminé. ${result.createdCount} utilisateurs créés, ${result.failedCount} échoués.`;
@@ -275,7 +257,6 @@ const Users: React.FC = () => {
           
           setBulkUploadSuccess(successMessage);
           
-          // Refresh the users list
           const fetchUsersResponse = await fetch(`${BACKEND_URL}/api/users`, {
             headers: { 'Authorization': `Bearer ${token}` },
           });
@@ -316,16 +297,14 @@ const Users: React.FC = () => {
 
   const handleEditUser = (userToEdit: User) => {
     setSelectedUser(userToEdit);
-    setError(null); // Clear main page error
-    setIsUserModalOpen(true); // Open UserModal
+    setError(null);
+    setIsUserModalOpen(true);
   };
 
   const handleDeleteUserClick = (userId: number) => {
-    // setUserToDeleteId(userId); // You can keep this if userToDeleteId state is used elsewhere,
-                                // but performDeleteUser will now use the passed parameter.
     setConfirmModalProps({
       message: 'Êtes-vous sûr de vouloir supprimer cet utilisateur ?',
-      onConfirmAction: () => performDeleteUser(userId), // Pass userId directly
+      onConfirmAction: () => performDeleteUser(userId),
       confirmText: "Supprimer",
       cancelText: "Annuler",
       title: "Confirmer la suppression"
@@ -333,13 +312,13 @@ const Users: React.FC = () => {
     setIsConfirmModalOpen(true);
   };
 
-  const performDeleteUser = async (idToDelete: number | null) => { // Modified to accept idToDelete parameter
+  const performDeleteUser = async (idToDelete: number | null) => {
     console.log('performDeleteUser called with idToDelete (parameter):', idToDelete); 
     if (idToDelete === null) {
       console.warn('performDeleteUser called but idToDelete parameter is null.'); 
       return;
     }
-    setIsConfirmModalOpen(false); // Close modal first
+    setIsConfirmModalOpen(false);
 
     setIsSaving(true);
     setError(null);
@@ -347,11 +326,10 @@ const Users: React.FC = () => {
     if (!token) {
       setError("Action non autorisée. Veuillez vous reconnecter.");
       setIsSaving(false);
-      // setUserToDeleteId(null); // Clear state if it was set
       return;
     }
     try {
-      const response = await fetch(`http://localhost:3001/api/users/${idToDelete}`, { // Use idToDelete parameter
+      const response = await fetch(`http://localhost:3001/api/users/${idToDelete}`, {
         method: 'DELETE',
         headers: {
           'Authorization': `Bearer ${token}`,
@@ -369,21 +347,21 @@ const Users: React.FC = () => {
         }
         throw new Error(errorMsg);
       }
-      setUsers(prevUsers => prevUsers.filter(u => u.id_user !== idToDelete)); // Use idToDelete parameter
+      setUsers(prevUsers => prevUsers.filter(u => u.id_user !== idToDelete));
       console.log('Utilisateur supprimé avec succès!'); 
     } catch (err: any) {
       console.error("Error deleting user in performDeleteUser:", err); 
       setError(err.message || "Erreur lors de la suppression de l'utilisateur.");
     } finally {
       setIsSaving(false);
-      setUserToDeleteId(null); // Clear the userToDeleteId state variable
+      setUserToDeleteId(null);
     }
   };
 
   const handleModalConfirm = () => {
     console.log('handleModalConfirm called. Current confirmModalProps.onConfirmAction:', confirmModalProps.onConfirmAction);
     if (typeof confirmModalProps.onConfirmAction === 'function') {
-      confirmModalProps.onConfirmAction(); // This will now execute performDeleteUser(userId)
+      confirmModalProps.onConfirmAction();
     } else {
       console.error('confirmModalProps.onConfirmAction is not a function!');
     }
@@ -394,10 +372,9 @@ const Users: React.FC = () => {
     setUserToDeleteId(null);
   };
 
-
   const handleSaveUser = async (userDataFromModal: UserFormData) => {
     setIsSaving(true);
-    setError(null); // Clear main page error before saving
+    setError(null);
     const token = localStorage.getItem('authToken');
     if (!token) {
       setError("Action non autorisée. Veuillez vous reconnecter.");
@@ -435,10 +412,10 @@ const Users: React.FC = () => {
       });
 
       if (!response.ok) {
-        const responseText = await response.text(); // Read body ONCE as text
+        const responseText = await response.text();
         let errorMsg = `HTTP error! status: ${response.status}`;
         try {
-          const errorData = JSON.parse(responseText); // TRY to parse the text
+          const errorData = JSON.parse(responseText);
           errorMsg = errorData.message || errorMsg;
         } catch (parseError) {
           if (responseText) { 
@@ -459,21 +436,17 @@ const Users: React.FC = () => {
       
       const successMessage = method === 'PUT' ? "Utilisateur mis à jour avec succès!" : "Utilisateur créé avec succès!";
       console.log(successMessage);
-      setIsUserModalOpen(false); // Close UserModal
+      setIsUserModalOpen(false);
       setSelectedUser(null);
 
     } catch (err: any) {
       console.error("Error saving user:", err);
-      // Set error to be displayed in the UserModal if it's still open,
-      // or on the main page if the modal was supposed to close.
-      // For simplicity, setting main page error. UserModal could have its own error state.
       setError(err.message || "Erreur lors de l'enregistrement de l'utilisateur.");
     } finally {
       setIsSaving(false);
     }
   };
 
-  // --- Filtering Logic ---
   const filteredUsers = users.filter(user => {
     const matchesRole = selectedRoleFilter === 'Tous' || (user.role && user.role.name_role === selectedRoleFilter);
     const searchLower = searchQuery.toLowerCase();
@@ -488,10 +461,9 @@ const Users: React.FC = () => {
     return <div className="users-page"><p>Chargement des utilisateurs...</p></div>;
   }
 
-  if (isLoading && error) { // Changed this condition to show error if loading fails
+  if (isLoading && error) {
     return <div className="users-page"><p className="error-message" style={{textAlign: 'center', color: 'red'}}>{error}</p></div>;
   }
-
 
   return (
     <div className="users-page">
@@ -500,7 +472,7 @@ const Users: React.FC = () => {
           <h1>Gestion des Utilisateurs</h1>
           <p>Gérez les utilisateurs et leurs accès à la plateforme.</p>
         </div>
-        <div className="header-actions"> {/* Wrapper for buttons */}
+        <div className="header-actions">
           <button className="add-user-btn" onClick={handleAddUser} disabled={isSaving}>
             {isSaving ? 'Opération...' : '+ Ajouter un utilisateur'}
           </button>
@@ -599,7 +571,7 @@ const Users: React.FC = () => {
                     </button>
                     <button
                       className="delete-btn"
-                      onClick={() => handleDeleteUserClick(user.id_user)} // <<<< MODIFIED
+                      onClick={() => handleDeleteUserClick(user.id_user)}
                       disabled={isSaving}
                     >
                       Supprimer
@@ -612,7 +584,7 @@ const Users: React.FC = () => {
                 <td colSpan={4} style={{ textAlign: 'center' }}>
                     {!isLoading && users.length === 0 && !error ? "Aucun utilisateur n'a été créé pour le moment." :
                      !isLoading && filteredUsers.length === 0 && !error ? "Aucun utilisateur ne correspond à vos critères." : 
-                     error ? "" : "Chargement..." /* Avoid showing "Aucun utilisateur" if there's an error */}
+                     error ? "" : "Chargement..."}
                 </td>
               </tr>
             )}
@@ -621,21 +593,17 @@ const Users: React.FC = () => {
       </div>
 
       <UserModal
-        isOpen={isUserModalOpen} // Use renamed state
+        isOpen={isUserModalOpen}
         onClose={() => {
           setIsUserModalOpen(false);
           setSelectedUser(null);
-          // setError(null); // Optionally clear error when UserModal closes
         }}
         onSave={handleSaveUser}
         userDataToEdit={selectedUser}
         availableRoles={availableRoles}
         availableDepartements={availableDepartements}
-        // Pass a specific error state for the modal if you want to isolate modal errors
-        // errorMessage={userModalError}
       />
 
-      {/* Render the Confirmation Modal */}
       <ConfirmationModal
         isOpen={isConfirmModalOpen}
         title={confirmModalProps.title}
