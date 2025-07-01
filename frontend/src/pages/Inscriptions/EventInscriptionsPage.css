@@ -5,7 +5,6 @@
   font-family: var(--font-family-base);
 }
 
-/* Back link styling (e.g., "Retour à la gestion des événements") */
 .event-inscriptions-page .back-link {
   display: inline-flex;
   align-items: center;
@@ -15,7 +14,7 @@
   margin-bottom: 20px;
   font-weight: 500;
   font-size: 0.9rem;
-  padding: 6px 0; /* Minimal padding, adjust if a button look is desired */
+  padding: 6px 0;
   transition: color 0.2s ease;
 }
 
@@ -25,11 +24,10 @@
 }
 
 .event-inscriptions-page .back-link i {
-  font-size: 1.1em; /* Adjust icon size */
+  font-size: 1.1em;
   line-height: 1;
 }
 
-/* Page Title */
 .event-inscriptions-page h2 {
   margin-top: 0;
   margin-bottom: 24px;
@@ -40,7 +38,6 @@
   font-weight: 600;
 }
 
-/* Filters Section */
 .filters-container {
   display: flex;
   gap: 15px;
@@ -50,19 +47,18 @@
   border: 1px solid var(--border-color);
   border-radius: 8px;
   align-items: center;
-  flex-wrap: wrap; /* Allow filters to wrap on smaller screens */
-  /* Removed justify-content if it was there, rely on margin-left: auto for the button */
+  flex-wrap: wrap;
 }
 
 .filter-input, 
 .filter-select {
-  padding: 10px 12px; 
+  padding: 10px 12px;
   border-radius: 6px;
   border: 1px solid var(--input-border);
   background-color: var(--input-bg);
   color: var(--text-primary);
   font-size: 0.9rem;
-  min-width: 180px; 
+  min-width: 180px;
 }
 
 .filter-select {
@@ -72,24 +68,20 @@
 .clear-filters-btn {
   padding: 10px 15px;
   border-radius: 6px;
-  /* background-color: var(--warning-color, #0cca94); OLD COLOR */
-  background-color: var(--success-color, #28a745); /* NEW: Using success-color (friendly green) */
-  /* color: var(--text-on-warning, #000); OLD TEXT COLOR */
-  color: var(--text-on-success, var(--text-on-primary, #fff)); /* NEW: Text color for good contrast on green */
+  background-color: var(--success-color, #28a745);
+  color: var(--text-on-success, var(--text-on-primary, #fff));
   border: none;
   cursor: pointer;
   font-weight: 500;
   transition: background-color 0.2s ease, opacity 0.2s ease;
-  margin-left: auto; 
+  margin-left: auto;
 }
 
 .clear-filters-btn:hover {
-  /* background-color: var(--warning-color-dark, #70edc3); OLD HOVER */
-  background-color: var(--success-color-dark, #1e7e34); /* NEW: Darker green for hover */
-  opacity: 1; 
+  background-color: var(--success-color-dark, #1e7e34);
+  opacity: 1;
 }
 
-/* Table Styling */
 .inscriptions-table-container {
   overflow-x: auto;
   background-color: var(--background-content);
@@ -102,28 +94,28 @@
 .inscriptions-table {
   width: 100%;
   border-collapse: collapse;
-  min-width: 800px; 
+  min-width: 800px;
 }
 
 .inscriptions-table th, 
 .inscriptions-table td {
   padding: 14px 18px;
   text-align: left;
-  border-bottom: 1px solid var(--border-color); 
-  vertical-align: middle; /* Ensure vertical alignment */
+  border-bottom: 1px solid var(--border-color);
+  vertical-align: middle;
 }
 
 .inscriptions-table th {
-  background-color: var(--background-elevated); 
-  color: var(--text-primary); 
+  background-color: var(--background-elevated);
+  color: var(--text-primary);
   font-weight: 600;
-  font-size: 0.9rem; 
-  text-transform: uppercase; 
-  letter-spacing: 0.5px; 
+  font-size: 0.9rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
 }
 
 .inscriptions-table td {
-  color: var(--text-secondary); 
+  color: var(--text-secondary);
   font-size: 0.875rem;
 }
 
@@ -139,20 +131,16 @@
   border-bottom: none;
 }
 
-/* "Voir" Details Button in Table */
 .inscriptions-table .details-btn {
   background-color: transparent;
   color: var(--primary-color);
   border: 1px solid transparent;
   padding: 6px 10px;
-  border-radius: 16px; /* Pill shape */
+  border-radius: 16px;
   cursor: pointer;
   font-weight: 500;
   font-size: 0.8rem;
   transition: background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease;
-  /* display: inline-flex; Already handled by .icon-btn */
-  /* align-items: center; Already handled by .icon-btn */
-  /* gap: 6px; Already handled by .icon-btn */
 }
 
 .inscriptions-table .details-btn:hover {
@@ -160,7 +148,6 @@
   color: var(--primary-color-dark);
 }
 
-/* File Link Styling (if any) */
 .file-link {
   color: var(--text-link);
   text-decoration: underline;
@@ -170,7 +157,6 @@
   color: var(--primary-color);
 }
 
-/* Export Options Section */
 .export-options-container {
   margin-top: 20px;
   padding: 15px;
@@ -186,7 +172,7 @@
 
 .export-checkbox-label {
   color: var(--text-secondary);
-  display: inline-flex; /* Align checkbox and text */
+  display: inline-flex;
   align-items: center;
   cursor: pointer;
   font-size: 0.9rem;
@@ -194,15 +180,15 @@
 
 .export-checkbox-label input[type="checkbox"] {
   margin-right: 8px;
-  accent-color: var(--primary-color); /* Styles the checkbox color */
-  width: 16px; /* Custom size */
-  height: 16px; /* Custom size */
+  accent-color: var(--primary-color);
+  width: 16px;
+  height: 16px;
 }
 
 .export-buttons {
   display: flex;
   gap: 10px;
-  flex-wrap: wrap; /* Allow buttons to wrap */
+  flex-wrap: wrap;
 }
 
 .export-btn {
@@ -211,17 +197,17 @@
   color: var(--text-on-primary);
   border: none;
   cursor: pointer;
-  font-size: 0.875rem; /* 14px */
+  font-size: 0.875rem;
   font-weight: 500;
   transition: background-color 0.2s ease-in-out, transform 0.1s ease, box-shadow 0.2s ease;
   box-shadow: 0 1px 3px rgba(var(--shadow-color-rgb), 0.1);
-  display: inline-flex; /* For icon alignment if icons are added */
+  display: inline-flex;
   align-items: center;
   gap: 6px;
 }
 
 .export-btn:hover {
-  opacity: 0.9; /* General hover effect, specific bg can be added per button type */
+  opacity: 0.9;
   box-shadow: 0 2px 5px rgba(var(--shadow-color-rgb), 0.15);
 }
 
@@ -234,11 +220,11 @@
   background-color: var(--success-color);
 }
 .csv-btn:hover {
-  background-color: var(--success-color-dark); /* Darker shade on hover */
+  background-color: var(--success-color-dark);
 }
 
 .excel-btn {
-  background-color: var(--primary-color); /* Or a specific Excel green like #1D6F42 */
+  background-color: var(--primary-color);
 }
 .excel-btn:hover {
   background-color: var(--primary-color-dark);
@@ -251,19 +237,16 @@
   background-color: var(--danger-color-dark);
 }
 
-/* General Icon Button Helper */
-.icon-btn { /* Applied to details-btn and can be used for export-btn if icons are added */
+.icon-btn {
   display: inline-flex;
   align-items: center;
-  gap: 6px; 
+  gap: 6px;
 }
-.icon-btn i { /* Style for icons within these buttons */
-  font-size: 1em; /* Default icon size, adjust as needed */
-  line-height: 1; 
+.icon-btn i {
+  font-size: 1em;
+  line-height: 1;
 }
 
-
-/* Responsive Adjustments */
 @media (max-width: 768px) {
   .event-inscriptions-page {
     padding: 16px;
